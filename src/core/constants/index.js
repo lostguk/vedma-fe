@@ -1,1 +1,4 @@
-export * from './token-key'
+export * from "./token-key"
+export * from "./pages"
+export * from "./colors"
+export * from "./icon-names"

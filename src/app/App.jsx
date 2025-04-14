@@ -1,6 +1,9 @@
 import { useState, useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { fetchCategories } from "src/store/slices/categories/slice"
+import { RouterProvider } from "react-router-dom"
+import GlobalStyles from "./globalStyles"
+import { router } from "./router"
 
 function App() {
   const dispatch = useDispatch()
@@ -13,19 +16,8 @@ function App() {
   }, [])
   return (
     <>
-      <div></div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <GlobalStyles />
+      <RouterProvider router={router} fallbackElement={<p>Loading...</p>} />
     </>
   )
 }

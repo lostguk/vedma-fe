@@ -1,6 +1,10 @@
 import React from "react"
+import { COLORS } from "src/core/constants"
 
-export const Main = () => {
+const Main = () => {
   let a
-  return <div>dic1hsdfs</div>
+
+  return <div></div>
 }
+
+export default Main
