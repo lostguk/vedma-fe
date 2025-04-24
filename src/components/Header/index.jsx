@@ -33,7 +33,7 @@ export const Header = () => {
         <Box width="100%">
           <Box gap="24px">
             {links.map(({ link, title }) => (
-              <Box color="white">
+              <Box color="white" key={title}>
                 <Link
                   to={link}
                   className={({ isActive }) => (isActive ? "active" : "")}

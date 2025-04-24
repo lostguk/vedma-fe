@@ -3,13 +3,11 @@ import axiosClient from "src/core/axios-client"
 
 const fetchCategories = createAsyncThunk("fetchCategories", async () => {
   const response = await axiosClient.get("/categories")
-  return response.data.results
+  return response.data.data
 })
 
 const initialState = {
-  categories: {
-    items: [],
-  },
+  items: [],
 }
 
 export const slice = createSlice({
@@ -19,7 +17,7 @@ export const slice = createSlice({
 
   extraReducers: (builder) => {
     builder.addCase(fetchCategories.fulfilled, (state, { payload }) => {
-      state.categories.items = payload
+      state.items = payload
     })
   },
 })
