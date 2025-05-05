@@ -2,6 +2,7 @@ import styled from "@emotion/styled"
 
 export const Box = styled.div`
   color: ${({ color = "inherit" }) => color};
+  line-height: ${({ lineHeight = "inherit" }) => lineHeight};
   font-size: ${({ fontSize = "inherit" }) => fontSize};
   font-weight: ${({ fontWeight = "inherit" }) => fontWeight};
   display: ${({ display = "flex" }) => display};
@@ -33,6 +34,11 @@ export const Box = styled.div`
   border-left: ${({ borderleft = "none" }) => borderleft};
   border-right: ${({ borderRight = "none" }) => borderRight};
   border-radius: ${({ borderRadius = "none" }) => borderRadius};
+  border-top-left-radius: ${({ borderRadiusTL = "none" }) => borderRadiusTL};
+  border-bottom-left-radius: ${({ borderRadiusBL = "none" }) => borderRadiusBL};
+  border-top-right-radius: ${({ borderRadiusTR = "none" }) => borderRadiusTR};
+  border-bottom-right-radius: ${({ borderRadiusTL = "none" }) =>
+    borderRadiusTL};
   border-width: ${({ borderWidth }) => borderWidth};
   flex-wrap: ${({ wrap = "nowrap" }) => wrap};
   flex-grow: ${({ flexGrow = 0 }) => flexGrow};
@@ -45,6 +51,7 @@ export const Box = styled.div`
   bottom: ${({ bottom }) => bottom};
   left: ${({ left }) => left};
   text-align: ${({ textAlign = "start" }) => textAlign};
+  text-decoration: ${({ textDecoration = "none" }) => textDecoration};
   opacity: ${({ opacity = 1 }) => opacity};
   grid-column: ${({ gridColumn = "auto" }) => gridColumn};
   grid-row: ${({ gridRow = "auto" }) => gridRow};

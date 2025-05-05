@@ -7,7 +7,9 @@ export const Footer = () => {
     <StyledFooter>
       <Container>
         <Box wrap="wrap" gap="12px" width="100%">
-          <Box width="calc(25% - 12px)">LOGO</Box>
+          <Box width="calc(25% - 12px)" align="flex-start">
+            <img width="100%" src="src/assets/logo.png" />
+          </Box>
 
           <Box width="calc(25% - 12px)" direction="column" gap="4px">
             <FooterItem>Главная</FooterItem>

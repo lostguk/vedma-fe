@@ -2,21 +2,25 @@ import React, { useState, useEffect } from "react"
 import { Box, Icon } from "src/components"
 import { fetchCategories } from "src/store/slices/categories/slice"
 import { useDispatch, useSelector } from "react-redux"
-import { CatalogBody, LinksBody, LinkItem } from "./styled"
+import { CatalogBody, CategoriesBody, Category, CategoriesItem } from "./styled"
 import { ICON_NAMES } from "src/core/constants"
 
 export const Catalog = () => {
   const menu = useSelector((state) => state.categories.items)
 
+  console.log(menu)
+
   const [currentMenu, setCurrentMenu] = useState([])
 
   const [currentLevel, setCurrentlevel] = useState(0)
 
+  const [selectedCategory, setSelectedCategory] = useState(null)
+
   const dispatch = useDispatch()
 
-  const LevelUp = ({ menu, level }) => {
+  const onCategoryClick = ({ menu, level, id }) => {
     if (!menu?.length) {
-      alert("good")
+      setSelectedCategory(id)
 
       return null
     }
@@ -54,29 +58,36 @@ export const Catalog = () => {
 
   return (
     <CatalogBody>
-      <LinksBody level={currentLevel}>
+      <CategoriesBody level={currentLevel}>
         {currentMenu.map((item, i) => (
-          <LinkItem key={i}>
+          <CategoriesItem key={i}>
             {currentLevel > 0 && (
-              <Box onClick={() => LevelDown(currentLevel - 1)}> Назад </Box>
+              <Category onClick={() => LevelDown(currentLevel - 1)}>
+                Назад
+              </Category>
             )}
 
-            {item.map(({ name, children }) => (
-              <Box
-                maxWidth="calc(100% - 20px)"
-                key={name}
-                align="center"
+            {item.map(({ name, children, id }) => (
+              <Category
+                key={id}
+                isActive={selectedCategory === id}
                 onClick={() =>
-                  LevelUp({ menu: children, level: currentLevel + 1 })
+                  onCategoryClick({
+                    menu: children,
+                    level: currentLevel + 1,
+                    id,
+                  })
                 }
               >
                 {name}&nbsp;
-                {children?.length && <Icon name={ICON_NAMES.arrowRight} />}
-              </Box>
+                {Boolean(children?.length) && (
+                  <Icon name={ICON_NAMES.arrowRight} />
+                )}
+              </Category>
             ))}
-          </LinkItem>
+          </CategoriesItem>
         ))}
-      </LinksBody>
+      </CategoriesBody>
     </CatalogBody>
   )
 }

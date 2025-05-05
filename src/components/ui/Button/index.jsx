@@ -12,7 +12,7 @@ const variants = {
   },
   secondary: {
     color: "#fff",
-    hoverColor: "#333333",
+    hoverColor: "#ccc",
     backgroundColor: COLORS.secondary,
     backgroundHoverColor: "#2A334D",
     borderColor: COLORS.secondary,
@@ -21,8 +21,8 @@ const variants = {
 }
 
 const Styled = styled.button`
-  width: auto;
-  min-width: 40px;
+  width: ${({ width }) => width || "auto"};
+  min-width: ${({ minWidth }) => minWidth || "40px"};
   display: flex;
   padding: 12px 14px;
   border-radius: 50px;
@@ -32,14 +32,17 @@ const Styled = styled.button`
   transition: all 0.3s;
   border: 1px solid ${({ variant }) => variants[variant].borderColor};
   cursor: pointer;
+  justify-content: center;
 
   &:hover {
-    color: ${({ variant }) => variants[variant].hoverColor};
+    color: ${({ variant }) => variants[variant].hoverColor}!important;
     background: ${({ variant }) => variants[variant].backgroundHoverColor};
     border: 1px solid ${({ variant }) => variants[variant].backgroundHoverColor};
   }
 `
 
-export const Button = ({ variant = "primary", children }) => (
-  <Styled variant={variant}>{children}</Styled>
+export const Button = ({ variant = "primary", children, ...props }) => (
+  <Styled variant={variant} {...props}>
+    {children}
+  </Styled>
 )

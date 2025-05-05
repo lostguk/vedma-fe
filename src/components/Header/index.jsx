@@ -49,7 +49,9 @@ export const Header = () => {
           </Box>
         </Box>
         <Box width="100%" align="center" marginTop="16px">
-          <Box color="#fff">LOGO</Box>
+          <Box color="#fff">
+            <img width="100%" src="src/assets/logo.png" />
+          </Box>
 
           <Box marginLeft="auto" gap="8px" align="center">
             <Button variant="secondary">
