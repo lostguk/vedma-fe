@@ -18,6 +18,15 @@ const variants = {
     borderColor: COLORS.secondary,
     borderHoverColor: "white",
   },
+
+  black: {
+    color: "#fff",
+    hoverColor: "#ccc",
+    backgroundColor: "#232323",
+    backgroundHoverColor: "#2A334D",
+    borderColor: "#232323",
+    borderHoverColor: "white",
+  },
 }
 
 const Styled = styled.button`

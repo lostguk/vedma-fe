@@ -1,7 +1,11 @@
-import React from "react"
-import { Box, Link, Container, Button, Icon } from "src/components"
+import React, { useState } from "react"
+import { Box, Link, Container, Button, Icon, Input } from "src/components"
 import { COLORS, ICON_NAMES, PAGES } from "src/core/constants"
+import { Modal } from "react-responsive-modal"
 import { StyledHeader } from "./styled"
+import { LoginForm } from "./LoginForm"
+import { ResetPasswordForm } from "./ResetPasswordForm"
+import { RegistrationForm } from "./RegistrationForm"
 
 const links = [
   {
@@ -27,8 +31,25 @@ const links = [
 ]
 
 export const Header = () => {
+  const [isModalOpen, setModalOpen] = useState(false)
+
   return (
     <StyledHeader>
+      <Modal
+        styles={{
+          modal: {
+            borderRadius: "30px",
+            width: "100%",
+            maxWidth: "700px",
+          },
+        }}
+        center={true}
+        open={isModalOpen}
+        onClose={() => setModalOpen(false)}
+      >
+        <RegistrationForm />
+      </Modal>
+
       <Container>
         <Box width="100%">
           <Box gap="24px">
@@ -54,7 +75,7 @@ export const Header = () => {
           </Box>
 
           <Box marginLeft="auto" gap="8px" align="center">
-            <Button variant="secondary">
+            <Button variant="secondary" onClick={() => setModalOpen(true)}>
               <Icon name={ICON_NAMES.profile} />
             </Button>
 
