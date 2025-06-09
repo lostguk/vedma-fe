@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { Box, Link, Container, Button, Icon, Input } from "src/components"
+import { Box, Link, Container, Button, Icon, Cart } from "src/components"
 import { COLORS, ICON_NAMES, PAGES } from "src/core/constants"
 import { Modal } from "react-responsive-modal"
 import { StyledHeader } from "./styled"
@@ -35,6 +35,8 @@ export const Header = () => {
 
   return (
     <StyledHeader>
+      <Cart />
+
       <Modal
         styles={{
           modal: {
@@ -43,7 +45,6 @@ export const Header = () => {
             maxWidth: "700px",
           },
         }}
-        center={true}
         open={isModalOpen}
         onClose={() => setModalOpen(false)}
       >

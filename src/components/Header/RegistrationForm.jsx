@@ -5,6 +5,8 @@ import { COLORS } from "src/core/constants"
 import { yupResolver } from "@hookform/resolvers/yup"
 import * as Yup from "yup"
 import MaskedInput from "react-text-mask"
+import { AddressSuggestions } from "react-dadata"
+import "react-dadata/dist/react-dadata.css"
 
 export const RegistrationForm = () => {
   const schema = Yup.object().shape({
@@ -65,17 +67,12 @@ export const RegistrationForm = () => {
           </Box>
 
           <Box width="calc(33.3333% - 6px)">
-            <Controller
-              name="firstName"
-              control={control}
-              render={({ field }) => (
-                <Input
-                  placeholder="Фамилия"
-                  error={errors?.email?.firstName}
-                  {...field}
-                />
-              )}
+            <AddressSuggestions
+              token="578ca240caa601f95c0e78bcc3c2b57aeff7c907"
+              value={value}
+              onChange={setValue}
             />
+            {console.log(value)}
           </Box>
 
           <Box width="calc(33.3333% - 6px)">
