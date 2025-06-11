@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react"
 import { Box, Icon } from "src/components"
 import { fetchCategories } from "src/store/slices/categories/slice"
+import { setFilter } from "src/store/slices/products/slice"
 import { useDispatch, useSelector } from "react-redux"
 import { CatalogBody, CategoriesBody, Category, CategoriesItem } from "./styled"
 import { ICON_NAMES } from "src/core/constants"
 
 export const Catalog = () => {
   const menu = useSelector((state) => state.categories.items)
+  const { category } = useSelector((state) => state.products.filter)
 
   console.log(menu)
 
@@ -14,13 +16,11 @@ export const Catalog = () => {
 
   const [currentLevel, setCurrentlevel] = useState(0)
 
-  const [selectedCategory, setSelectedCategory] = useState(null)
-
   const dispatch = useDispatch()
 
-  const onCategoryClick = ({ menu, level, id }) => {
+  const onCategoryClick = ({ menu, level, slug }) => {
     if (!menu?.length) {
-      setSelectedCategory(id)
+      dispatch(setFilter({ filter: "category", value: slug }))
 
       return null
     }
@@ -67,15 +67,15 @@ export const Catalog = () => {
               </Category>
             )}
 
-            {item.map(({ name, children, id }) => (
+            {item.map(({ name, children, slug }) => (
               <Category
-                key={id}
-                isActive={selectedCategory === id}
+                key={slug}
+                isActive={category === slug}
                 onClick={() =>
                   onCategoryClick({
                     menu: children,
                     level: currentLevel + 1,
-                    id,
+                    slug,
                   })
                 }
               >

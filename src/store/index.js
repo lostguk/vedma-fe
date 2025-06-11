@@ -6,5 +6,6 @@ export const store = configureStore({
   reducer: {
     global: slices.global,
     categories: slices.categories,
+    products: slices.products,
   },
 })

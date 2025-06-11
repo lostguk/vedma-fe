@@ -1,7 +1,11 @@
 import React from "react"
 import { Button, Box } from "src/components"
 
-export const Card = () => {
+export const Card = ({
+  name = "Свеча «Защита»",
+  description = "Oчищает от негатива, ставит магический барьер.",
+  price = 300,
+}) => {
   return (
     <Box direction="column">
       <Box
@@ -14,14 +18,14 @@ export const Card = () => {
       </Box>
 
       <Box marginBottom="8px" fontSize="14px" fontWeight="400" opacity="0.5">
-        Oчищает от негатива, ставит магический барьер.
+        {description}
       </Box>
 
-      <Box marginBottom="8px">Свеча «Защита»</Box>
+      <Box marginBottom="8px">{name}</Box>
 
       <Box marginBottom="16px" aling="flex-start">
         <Box fontSize="18px" fontWeight="600" color="#fff" marginRight="8px">
-          300₽
+          {price}₽
         </Box>
 
         <Box

@@ -2,6 +2,80 @@ import { ICON_NAMES } from "src/core/constants"
 
 export const Icon = ({ name, color, width, height }) => {
   switch (name) {
+    case ICON_NAMES.loader:
+      return (
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+          <circle
+            fill="#181E39"
+            stroke="#181E39"
+            strokeWidth="4"
+            r="15"
+            cx="40"
+            cy="100"
+          >
+            <animate
+              attributeName="opacity"
+              calcMode="spline"
+              dur="2"
+              values="1;0;1;"
+              keySplines=".5 0 .5 1;.5 0 .5 1"
+              repeatCount="indefinite"
+              begin="-.4"
+            ></animate>
+          </circle>
+          <circle
+            fill="#181E39"
+            stroke="#181E39"
+            strokeWidth="4"
+            r="15"
+            cx="100"
+            cy="100"
+          >
+            <animate
+              attributeName="opacity"
+              calcMode="spline"
+              dur="2"
+              values="1;0;1;"
+              keySplines=".5 0 .5 1;.5 0 .5 1"
+              repeatCount="indefinite"
+              begin="-.2"
+            ></animate>
+          </circle>
+          <circle
+            fill="#181E39"
+            stroke="#181E39"
+            strokeWidth="4"
+            r="15"
+            cx="160"
+            cy="100"
+          >
+            <animate
+              attributeName="opacity"
+              calcMode="spline"
+              dur="2"
+              values="1;0;1;"
+              keySplines=".5 0 .5 1;.5 0 .5 1"
+              repeatCount="indefinite"
+              begin="0"
+            ></animate>
+          </circle>
+        </svg>
+      )
+    case ICON_NAMES.cross:
+      return (
+        <svg
+          fill="#000000"
+          width={width || 24}
+          height={height || 24}
+          viewBox={`0 0 ${width || 24} ${height || 24}`}
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M0 14.545L1.455 16 8 9.455 14.545 16 16 14.545 9.455 8 16 1.455 14.545 0 8 6.545 1.455 0 0 1.455 6.545 8z"
+            fillRule="evenodd"
+          />
+        </svg>
+      )
     case ICON_NAMES.arrowLeft:
       return (
         <svg

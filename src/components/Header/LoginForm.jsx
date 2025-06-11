@@ -5,7 +5,7 @@ import { COLORS } from "src/core/constants"
 import { yupResolver } from "@hookform/resolvers/yup"
 import * as Yup from "yup"
 
-export const LoginForm = () => {
+export const LoginForm = ({ modalStates, setModalState }) => {
   const schema = Yup.object().shape({
     email: Yup.string()
       .email("Введите корректный адрес электронной почты")
@@ -67,6 +67,7 @@ export const LoginForm = () => {
           justify="flex-end"
           margin="8px 0 64px"
           cursor="pointer"
+          onClick={() => setModalState(modalStates.resetPassword)}
         >
           Забыли пароль?
         </Box>
@@ -84,6 +85,7 @@ export const LoginForm = () => {
         justify="center"
         marginTop="12px"
         cursor="pointer"
+        onClick={() => setModalState(modalStates.regisration)}
       >
         Зарегистрироваться
       </Box>

@@ -3,9 +3,7 @@ import { Box, Link, Container, Button, Icon, Cart } from "src/components"
 import { COLORS, ICON_NAMES, PAGES } from "src/core/constants"
 import { Modal } from "react-responsive-modal"
 import { StyledHeader } from "./styled"
-import { LoginForm } from "./LoginForm"
-import { ResetPasswordForm } from "./ResetPasswordForm"
-import { RegistrationForm } from "./RegistrationForm"
+import { AuthModal } from "./AuthModal"
 
 const links = [
   {
@@ -32,24 +30,17 @@ const links = [
 
 export const Header = () => {
   const [isModalOpen, setModalOpen] = useState(false)
+  const [isCartOpen, setCartOpen] = useState(false)
+
+  const toggleCart = () => setCartOpen((prev) => !prev)
 
   return (
     <StyledHeader>
-      <Cart />
+      {isCartOpen && <Cart toggleCart={toggleCart} />}
 
-      <Modal
-        styles={{
-          modal: {
-            borderRadius: "30px",
-            width: "100%",
-            maxWidth: "700px",
-          },
-        }}
-        open={isModalOpen}
-        onClose={() => setModalOpen(false)}
-      >
-        <RegistrationForm />
-      </Modal>
+      {isModalOpen && (
+        <AuthModal isModalOpen={isModalOpen} setModalOpen={setModalOpen} />
+      )}
 
       <Container>
         <Box width="100%">
@@ -80,7 +71,7 @@ export const Header = () => {
               <Icon name={ICON_NAMES.profile} />
             </Button>
 
-            <Button variant="secondary">
+            <Button variant="secondary" onClick={toggleCart}>
               <Box align="center">
                 <Icon name={ICON_NAMES.basket} />
                 &nbsp; Корзина

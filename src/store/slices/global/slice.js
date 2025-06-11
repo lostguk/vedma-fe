@@ -1,27 +1,23 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice } from "@reduxjs/toolkit"
 
 const initialState = {
-  test: null
+  cart: [],
 }
 
 export const slice = createSlice({
-  name: 'global',
+  name: "global",
 
   initialState,
 
   reducers: {
-    setTest(state, { payload }) {
-      state.test = payload
+    setCart(state, { payload }) {
+      state.cart = payload
     },
   },
 })
 
-const {
-  setTest,
-} = slice.actions
+const { setCart } = slice.actions
 
-export {
-  setTest
-}
+export { setCart }
 
 export default slice.reducer

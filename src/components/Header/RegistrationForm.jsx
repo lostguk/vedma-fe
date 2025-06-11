@@ -7,8 +7,9 @@ import * as Yup from "yup"
 import MaskedInput from "react-text-mask"
 import { AddressSuggestions } from "react-dadata"
 import "react-dadata/dist/react-dadata.css"
+import { MaskInput } from "./styled"
 
-export const RegistrationForm = () => {
+export const RegistrationForm = ({ modalStates, setModalState }) => {
   const schema = Yup.object().shape({
     email: Yup.string()
       .email("Введите корректный адрес электронной почты")
@@ -16,8 +17,6 @@ export const RegistrationForm = () => {
 
     password: Yup.string().required("Поле пароль обязательно для заполнения"),
   })
-
-  const [value, setValue] = useState("")
 
   const {
     handleSubmit,
@@ -29,9 +28,9 @@ export const RegistrationForm = () => {
   const onSubmit = (data) => console.log(data)
 
   return (
-    <Box padding="32px" direction="column">
+    <Box padding="32px" direction="column" color="black">
       <Box fontSize="40px" color="#292929" marginBottom="16px">
-        Войти
+        Зарегистрироваться
       </Box>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Box gap="8px" wrap="wrap">
@@ -40,39 +39,27 @@ export const RegistrationForm = () => {
               name="lastName"
               control={control}
               render={({ field }) => (
-                <MaskedInput
-                  id="my-date-input"
+                <Input
+                  placeholder="Фамилия"
+                  error={errors?.email?.middleName}
                   {...field}
-                  mask={[
-                    "+",
-                    "7",
-                    "(",
-                    /[1-9]/,
-                    /\d/,
-                    /\d/,
-                    ")",
-                    " ",
-                    /\d/,
-                    /\d/,
-                    /\d/,
-                    "-",
-                    /\d/,
-                    /\d/,
-                    /\d/,
-                    /\d/,
-                  ]}
                 />
               )}
             />
           </Box>
 
           <Box width="calc(33.3333% - 6px)">
-            <AddressSuggestions
-              token="578ca240caa601f95c0e78bcc3c2b57aeff7c907"
-              value={value}
-              onChange={setValue}
+            <Controller
+              name="firstName"
+              control={control}
+              render={({ field }) => (
+                <Input
+                  placeholder="Имя"
+                  error={errors?.email?.middleName}
+                  {...field}
+                />
+              )}
             />
-            {console.log(value)}
           </Box>
 
           <Box width="calc(33.3333% - 6px)">
@@ -94,10 +81,29 @@ export const RegistrationForm = () => {
               name="phone"
               control={control}
               render={({ field }) => (
-                <Input
-                  placeholder="+7 (___) ___-__-__"
-                  error={errors?.email?.phone}
+                <MaskInput
+                  placeholder="+7(___) ___ __ __"
+                  id="my-date-input"
                   {...field}
+                  mask={[
+                    "+",
+                    "7",
+                    "(",
+                    /[1-9]/,
+                    /\d/,
+                    /\d/,
+                    ")",
+                    "-",
+                    /\d/,
+                    /\d/,
+                    /\d/,
+                    "-",
+                    /\d/,
+                    /\d/,
+                    "-",
+                    /\d/,
+                    /\d/,
+                  ]}
                 />
               )}
             />
@@ -156,12 +162,13 @@ export const RegistrationForm = () => {
           justify="flex-end"
           margin="8px 0 64px"
           cursor="pointer"
+          onClick={() => setModalState(modalStates.resetPassword)}
         >
           Забыли пароль?
         </Box>
 
         <Button width="100%" type="submit" variant="black">
-          Войти
+          Зарегистрироваться
         </Button>
       </form>
 
@@ -173,8 +180,9 @@ export const RegistrationForm = () => {
         justify="center"
         marginTop="12px"
         cursor="pointer"
+        onClick={() => setModalState(modalStates.login)}
       >
-        Зарегистрироваться
+        Войти
       </Box>
     </Box>
   )
