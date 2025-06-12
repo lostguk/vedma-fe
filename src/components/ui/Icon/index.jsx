@@ -64,10 +64,10 @@ export const Icon = ({ name, color, width, height }) => {
     case ICON_NAMES.cross:
       return (
         <svg
-          fill="#000000"
-          width={width || 24}
-          height={height || 24}
-          viewBox={`0 0 ${width || 24} ${height || 24}`}
+          fill={color || "#000000"}
+          width={width || 16}
+          height={height || 16}
+          viewBox={`0 0 ${width || 16} ${height || 16}`}
           xmlns="http://www.w3.org/2000/svg"
         >
           <path

@@ -48,9 +48,9 @@ const CatalogPage = () => {
                 <Icon name={ICON_NAMES.loader} />
               </Box>
             ) : (
-              items.map(({ id, name, description, price }) => (
-                <Box width="calc(33.3333% - 12px)" key={id}>
-                  <Card name={name} description={description} price={price} />
+              items.map((product) => (
+                <Box width="calc(33.3333% - 12px)" key={product.id}>
+                  <Card {...product} />
                 </Box>
               ))
             )}

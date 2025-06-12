@@ -1,10 +1,40 @@
 import React from "react"
-import { Button, Box } from "src/components"
+import { Button, Box, Icon } from "src/components"
 import { ActionButton } from "./styled"
+import { ICON_NAMES } from "src/core/constants"
+import { useDispatch } from "react-redux"
+import {
+  removeCartItem,
+  plusCartItem,
+  minusCartItem,
+} from "src/store/slices/global/slice"
 
-export const Card = () => {
+export const Card = (props) => {
+  const dispatch = useDispatch()
+
+  const removeProduct = () => dispatch(removeCartItem(props.id))
+
+  const plusItem = () => dispatch(plusCartItem(props.id))
+
+  const minusItem = () => dispatch(minusCartItem(props.id))
+
   return (
-    <Box width="100%" align="flex-end">
+    <Box width="100%" align="flex-end" position="relative">
+      <Box
+        onClick={removeProduct}
+        cursor="pointer"
+        position="absolute"
+        top="0"
+        right="0"
+        borderRadius="5px"
+        justify="center"
+        aling="center"
+        background="rgba(246, 178, 115, .2)"
+        padding="8px"
+      >
+        <Icon name={ICON_NAMES.cross} color="#FF0000" />
+      </Box>
+
       <Box
         borderRadius="20px"
         overflow="hidden"
@@ -12,7 +42,7 @@ export const Card = () => {
         height="260px"
         width="35%"
       >
-        <img width="100%" src="src/assets/card-img.png" />
+        <img width="100%" src={props.images_urls[0]} />
       </Box>
 
       <Box width="45%" padding="0 16px" direction="column" marginBottom="5px">
@@ -23,7 +53,7 @@ export const Card = () => {
           marginRight="8px"
           align="flex-end"
         >
-          300₽
+          {props.price}₽
           <Box
             fontSize="14px"
             fontWeight="600"
@@ -41,18 +71,18 @@ export const Card = () => {
           color="#000000"
           margin="3px 0 0 5px"
         >
-          Свеча «Любовь»
+          {props.name}
         </Box>
       </Box>
 
       <Box width="20%">
-        <Box>
+        <Box onClick={minusItem}>
           <ActionButton>-</ActionButton>
         </Box>
         <Box color="#000" align="center" justify="center" margin="0 auto">
-          1
+          {props.count}
         </Box>
-        <Box>
+        <Box onClick={plusItem}>
           <ActionButton>+</ActionButton>
         </Box>
       </Box>
