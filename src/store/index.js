@@ -7,5 +7,6 @@ export const store = configureStore({
     global: slices.global,
     categories: slices.categories,
     products: slices.products,
+    mainPage: slices.mainPage,
   },
 })

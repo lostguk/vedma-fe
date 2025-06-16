@@ -4,6 +4,7 @@ import { useForm, Controller } from "react-hook-form"
 import { COLORS } from "src/core/constants"
 import { yupResolver } from "@hookform/resolvers/yup"
 import * as Yup from "yup"
+import axiosClient from "src/core/axios-client"
 
 export const ResetPasswordForm = ({ modalStates, setModalState }) => {
   const schema = Yup.object().shape({
@@ -21,7 +22,11 @@ export const ResetPasswordForm = ({ modalStates, setModalState }) => {
     resolver: yupResolver(schema),
   })
 
-  const onSubmit = (data) => console.log(data)
+  const onSubmit = async (data) => {
+    const response = await axiosClient.post("/reset-password", {
+      ...data,
+    })
+  }
 
   return (
     <Box padding="32px" direction="column">

@@ -16,6 +16,7 @@ export const Card = (props) => {
     name = "Свеча «Защита»",
     description = "Oчищает от негатива, ставит магический барьер.",
     price = 300,
+    old_price,
     id,
   } = props
 
@@ -39,7 +40,7 @@ export const Card = (props) => {
         marginBottom="8px"
         height="260px"
       >
-        <img width="100%" src={props.images_urls[0]} />
+        <img width="100%" src={props.thumb_url} />
       </Box>
 
       <Box marginBottom="8px" fontSize="14px" fontWeight="400" opacity="0.5">
@@ -53,14 +54,16 @@ export const Card = (props) => {
           {price}₽
         </Box>
 
-        <Box
-          fontSize="16px"
-          fontWeight="250"
-          color="#ff0000"
-          textDecoration="line-through"
-        >
-          700₽
-        </Box>
+        {old_price && (
+          <Box
+            fontSize="16px"
+            fontWeight="250"
+            color="#ff0000"
+            textDecoration="line-through"
+          >
+            700₽
+          </Box>
+        )}
       </Box>
 
       <Box marginTop="auto" justify="center">

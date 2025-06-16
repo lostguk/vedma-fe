@@ -1,21 +1,33 @@
 import React, { useState } from "react"
-import { Box, Link, Container, Button, Icon, Input } from "src/components"
+import { Box, Button, Input } from "src/components"
 import { useForm, Controller } from "react-hook-form"
 import { COLORS } from "src/core/constants"
 import { yupResolver } from "@hookform/resolvers/yup"
 import * as Yup from "yup"
-import MaskedInput from "react-text-mask"
 import { AddressSuggestions } from "react-dadata"
 import "react-dadata/dist/react-dadata.css"
 import { MaskInput } from "./styled"
+import axiosClient from "src/core/axios-client"
 
 export const RegistrationForm = ({ modalStates, setModalState }) => {
   const schema = Yup.object().shape({
     email: Yup.string()
       .email("Введите корректный адрес электронной почты")
       .required("Поле email обязательно для заполнения"),
-
     password: Yup.string().required("Поле пароль обязательно для заполнения"),
+    password_confirmation: Yup.string()
+      .oneOf([Yup.ref("password"), null], "Пароли не совпадают")
+      .min(8, "Минимальная длина пароля 8 символов")
+      .required("Пароль является обязательным"),
+    phone: Yup.string()
+      .required("Поле email обязательно для заполнения")
+      .matches(
+        /^\+?[78][-\(]?\d{3}\)?-?\d{3}-?\d{2}-?\d{2}$/,
+        "Введите корректный телефон",
+      ),
+    last_name: Yup.string().required("Пароль является обязательным"),
+    first_name: Yup.string().required("Пароль является обязательным"),
+    middle_name: Yup.string().required("Пароль является обязательным"),
   })
 
   const {
@@ -23,9 +35,15 @@ export const RegistrationForm = ({ modalStates, setModalState }) => {
     formState: { errors },
     control,
     watch,
-  } = useForm({})
+  } = useForm({
+    resolver: yupResolver(schema),
+  })
 
-  const onSubmit = (data) => console.log(data)
+  const onSubmit = async (data) => {
+    const response = await axiosClient.post("/register", {
+      ...data,
+    })
+  }
 
   return (
     <Box padding="32px" direction="column" color="black">
@@ -36,12 +54,12 @@ export const RegistrationForm = ({ modalStates, setModalState }) => {
         <Box gap="8px" wrap="wrap">
           <Box width="calc(33.3333% - 6px)">
             <Controller
-              name="lastName"
+              name="last_name"
               control={control}
               render={({ field }) => (
                 <Input
                   placeholder="Фамилия"
-                  error={errors?.email?.middleName}
+                  error={errors?.last_name?.message}
                   {...field}
                 />
               )}
@@ -50,12 +68,12 @@ export const RegistrationForm = ({ modalStates, setModalState }) => {
 
           <Box width="calc(33.3333% - 6px)">
             <Controller
-              name="firstName"
+              name="first_name"
               control={control}
               render={({ field }) => (
                 <Input
                   placeholder="Имя"
-                  error={errors?.email?.middleName}
+                  error={errors?.first_name?.message}
                   {...field}
                 />
               )}
@@ -64,12 +82,12 @@ export const RegistrationForm = ({ modalStates, setModalState }) => {
 
           <Box width="calc(33.3333% - 6px)">
             <Controller
-              name="middleName"
+              name="middle_name"
               control={control}
               render={({ field }) => (
                 <Input
                   placeholder="Отчество"
-                  error={errors?.email?.middleName}
+                  error={errors?.middle_name?.message}
                   {...field}
                 />
               )}
@@ -79,32 +97,40 @@ export const RegistrationForm = ({ modalStates, setModalState }) => {
           <Box width="calc(33.3333% - 6px)">
             <Controller
               name="phone"
+              error={errors?.email?.phone}
               control={control}
               render={({ field }) => (
-                <MaskInput
-                  placeholder="+7(___) ___ __ __"
-                  id="my-date-input"
-                  {...field}
-                  mask={[
-                    "+",
-                    "7",
-                    "(",
-                    /[1-9]/,
-                    /\d/,
-                    /\d/,
-                    ")",
-                    "-",
-                    /\d/,
-                    /\d/,
-                    /\d/,
-                    "-",
-                    /\d/,
-                    /\d/,
-                    "-",
-                    /\d/,
-                    /\d/,
-                  ]}
-                />
+                <Box direction="column" maxWidth="100%">
+                  <MaskInput
+                    placeholder="+7(___) ___ __ __"
+                    id="my-date-input"
+                    {...field}
+                    mask={[
+                      "+",
+                      "7",
+                      "(",
+                      /[1-9]/,
+                      /\d/,
+                      /\d/,
+                      ")",
+                      "-",
+                      /\d/,
+                      /\d/,
+                      /\d/,
+                      "-",
+                      /\d/,
+                      /\d/,
+                      "-",
+                      /\d/,
+                      /\d/,
+                    ]}
+                  />
+                  {errors?.phone?.message && (
+                    <Box marginTop="4px" paddingLeft="8px" color="red">
+                      {errors?.phone?.message}
+                    </Box>
+                  )}
+                </Box>
               )}
             />
           </Box>
@@ -116,7 +142,7 @@ export const RegistrationForm = ({ modalStates, setModalState }) => {
               render={({ field }) => (
                 <Input
                   placeholder="Email"
-                  error={errors?.email?.phone}
+                  error={errors?.email?.message}
                   {...field}
                 />
               )}
@@ -126,12 +152,12 @@ export const RegistrationForm = ({ modalStates, setModalState }) => {
           <Box width="calc(33.3333% - 6px)">
             <Controller
               name="password"
-              type="password"
               control={control}
               render={({ field }) => (
                 <Input
                   placeholder="Пароль"
-                  error={errors?.password?.password}
+                  type="password"
+                  error={errors?.password?.message}
                   {...field}
                 />
               )}
@@ -140,13 +166,13 @@ export const RegistrationForm = ({ modalStates, setModalState }) => {
 
           <Box width="calc(33.3333% - 6px)">
             <Controller
-              name="confirmPassword"
-              type="password"
+              name="password_confirmation"
               control={control}
               render={({ field }) => (
                 <Input
+                  type="password"
                   placeholder="Подтвердите пароль"
-                  error={errors?.password?.confirmPassword}
+                  error={errors?.password_confirmation?.message}
                   {...field}
                 />
               )}

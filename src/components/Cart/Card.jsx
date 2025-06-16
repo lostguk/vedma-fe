@@ -42,7 +42,7 @@ export const Card = (props) => {
         height="260px"
         width="35%"
       >
-        <img width="100%" src={props.images_urls[0]} />
+        <img width="100%" src={props.thumb_url} />
       </Box>
 
       <Box width="45%" padding="0 16px" direction="column" marginBottom="5px">

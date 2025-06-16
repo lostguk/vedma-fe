@@ -4,6 +4,7 @@ import { useForm, Controller } from "react-hook-form"
 import { COLORS } from "src/core/constants"
 import { yupResolver } from "@hookform/resolvers/yup"
 import * as Yup from "yup"
+import axiosClient from "src/core/axios-client"
 
 export const LoginForm = ({ modalStates, setModalState }) => {
   const schema = Yup.object().shape({
@@ -23,8 +24,14 @@ export const LoginForm = ({ modalStates, setModalState }) => {
     resolver: yupResolver(schema),
   })
 
-  const onSubmit = (data) => console.log(data)
+  const onSubmit = async ({ email, password }) => {
+    const response = await axiosClient.post("/login", {
+      email,
+      password,
+    })
 
+    console.log(response)
+  }
   return (
     <Box padding="32px" direction="column">
       <Box fontSize="40px" color="#292929" marginBottom="16px">

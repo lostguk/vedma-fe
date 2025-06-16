@@ -1,9 +1,13 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { Container, Button, Box, Card } from "src/components"
 import { COLORS } from "src/core/constants"
+import { useDispatch, useSelector } from "react-redux"
+import { fetchCandels } from "src/store/slices/mainPage/slice"
 
 const Main = () => {
-  const proxy = [1, 2, 3, 4]
+  const dispatch = useDispatch()
+
+  const { items, isLoading } = useSelector((state) => state.mainPage.candels)
 
   const infoItems = [
     {
@@ -38,6 +42,11 @@ const Main = () => {
     },
   ]
 
+  useEffect(() => {
+    dispatch(fetchCandels())
+  }, [])
+
+  console.log(items)
   return (
     <>
       <Container>
@@ -160,8 +169,8 @@ const Main = () => {
           </Box>
 
           <Box gap="20px" marginTop="40px">
-            {proxy.map(() => (
-              <Card />
+            {items.map((item) => (
+              <Card {...item} />
             ))}
           </Box>
         </Box>
