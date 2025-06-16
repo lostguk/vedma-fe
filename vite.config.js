@@ -3,6 +3,9 @@ import react from "@vitejs/plugin-react"
 import eslint from "vite-plugin-eslint"
 
 export default defineConfig({
+  server: {
+    port: 3005,
+  },
   plugins: [react(), eslint()],
   resolve: {
     alias: {
