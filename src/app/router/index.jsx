@@ -4,11 +4,12 @@ import DefaultLayout from "src/app/lauout"
 
 import Main from "src/pages/main"
 import CatalogPage from "src/pages/catalog"
+import OrderPage from "src/pages/order"
 
 export const router = createBrowserRouter([
   {
     path: "*",
-    element: <div>Not found</div>,
+    element: <div style={{ color: "black" }}>Not found</div>,
   },
   {
     element: <DefaultLayout />,
@@ -17,14 +18,13 @@ export const router = createBrowserRouter([
         path: PAGES.main,
         element: <Main />,
       },
-    ],
-  },
-  {
-    element: <DefaultLayout />,
-    children: [
       {
         path: PAGES.catalog,
         element: <CatalogPage />,
+      },
+      {
+        path: PAGES.order,
+        element: <OrderPage />,
       },
     ],
   },

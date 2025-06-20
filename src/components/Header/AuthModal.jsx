@@ -14,9 +14,6 @@ const modalStates = {
 export const AuthModal = ({ setModalOpen, isModalOpen }) => {
   const [modalState, setModalState] = useState(modalStates.login)
 
-  console.log(modalState)
-  console.log()
-
   return (
     <Modal
       styles={{

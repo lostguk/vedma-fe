@@ -1,6 +1,7 @@
 import React from "react"
 import { Button, Box } from "src/components"
 import { useDispatch, useSelector } from "react-redux"
+import { NumericFormat } from "react-number-format"
 import {
   addCartItem,
   plusCartItem,
@@ -51,7 +52,12 @@ export const Card = (props) => {
 
       <Box marginBottom="16px" aling="flex-start">
         <Box fontSize="18px" fontWeight="600" color="#fff" marginRight="8px">
-          {price}₽
+          <NumericFormat
+            displayType="text"
+            value={price}
+            suffix=" ₽"
+            thousandSeparator=" "
+          />
         </Box>
 
         {old_price && (
@@ -61,7 +67,12 @@ export const Card = (props) => {
             color="#ff0000"
             textDecoration="line-through"
           >
-            700₽
+            <NumericFormat
+              displayType="text"
+              value={old_price}
+              suffix=" ₽"
+              thousandSeparator=" "
+            />
           </Box>
         )}
       </Box>
@@ -72,7 +83,7 @@ export const Card = (props) => {
             <Box onClick={minusItem}>
               <ActionButton>-</ActionButton>
             </Box>
-            <Box align="center" justify="center" margin="0 32px">
+            <Box align="center" justify="center" margin="0 24px">
               {currentItem.count}
             </Box>
             <Box onClick={plusItem}>
@@ -80,7 +91,12 @@ export const Card = (props) => {
             </Box>
           </>
         ) : (
-          <Button width="100%" variant="secondary" onClick={addToCart}>
+          <Button
+            width="100%"
+            maxWidth="200px"
+            variant="secondary"
+            onClick={addToCart}
+          >
             В корзину
           </Button>
         )}

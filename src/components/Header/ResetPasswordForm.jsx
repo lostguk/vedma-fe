@@ -61,13 +61,17 @@ export const ResetPasswordForm = ({ modalStates, setModalState }) => {
         fronSize="18px"
         justify="center"
         marginTop="12px"
-        cursor="pointer"
       >
-        <div onClick={() => setModalState(modalStates.login)}>Войти</div>
+        <Box cursor="pointer" onClick={() => setModalState(modalStates.login)}>
+          Войти
+        </Box>
         &nbsp;/&nbsp;
-        <div onClick={() => setModalState(modalStates.regisration)}>
+        <Box
+          cursor="pointer"
+          onClick={() => setModalState(modalStates.regisration)}
+        >
           Зарегистрироваться
-        </div>
+        </Box>
       </Box>
     </Box>
   )

@@ -1,7 +1,8 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { Box, Link, Container, Button, Icon, Cart } from "src/components"
 import { COLORS, ICON_NAMES, PAGES } from "src/core/constants"
-import { Modal } from "react-responsive-modal"
+import { setCart } from "src/core/helpers"
+import { useSelector } from "react-redux"
 import { StyledHeader } from "./styled"
 import { AuthModal } from "./AuthModal"
 
@@ -31,6 +32,12 @@ const links = [
 export const Header = () => {
   const [isModalOpen, setModalOpen] = useState(false)
   const [isCartOpen, setCartOpen] = useState(false)
+
+  const { cart } = useSelector((state) => state.global)
+
+  useEffect(() => {
+    setCart(cart)
+  }, [cart])
 
   const toggleCart = () => setCartOpen((prev) => !prev)
 

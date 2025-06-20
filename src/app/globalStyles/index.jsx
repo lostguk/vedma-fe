@@ -29,6 +29,10 @@ export const GlobalStyles = () => (
         height: 100%;
       }
 
+      .react-dadata__container {
+        width: 100%;
+      }
+
       /* Кастомизация всех скроллов */
 
       ::-webkit-scrollbar {

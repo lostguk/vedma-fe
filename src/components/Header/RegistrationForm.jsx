@@ -1,12 +1,11 @@
 import React, { useState } from "react"
-import { Box, Button, Input } from "src/components"
+import { Box, Button, Input, PhoneInput } from "src/components"
 import { useForm, Controller } from "react-hook-form"
 import { COLORS } from "src/core/constants"
 import { yupResolver } from "@hookform/resolvers/yup"
 import * as Yup from "yup"
 import { AddressSuggestions } from "react-dadata"
 import "react-dadata/dist/react-dadata.css"
-import { MaskInput } from "./styled"
 import axiosClient from "src/core/axios-client"
 
 export const RegistrationForm = ({ modalStates, setModalState }) => {
@@ -101,7 +100,8 @@ export const RegistrationForm = ({ modalStates, setModalState }) => {
               control={control}
               render={({ field }) => (
                 <Box direction="column" maxWidth="100%">
-                  <MaskInput
+                  <PhoneInput
+                    error={Boolean(errors?.phone?.message)}
                     placeholder="+7(___) ___ __ __"
                     id="my-date-input"
                     {...field}
@@ -126,7 +126,12 @@ export const RegistrationForm = ({ modalStates, setModalState }) => {
                     ]}
                   />
                   {errors?.phone?.message && (
-                    <Box marginTop="4px" paddingLeft="8px" color="red">
+                    <Box
+                      marginTop="4px"
+                      paddingLeft="8px"
+                      color="red"
+                      fontSize="12px"
+                    >
                       {errors?.phone?.message}
                     </Box>
                   )}
@@ -187,10 +192,13 @@ export const RegistrationForm = ({ modalStates, setModalState }) => {
           fronSize="13px"
           justify="flex-end"
           margin="8px 0 64px"
-          cursor="pointer"
-          onClick={() => setModalState(modalStates.resetPassword)}
         >
-          Забыли пароль?
+          <Box
+            cursor="pointer"
+            onClick={() => setModalState(modalStates.resetPassword)}
+          >
+            Забыли пароль?
+          </Box>
         </Box>
 
         <Button width="100%" type="submit" variant="black">
@@ -205,10 +213,10 @@ export const RegistrationForm = ({ modalStates, setModalState }) => {
         fronSize="18px"
         justify="center"
         marginTop="12px"
-        cursor="pointer"
-        onClick={() => setModalState(modalStates.login)}
       >
-        Войти
+        <Box cursor="pointer" onClick={() => setModalState(modalStates.login)}>
+          Войти
+        </Box>
       </Box>
     </Box>
   )

@@ -32,6 +32,7 @@ const variants = {
 const Styled = styled.button`
   width: ${({ width }) => width || "auto"};
   min-width: ${({ minWidth }) => minWidth || "40px"};
+  max-width: ${({ maxWidth }) => maxWidth || "initial"};
   display: flex;
   padding: 12px 14px;
   border-radius: 50px;

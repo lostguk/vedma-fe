@@ -1,10 +1,10 @@
-import React from "react"
-import { Box, Link, Container, Button, Icon, Input } from "src/components"
+import React, { useEffect } from "react"
+import { Box, Button, Input } from "src/components"
 import { useForm, Controller } from "react-hook-form"
 import { COLORS } from "src/core/constants"
 import { yupResolver } from "@hookform/resolvers/yup"
 import * as Yup from "yup"
-import axiosClient from "src/core/axios-client"
+import axiosClient, { setToken } from "src/core/axios-client"
 
 export const LoginForm = ({ modalStates, setModalState }) => {
   const schema = Yup.object().shape({
@@ -12,26 +12,41 @@ export const LoginForm = ({ modalStates, setModalState }) => {
       .email("Введите корректный адрес электронной почты")
       .required("Поле email обязательно для заполнения"),
 
-    password: Yup.string().required("Поле пароль обязательно для заполнения"),
+    password: Yup.string()
+      .required("Поле пароль обязательно для заполнения")
+      .min(8, "Минимальная длинна пароля - 8 символов"),
   })
 
   const {
     handleSubmit,
     formState: { errors },
     control,
+    setError,
+    clearErrors,
     watch,
   } = useForm({
     resolver: yupResolver(schema),
   })
 
-  const onSubmit = async ({ email, password }) => {
-    const response = await axiosClient.post("/login", {
-      email,
-      password,
-    })
-
-    console.log(response)
+  const onSubmit = ({ email, password }) => {
+    axiosClient
+      .post("/login", {
+        email,
+        password,
+      })
+      .then((res) => console.log(res))
+      .catch((err) => {
+        setError("global", {
+          type: "custom",
+          message: err?.response?.data?.message,
+        })
+      })
   }
+
+  useEffect(() => {
+    clearErrors("global")
+  }, [watch("email"), watch("password")])
+
   return (
     <Box padding="32px" direction="column">
       <Box fontSize="40px" color="#292929" marginBottom="16px">
@@ -46,7 +61,9 @@ export const LoginForm = ({ modalStates, setModalState }) => {
             render={({ field }) => (
               <Input
                 placeholder="Email"
-                error={errors?.email?.message}
+                error={
+                  errors?.email?.message || Boolean(errors?.global?.message)
+                }
                 {...field}
               />
             )}
@@ -59,13 +76,20 @@ export const LoginForm = ({ modalStates, setModalState }) => {
             render={({ field }) => (
               <Input
                 placeholder="Пароль"
-                error={errors?.password?.message}
+                error={
+                  errors?.password?.message || Boolean(errors?.global?.message)
+                }
                 {...field}
               />
             )}
           />
         </Box>
 
+        {errors?.global?.message && (
+          <Box marginTop="4px" paddingLeft="8px" color="red">
+            {errors?.global?.message}
+          </Box>
+        )}
         <Box
           color={COLORS.main}
           fontWeight={600}
@@ -73,10 +97,13 @@ export const LoginForm = ({ modalStates, setModalState }) => {
           fronSize="13px"
           justify="flex-end"
           margin="8px 0 64px"
-          cursor="pointer"
-          onClick={() => setModalState(modalStates.resetPassword)}
         >
-          Забыли пароль?
+          <Box
+            cursor="pointer"
+            onClick={() => setModalState(modalStates.resetPassword)}
+          >
+            Забыли пароль?
+          </Box>
         </Box>
 
         <Button width="100%" type="submit" from="loginForm" variant="black">
@@ -91,10 +118,13 @@ export const LoginForm = ({ modalStates, setModalState }) => {
         fronSize="18px"
         justify="center"
         marginTop="12px"
-        cursor="pointer"
-        onClick={() => setModalState(modalStates.regisration)}
       >
-        Зарегистрироваться
+        <Box
+          cursor="pointer"
+          onClick={() => setModalState(modalStates.regisration)}
+        >
+          Зарегистрироваться
+        </Box>
       </Box>
     </Box>
   )

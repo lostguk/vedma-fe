@@ -1,11 +1,14 @@
 import React, { useEffect } from "react"
 import { Container, Button, Box, Card } from "src/components"
-import { COLORS } from "src/core/constants"
+import { COLORS, PAGES } from "src/core/constants"
 import { useDispatch, useSelector } from "react-redux"
 import { fetchCandels } from "src/store/slices/mainPage/slice"
+import { useNavigate } from "react-router-dom"
 
 const Main = () => {
   const dispatch = useDispatch()
+
+  const navigate = useNavigate()
 
   const { items, isLoading } = useSelector((state) => state.mainPage.candels)
 
@@ -46,7 +49,6 @@ const Main = () => {
     dispatch(fetchCandels())
   }, [])
 
-  console.log(items)
   return (
     <>
       <Container>
@@ -62,7 +64,9 @@ const Main = () => {
               maxWidth="300px"
               marginTop="auto"
             >
-              <Button width="100%">Каталог</Button>
+              <Button width="100%" onClick={() => navigate(PAGES.catalog)}>
+                Каталог
+              </Button>
             </Box>
 
             <Box
@@ -142,7 +146,7 @@ const Main = () => {
       </Box>
 
       <Container>
-        <Box padding="48px 0" direction="column">
+        <Box padding="48px 0" direction="column" width="100%">
           <Box
             maxWidth="800px"
             width="100%"
@@ -168,9 +172,11 @@ const Main = () => {
             пламенем и отпустите намерение во Вселенную.
           </Box>
 
-          <Box gap="20px" marginTop="40px">
+          <Box gap="15px" marginTop="40px">
             {items.map((item) => (
-              <Card {...item} />
+              <Box width="calc(33.3333% - 10px)">
+                <Card {...item} />
+              </Box>
             ))}
           </Box>
         </Box>
