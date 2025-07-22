@@ -18,6 +18,11 @@ const StyledInput = styled.input`
       inset 0 1px 1px rgba(0, 0, 0, 0.075),
       0 0 0 3px rgba(0, 124, 214, 0.3);
   }
+
+  &:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
 `
 
 export const Input = (props) => {

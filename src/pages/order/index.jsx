@@ -306,7 +306,7 @@ const OrderPage = () => {
             <Box>
               <AddressSuggestions
                 customInput={Input}
-                token="578ca240caa601f95c0e78bcc3c2b57aeff7c907"
+                token={import.meta.env.VITE_DADATA_TOKEN}
               />
             </Box>
 

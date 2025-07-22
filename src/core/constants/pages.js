@@ -5,4 +5,6 @@ export const PAGES = {
   exchange: "/exchange",
   contacts: "/contacts",
   order: "/order",
+  user: "/user",
+  return: "/user",
 }

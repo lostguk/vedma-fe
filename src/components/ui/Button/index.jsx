@@ -29,12 +29,23 @@ const variants = {
   },
 }
 
+const sizes = {
+  medium: {
+    padding: "12px 14px",
+    fontSize: "16px",
+  },
+
+  large: {
+    padding: "16px 20px",
+    fontSize: "18px",
+  },
+}
+
 const Styled = styled.button`
   width: ${({ width }) => width || "auto"};
   min-width: ${({ minWidth }) => minWidth || "40px"};
   max-width: ${({ maxWidth }) => maxWidth || "initial"};
   display: flex;
-  padding: 12px 14px;
   border-radius: 50px;
   font-weight: 600;
   color: ${({ variant }) => variants[variant].color};
@@ -43,6 +54,8 @@ const Styled = styled.button`
   border: 1px solid ${({ variant }) => variants[variant].borderColor};
   cursor: pointer;
   justify-content: center;
+  padding: ${({ size }) => sizes[size].padding};
+  font-size: ${({ size }) => sizes[size].fontSize};
 
   &:hover {
     color: ${({ variant }) => variants[variant].hoverColor}!important;
@@ -51,8 +64,13 @@ const Styled = styled.button`
   }
 `
 
-export const Button = ({ variant = "primary", children, ...props }) => (
-  <Styled variant={variant} {...props}>
+export const Button = ({
+  variant = "primary",
+  size = "medium",
+  children,
+  ...props
+}) => (
+  <Styled variant={variant} size={size} {...props}>
     {children}
   </Styled>
 )

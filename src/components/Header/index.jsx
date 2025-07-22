@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react"
 import { Box, Link, Container, Button, Icon, Cart } from "src/components"
 import { COLORS, ICON_NAMES, PAGES } from "src/core/constants"
 import { setCart } from "src/core/helpers"
+import { useNavigate } from "react-router-dom"
 import { useSelector } from "react-redux"
 import { StyledHeader } from "./styled"
 import { AuthModal } from "./AuthModal"
@@ -32,8 +33,17 @@ const links = [
 export const Header = () => {
   const [isModalOpen, setModalOpen] = useState(false)
   const [isCartOpen, setCartOpen] = useState(false)
+  const navigate = useNavigate()
 
-  const { cart } = useSelector((state) => state.global)
+  const { cart, user } = useSelector((state) => state.global)
+
+  const onProfileClick = () => {
+    if (Boolean(user)) {
+      navigate(PAGES.user)
+    } else {
+      setModalOpen(true)
+    }
+  }
 
   useEffect(() => {
     setCart(cart)
@@ -74,7 +84,7 @@ export const Header = () => {
           </Box>
 
           <Box marginLeft="auto" gap="8px" align="center">
-            <Button variant="secondary" onClick={() => setModalOpen(true)}>
+            <Button variant="secondary" onClick={onProfileClick}>
               <Icon name={ICON_NAMES.profile} />
             </Button>
 

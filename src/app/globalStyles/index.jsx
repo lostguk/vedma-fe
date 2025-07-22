@@ -60,6 +60,13 @@ export const GlobalStyles = () => (
       }
 
       /* Конец кастомизации */
+
+      .react-dadata__input {
+        font-size: 14px;
+      }
+      .react-dadata__input::placeholder {
+        font-size: 14px;
+      }
     `}
   />
 )

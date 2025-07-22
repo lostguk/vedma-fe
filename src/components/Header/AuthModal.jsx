@@ -4,11 +4,15 @@ import { TabItem } from "src/components"
 import { LoginForm } from "./LoginForm"
 import { ResetPasswordForm } from "./ResetPasswordForm"
 import { RegistrationForm } from "./RegistrationForm"
+import { RegistrationSuccess } from "./RegistrationSuccess"
+import { ResetPasswordSuccess } from "./ResetPasswordSuccess"
 
 const modalStates = {
   login: "login",
-  regisration: "regisration",
+  registration: "registration",
   resetPassword: "resetPassword",
+  registrationSuccess: "registrationSuccess",
+  resetPasswordSuccess: "resetPasswordSuccess",
 }
 
 export const AuthModal = ({ setModalOpen, isModalOpen }) => {
@@ -27,18 +31,49 @@ export const AuthModal = ({ setModalOpen, isModalOpen }) => {
       onClose={() => setModalOpen(false)}
     >
       <TabItem tab={modalStates.login} currentTab={modalState}>
-        <LoginForm setModalState={setModalState} modalStates={modalStates} />
+        <LoginForm
+          setModalState={setModalState}
+          modalStates={modalStates}
+          setModalOpen={setModalOpen}
+        />
       </TabItem>
 
-      <TabItem tab={modalStates.regisration} currentTab={modalState}>
+      <TabItem
+        tab={modalStates.registration}
+        currentTab={modalState}
+        setModalOpen={setModalOpen}
+      >
         <RegistrationForm
           setModalState={setModalState}
           modalStates={modalStates}
         />
       </TabItem>
 
-      <TabItem tab={modalStates.resetPassword} currentTab={modalState}>
+      <TabItem
+        tab={modalStates.resetPassword}
+        currentTab={modalState}
+        setModalOpen={setModalOpen}
+      >
         <ResetPasswordForm
+          setModalState={setModalState}
+          modalStates={modalStates}
+        />
+      </TabItem>
+
+      <TabItem
+        tab={modalStates.registrationSuccess}
+        currentTab={modalState}
+        setModalOpen={setModalOpen}
+      >
+        <RegistrationSuccess />
+      </TabItem>
+
+      <TabItem
+        tab={modalStates.resetPasswordSuccess}
+        currentTab={modalState}
+        setModalOpen={setModalOpen}
+      >
+        <ResetPasswordSuccess
           setModalState={setModalState}
           modalStates={modalStates}
         />

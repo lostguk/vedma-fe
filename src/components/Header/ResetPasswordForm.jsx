@@ -23,7 +23,7 @@ export const ResetPasswordForm = ({ modalStates, setModalState }) => {
   })
 
   const onSubmit = async (data) => {
-    const response = await axiosClient.post("/reset-password", {
+    const response = await axiosClient.post("/forgot-password", {
       ...data,
     })
   }

@@ -4,6 +4,7 @@ import { getCart } from "src/core/helpers"
 const initialState = {
   cart: getCart() || [],
   user: null,
+  isLoginLoading: false,
 }
 
 export const slice = createSlice({

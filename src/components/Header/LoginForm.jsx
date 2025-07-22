@@ -5,8 +5,12 @@ import { COLORS } from "src/core/constants"
 import { yupResolver } from "@hookform/resolvers/yup"
 import * as Yup from "yup"
 import axiosClient, { setToken } from "src/core/axios-client"
+import { setUser } from "src/store/slices/global/slice"
+import { useDispatch } from "react-redux"
 
-export const LoginForm = ({ modalStates, setModalState }) => {
+export const LoginForm = ({ modalStates, setModalState, setModalOpen }) => {
+  const dispatch = useDispatch()
+
   const schema = Yup.object().shape({
     email: Yup.string()
       .email("Введите корректный адрес электронной почты")
@@ -34,7 +38,17 @@ export const LoginForm = ({ modalStates, setModalState }) => {
         email,
         password,
       })
-      .then((res) => console.log(res))
+      .then((res) => {
+        const response = res.data.data
+
+        console.log(response)
+
+        setToken(response.token)
+
+        dispatch(setUser(response.user))
+
+        setModalOpen(false)
+      })
       .catch((err) => {
         setError("global", {
           type: "custom",
@@ -58,6 +72,7 @@ export const LoginForm = ({ modalStates, setModalState }) => {
           <Controller
             name="email"
             control={control}
+            defaultValue="user@example.com"
             render={({ field }) => (
               <Input
                 placeholder="Email"
@@ -73,6 +88,7 @@ export const LoginForm = ({ modalStates, setModalState }) => {
             name="password"
             type="password"
             control={control}
+            defaultValue="password123"
             render={({ field }) => (
               <Input
                 placeholder="Пароль"
@@ -121,7 +137,7 @@ export const LoginForm = ({ modalStates, setModalState }) => {
       >
         <Box
           cursor="pointer"
-          onClick={() => setModalState(modalStates.regisration)}
+          onClick={() => setModalState(modalStates.registration)}
         >
           Зарегистрироваться
         </Box>
