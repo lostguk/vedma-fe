@@ -13,23 +13,17 @@ export const UserForm = () => {
 
   const user = useSelector((state) => state.global.user)
 
-  console.log(user)
-
   const schema = Yup.object().shape({
     email: Yup.string()
       .email("Введите корректный адрес электронной почты")
       .required("Поле email обязательно для заполнения"),
-    password: Yup.string().required("Поле пароль обязательно для заполнения"),
-    password_confirmation: Yup.string()
-      .oneOf([Yup.ref("password"), null], "Пароли не совпадают")
-      .min(8, "Минимальная длина пароля 8 символов")
-      .required("Пароль является обязательным"),
     phone: Yup.string()
       .required("Поле email обязательно для заполнения")
       .matches(
         /^\+?[78][-\(]?\d{3}\)?-?\d{3}-?\d{2}-?\d{2}$/,
         "Введите корректный телефон",
       ),
+    address: Yup.string().required("Пароль является обязательным"),
     last_name: Yup.string().required("Пароль является обязательным"),
     first_name: Yup.string().required("Пароль является обязательным"),
     middle_name: Yup.string().required("Пароль является обязательным"),
@@ -40,16 +34,27 @@ export const UserForm = () => {
     formState: { errors },
     control,
     watch,
+    reset,
   } = useForm({
     resolver: yupResolver(schema),
+    defaultValues: {
+      email: user?.email,
+      phone: user?.phone.replaceAll(" ", "-"),
+      address: user?.address,
+      last_name: user?.last_name,
+      first_name: user?.first_name,
+      middle_name: user?.middle_name,
+    },
   })
 
   const onSubmit = async (data) => {
-    const response = await axiosClient.post("/register", {
+    console.log(data)
+    const response = await axiosClient.patch("/profile", {
       ...data,
     })
   }
-
+  console.log(watch("phone"))
+  console.log(errors)
   return (
     <div>
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -58,7 +63,6 @@ export const UserForm = () => {
             <Controller
               name="last_name"
               control={control}
-              defaultValue={user?.last_name}
               render={({ field }) => (
                 <Input
                   placeholder="Фамилия"
@@ -74,7 +78,6 @@ export const UserForm = () => {
             <Controller
               name="first_name"
               control={control}
-              defaultValue={user?.first_name}
               render={({ field }) => (
                 <Input
                   placeholder="Имя"
@@ -105,8 +108,7 @@ export const UserForm = () => {
           <Box width="calc(33.3333% - 6px)">
             <Controller
               name="phone"
-              error={errors?.email?.phone}
-              defaultValue={user?.phone}
+              error={errors?.phone}
               control={control}
               render={({ field }) => (
                 <Box direction="column" width="100%">
@@ -155,7 +157,6 @@ export const UserForm = () => {
             <Controller
               name="email"
               control={control}
-              defaultValue={user?.email}
               render={({ field }) => (
                 <Input
                   placeholder="Email"
@@ -166,8 +167,6 @@ export const UserForm = () => {
               )}
             />
           </Box>
-
-          {console.log(user?.address)}
 
           <Box width="100%">
             <Controller
@@ -205,6 +204,7 @@ export const UserForm = () => {
                 onClick={(e) => {
                   e.preventDefault()
                   setIsEdit(false)
+                  reset()
                 }}
               >
                 Отмена

@@ -9,6 +9,8 @@ import { COLORS, ICON_NAMES } from "src/core/constants"
 
 import { TabMenuItem } from "./styled"
 import { UserForm } from "./UserForm"
+import { Chat } from "./Chat"
+import { OrderHistory } from "./OrderHistory"
 
 const tabs = [
   { value: "user", label: "Моя информация" },
@@ -33,7 +35,7 @@ const UserPage = () => {
 
   return (
     <Container>
-      <Box direction="column">
+      <Box direction="column" width="100%">
         <Box
           color={COLORS.main}
           fontSize="40px"
@@ -73,11 +75,11 @@ const UserPage = () => {
           </TabItem>
 
           <TabItem tab={tabs[1].value} currentTab={tab}>
-            <Box color="white">2</Box>
+            <OrderHistory />
           </TabItem>
 
           <TabItem tab={tabs[2].value} currentTab={tab}>
-            <Box color="white">3</Box>
+            <Chat />
           </TabItem>
         </Box>
       </Box>

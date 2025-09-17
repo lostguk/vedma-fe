@@ -42,6 +42,7 @@ const sizes = {
 }
 
 const Styled = styled.button`
+  pointer-events: ${({ disabled }) => (disabled ? "none" : "initial")};
   width: ${({ width }) => width || "auto"};
   min-width: ${({ minWidth }) => minWidth || "40px"};
   max-width: ${({ maxWidth }) => maxWidth || "initial"};
@@ -52,8 +53,9 @@ const Styled = styled.button`
   background: ${({ variant }) => variants[variant].backgroundColor};
   transition: all 0.3s;
   border: 1px solid ${({ variant }) => variants[variant].borderColor};
-  cursor: pointer;
+  cursor: ${({ disabled }) => (disabled ? "not-allowed" : "pointer")};
   justify-content: center;
+  opacity: ${({ disabled }) => (disabled ? "0.7" : "1")};
   padding: ${({ size }) => sizes[size].padding};
   font-size: ${({ size }) => sizes[size].fontSize};
 

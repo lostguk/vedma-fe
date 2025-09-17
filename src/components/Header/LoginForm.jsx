@@ -41,8 +41,6 @@ export const LoginForm = ({ modalStates, setModalState, setModalOpen }) => {
       .then((res) => {
         const response = res.data.data
 
-        console.log(response)
-
         setToken(response.token)
 
         dispatch(setUser(response.user))

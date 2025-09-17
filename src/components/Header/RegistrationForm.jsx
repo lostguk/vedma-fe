@@ -38,8 +38,6 @@ export const RegistrationForm = ({ modalStates, setModalState }) => {
     resolver: yupResolver(schema),
   })
 
-  console.log(watch("address"))
-
   const onSubmit = (data) => {
     axiosClient
       .post("/register", {
@@ -49,8 +47,6 @@ export const RegistrationForm = ({ modalStates, setModalState }) => {
       .then(() => {
         setModalState(modalStates.registrationSuccess)
       })
-
-    console.log(data)
   }
 
   return (
@@ -163,7 +159,7 @@ export const RegistrationForm = ({ modalStates, setModalState }) => {
               )}
             />
           </Box>
-          {console.log(watch("address"))}
+
           <Box width="100%">
             <Controller
               name="address"

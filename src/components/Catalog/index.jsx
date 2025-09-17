@@ -10,8 +10,6 @@ export const Catalog = () => {
   const menu = useSelector((state) => state.categories.items)
   const { category } = useSelector((state) => state.products.filter)
 
-  console.log(menu)
-
   const [currentMenu, setCurrentMenu] = useState([])
 
   const [currentLevel, setCurrentlevel] = useState(0)

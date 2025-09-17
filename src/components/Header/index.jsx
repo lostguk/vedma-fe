@@ -2,8 +2,11 @@ import React, { useEffect, useState } from "react"
 import { Box, Link, Container, Button, Icon, Cart } from "src/components"
 import { COLORS, ICON_NAMES, PAGES } from "src/core/constants"
 import { setCart } from "src/core/helpers"
+import { setUser } from "src/store/slices/global/slice"
 import { useNavigate } from "react-router-dom"
-import { useSelector } from "react-redux"
+import { useSelector, useDispatch } from "react-redux"
+import axiosClient, { getToken } from "src/core/axios-client"
+
 import { StyledHeader } from "./styled"
 import { AuthModal } from "./AuthModal"
 
@@ -31,6 +34,7 @@ const links = [
 ]
 
 export const Header = () => {
+  const dispatch = useDispatch()
   const [isModalOpen, setModalOpen] = useState(false)
   const [isCartOpen, setCartOpen] = useState(false)
   const navigate = useNavigate()
@@ -48,6 +52,14 @@ export const Header = () => {
   useEffect(() => {
     setCart(cart)
   }, [cart])
+
+  useEffect(() => {
+    if (getToken()) {
+      axiosClient
+        .get("/profile")
+        .then((res) => dispatch(setUser(res.data.data)))
+    }
+  }, [])
 
   const toggleCart = () => setCartOpen((prev) => !prev)
 

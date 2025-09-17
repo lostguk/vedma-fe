@@ -38,7 +38,6 @@ export const slice = createSlice({
 
   reducers: {
     setFilter(state, { payload: { filter, value } }) {
-      console.log(filter, value)
       state.filter[filter] = value
     },
     setPage(state, { payload }) {
