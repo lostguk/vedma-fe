@@ -51,8 +51,8 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            mkdir -p ~/opt/vedma-fe
-            rm -rf ~/opt/vedma-fe/*
+            mkdir -p /opt/vedma-fe
+            rm -rf /opt/vedma-fe/*
 
       - name: Upload dist via SCP
         uses: appleboy/scp-action@v0.1.7
@@ -62,4 +62,4 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           source: "dist/*"
-          target: "~/opt/vedma-fe"
+          target: "/opt/vedma-fe"
