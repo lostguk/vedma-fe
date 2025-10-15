@@ -61,5 +61,6 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           port: ${{ secrets.SSH_PORT }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: "dist/*"
+          source: "dist/**"
+          strip_components: 1
           target: "/opt/vedma-fe"
