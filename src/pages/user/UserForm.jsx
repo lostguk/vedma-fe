@@ -1,14 +1,20 @@
 import React, { useState } from "react"
 import { Box, Button, Input, PhoneInput } from "src/components"
 import { useForm, Controller } from "react-hook-form"
-import { COLORS } from "src/core/constants"
+import { PAGES } from "src/core/constants"
 import { yupResolver } from "@hookform/resolvers/yup"
 import * as Yup from "yup"
 import { AddressSuggestions } from "react-dadata"
-import axiosClient from "src/core/axios-client"
 import { useDispatch, useSelector } from "react-redux"
+import axiosClient, { removeToken } from "src/core/axios-client"
+import { useNavigate } from "react-router-dom"
+import { setUser } from "src/store/slices/global/slice"
 
 export const UserForm = () => {
+  const navigate = useNavigate()
+
+  const dispatch = useDispatch()
+
   const [isEdit, setIsEdit] = useState(false)
 
   const user = useSelector((state) => state.global.user)
@@ -48,13 +54,17 @@ export const UserForm = () => {
   })
 
   const onSubmit = async (data) => {
-    console.log(data)
     const response = await axiosClient.patch("/profile", {
       ...data,
     })
   }
-  console.log(watch("phone"))
-  console.log(errors)
+
+  const logout = () => {
+    removeToken()
+    navigate(PAGES.main)
+    dispatch(setUser(null))
+  }
+
   return (
     <div>
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -231,7 +241,7 @@ export const UserForm = () => {
                   type="button"
                   onClick={(e) => {
                     e.preventDefault()
-                    setIsEdit(true)
+                    logout()
                   }}
                 >
                   Выйти

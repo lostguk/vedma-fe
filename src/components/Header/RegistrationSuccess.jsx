@@ -1,6 +1,6 @@
 import { Box, Button } from "src/components"
 
-export const RegistrationSuccess = ({ modalStates, setModalState }) => {
+export const RegistrationSuccess = ({ setModalOpen }) => {
   return (
     <Box padding="32px" direction="column" color="black">
       <Box fontSize="40px" color="#292929" marginBottom="16px">
@@ -12,7 +12,9 @@ export const RegistrationSuccess = ({ modalStates, setModalState }) => {
       </Box>
 
       <Box width="100$" justify="center" marginTop="24px">
-        <Button size="large">Закрыть</Button>
+        <Button onClick={() => setModalOpen(false)} size="large">
+          Закрыть
+        </Button>
       </Box>
     </Box>
   )

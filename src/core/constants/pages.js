@@ -7,4 +7,5 @@ export const PAGES = {
   order: "/order",
   user: "/user",
   return: "/user",
+  verify: "/verify-registration",
 }

@@ -1,5 +1,14 @@
 import React, { useEffect, useState } from "react"
-import { Box, Link, Container, Button, Icon, Cart } from "src/components"
+import {
+  Box,
+  Link,
+  Container,
+  Button,
+  Icon,
+  Cart,
+  SidePage,
+  Badge,
+} from "src/components"
 import { COLORS, ICON_NAMES, PAGES } from "src/core/constants"
 import { setCart } from "src/core/helpers"
 import { setUser } from "src/store/slices/global/slice"
@@ -65,7 +74,11 @@ export const Header = () => {
 
   return (
     <StyledHeader>
-      {isCartOpen && <Cart toggleCart={toggleCart} />}
+      {isCartOpen && (
+        <SidePage isOpen={isCartOpen} toggle={toggleCart}>
+          <Cart toggleCart={toggleCart} />
+        </SidePage>
+      )}
 
       {isModalOpen && (
         <AuthModal isModalOpen={isModalOpen} setModalOpen={setModalOpen} />
@@ -86,6 +99,7 @@ export const Header = () => {
               </Box>
             ))}
           </Box>
+
           <Box color="white" fontWeight={250} marginLeft="auto">
             Пн-пт с 12-00 до 19-00
           </Box>
@@ -97,13 +111,14 @@ export const Header = () => {
 
           <Box marginLeft="auto" gap="8px" align="center">
             <Button variant="secondary" onClick={onProfileClick}>
-              <Icon name={ICON_NAMES.profile} />
+              {Boolean(user) ? <Icon name={ICON_NAMES.profile} /> : "Войти"}
             </Button>
 
             <Button variant="secondary" onClick={toggleCart}>
               <Box align="center">
                 <Icon name={ICON_NAMES.basket} />
-                &nbsp; Корзина
+                &nbsp; Корзина &nbsp;
+                {Boolean(cart?.length) && <Badge>{cart?.length}</Badge>}
               </Box>
             </Button>
 

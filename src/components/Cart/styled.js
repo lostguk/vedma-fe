@@ -1,18 +1,14 @@
 import styled from "@emotion/styled"
 
 export const CartBody = styled.div`
-  position: absolute;
   background: #fff;
-  right: 20px;
-  top: 10vh;
   width: 100%;
   max-width: 800px;
   border-radius: 20px;
   padding: 24px;
   display: flex;
   flex-direction: column;
-  z-index: 10;
-  max-height: 80vh;
+  height: 100%;
   overflow: auto;
 `
 

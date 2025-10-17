@@ -9,6 +9,7 @@ import UserPage from "src/pages/user"
 import DeliveryPage from "src/pages/delivery"
 import ContactsPage from "src/pages/contacts"
 import ReturnPage from "src/pages/return"
+import VerifyEmailPage from "src/pages/verify-registration"
 
 export const router = createBrowserRouter([
   {
@@ -45,6 +46,10 @@ export const router = createBrowserRouter([
       {
         path: PAGES.exchange,
         element: <ReturnPage />,
+      },
+      {
+        path: PAGES.verify,
+        element: <VerifyEmailPage />,
       },
     ],
   },

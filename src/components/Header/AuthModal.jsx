@@ -60,12 +60,8 @@ export const AuthModal = ({ setModalOpen, isModalOpen }) => {
         />
       </TabItem>
 
-      <TabItem
-        tab={modalStates.registrationSuccess}
-        currentTab={modalState}
-        setModalOpen={setModalOpen}
-      >
-        <RegistrationSuccess />
+      <TabItem tab={modalStates.registrationSuccess} currentTab={modalState}>
+        <RegistrationSuccess setModalOpen={setModalOpen} />
       </TabItem>
 
       <TabItem

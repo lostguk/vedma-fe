@@ -36,17 +36,33 @@ export const Card = (props) => {
         <Icon name={ICON_NAMES.cross} color="#FF0000" />
       </Box>
 
-      <Box borderRadius="20px" overflow="hidden" marginBottom="8px" width="35%">
+      <Box borderRadius="20px" overflow="hidden" width="35%">
         <img width="100%" src={props.thumb_url} />
       </Box>
 
-      <Box width="45%" padding="0 16px" direction="column" marginBottom="5px">
+      <Box
+        width="45%"
+        padding="0 16px"
+        direction="column"
+        marginBottom="5px"
+        alignSelf="flex-start"
+        height="100%"
+      >
         <Box
-          fontSize="28px"
+          fontSize="18px"
+          fontWeight="600"
+          color="#000000"
+          margin="0 0 8px 4px"
+        >
+          {props.name}
+        </Box>
+
+        <Box
+          fontSize="16px"
           fontWeight="600"
           color="#3A3A3A"
-          marginRight="8px"
-          align="flex-end"
+          direction="column"
+          marginTop="auto"
         >
           <NumericFormat
             displayType="text"
@@ -56,23 +72,14 @@ export const Card = (props) => {
           />
 
           <Box
-            fontSize="14px"
+            fontSize="12px"
             fontWeight="600"
             color="#000000"
             opacity="0.5"
-            margin="0 0 3px 5px"
+            marginTop="4px"
           >
             цена за штуку
           </Box>
-        </Box>
-
-        <Box
-          fontSize="18px"
-          fontWeight="600"
-          color="#000000"
-          margin="4px 0 16px 4px"
-        >
-          {props.name}
         </Box>
       </Box>
 
