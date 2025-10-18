@@ -15,6 +15,7 @@ import { setUser } from "src/store/slices/global/slice"
 import { useNavigate } from "react-router-dom"
 import { useSelector, useDispatch } from "react-redux"
 import axiosClient, { getToken } from "src/core/axios-client"
+import Logo from "src/assets/logo.png"
 
 import { StyledHeader } from "./styled"
 import { AuthModal } from "./AuthModal"
@@ -106,7 +107,7 @@ export const Header = () => {
         </Box>
         <Box width="100%" align="center" marginTop="16px">
           <Box color="#fff">
-            <img width="100%" src="src/assets/logo.png" />
+            <img width="100%" src={Logo} />
           </Box>
 
           <Box marginLeft="auto" gap="8px" align="center">
