@@ -22,7 +22,7 @@ jobs:
         run: npm ci --legacy-peer-deps
 
       - name: Build
-        run: npm run build
+        run: yarn build
         env:
           VITE_API_URL: ${{ secrets.VITE_API_URL }}
           VITE_DADATA_TOKEN: ${{ secrets.VITE_DADATA_TOKEN }}
