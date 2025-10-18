@@ -1,6 +1,7 @@
 import { Box, Link, Container, Button, Icon } from "src/components"
 import { StyledFooter, FooterItem } from "./styled"
 import { COLORS } from "src/core/constants"
+import Logo from "src/assets/logo.png"
 
 export const Footer = () => {
   return (
@@ -8,7 +9,7 @@ export const Footer = () => {
       <Container>
         <Box wrap="wrap" gap="12px" width="100%">
           <Box width="calc(25% - 12px)" align="flex-start">
-            <img width="100%" src="src/assets/logo.png" />
+            <img width="100%" src={Logo} />
           </Box>
 
           <Box width="calc(25% - 12px)" direction="column" gap="4px">

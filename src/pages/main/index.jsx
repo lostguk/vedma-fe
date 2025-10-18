@@ -7,7 +7,8 @@ import { useNavigate } from "react-router-dom"
 import MainImg from "src/assets/main-card.jpg"
 import MagicBook from "src/assets/magic-book.png"
 import LeftEye from "src/assets/left-eye.png"
-import RightEye from "src/assets/left-eye.png"
+import RightEye from "src/assets/right-eye.png"
+import Book from "src/assets/book.png"
 
 const Main = () => {
   const dispatch = useDispatch()
@@ -18,15 +19,15 @@ const Main = () => {
 
   const infoItems = [
     {
-      img: "src/assets/book.png",
+      img: Book,
       desc: "Проверенные рецепты",
     },
     {
-      img: "src/assets/book.png",
+      img: Book,
       desc: "Только натуральные материалы",
     },
     {
-      img: "src/assets/book.png",
+      img: Book,
       desc: "Энергетическая зарядка каждого изделия",
     },
   ]
