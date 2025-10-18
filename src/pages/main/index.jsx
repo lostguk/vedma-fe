@@ -4,6 +4,10 @@ import { COLORS, PAGES } from "src/core/constants"
 import { useDispatch, useSelector } from "react-redux"
 import { fetchCandels } from "src/store/slices/mainPage/slice"
 import { useNavigate } from "react-router-dom"
+import MainImg from "src/assets/main-card.jpg"
+import MagicBook from "src/assets/magic-book.png"
+import LeftEye from "src/assets/left-eye.png"
+import RightEye from "src/assets/left-eye.png"
 
 const Main = () => {
   const dispatch = useDispatch()
@@ -54,7 +58,7 @@ const Main = () => {
       <Container>
         <Box padding="24px 0 40px" gap="56px" width="100%">
           <Box width="40%" borderRadius="20px" overflow="hidden">
-            <img width="100%" src="src/assets/main-card.jpg" />
+            <img width="100%" src={MainImg} />
           </Box>
 
           <Box width="60%" direction="column">
@@ -127,7 +131,7 @@ const Main = () => {
         <Container>
           <Box gap="32px">
             <Box maxWidth="130px">
-              <img width="100%" src="src/assets/magic-book.png" />
+              <img width="100%" src={MagicBook} />
             </Box>
 
             <Box direction="column" gap="32px">
@@ -256,7 +260,7 @@ const Main = () => {
               borderRadiusBL="5px"
               overflow="hidden"
             >
-              <img width="100%" src="src/assets/left-eye.png" />
+              <img width="100%" src={LeftEye} />
             </Box>
 
             <Box
@@ -266,7 +270,7 @@ const Main = () => {
               borderRadiusBR="5px"
               overflow="hidden"
             >
-              <img width="100%" src="src/assets/right-eye.png" />
+              <img width="100%" src={RightEye} />
             </Box>
           </Box>
 
