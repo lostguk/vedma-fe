@@ -1,17 +1,18 @@
 import React from "react"
-import { Button, Box } from "src/components"
+import { Button, Box, ActionButton } from "src/components"
 import { useDispatch, useSelector } from "react-redux"
 import { NumericFormat } from "react-number-format"
+import { PAGES } from "src/core/constants"
+import { generatePath, useNavigate } from "react-router-dom"
 import {
   addCartItem,
   plusCartItem,
   minusCartItem,
 } from "src/store/slices/global/slice"
 
-import { ActionButton } from "./styled"
-
 export const Card = (props) => {
   const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   const {
     name = "Свеча «Защита»",
@@ -19,27 +20,30 @@ export const Card = (props) => {
     price = 300,
     old_price,
     id,
+    slug,
   } = props
 
   const cart = useSelector((state) => state.global.cart)
 
   const currentItem = cart.find(({ id }) => id === props.id)
 
-  const plusItem = () => dispatch(plusCartItem(props.id))
+  const plusItem = () => dispatch(plusCartItem(id))
 
-  const minusItem = () => dispatch(minusCartItem(props.id))
+  const minusItem = () => dispatch(minusCartItem(id))
 
   const addToCart = () => {
     dispatch(addCartItem(props))
   }
 
   return (
-    <Box direction="column">
+    <Box direction="column" height="100%">
       <Box
         borderRadius="20px"
         overflow="hidden"
         marginBottom="8px"
         height="260px"
+        onClick={() => navigate(generatePath(PAGES.product, { slug }))}
+        cursor="pointer"
       >
         <img width="100%" src={props.thumb_url} />
       </Box>
@@ -50,7 +54,7 @@ export const Card = (props) => {
 
       <Box marginBottom="8px">{name}</Box>
 
-      <Box marginBottom="16px" aling="flex-start">
+      <Box marginBottom="16px" align="flex-start">
         <Box fontSize="18px" fontWeight="600" color="#fff" marginRight="8px">
           <NumericFormat
             displayType="text"

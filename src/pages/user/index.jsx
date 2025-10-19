@@ -4,11 +4,13 @@ import { fetchProducts, setPage } from "src/store/slices/products/slice"
 import { useDispatch, useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
 import { PAGES } from "src/core/constants"
+import { getToken } from "src/core/axios-client"
 
 import { COLORS, ICON_NAMES } from "src/core/constants"
 
 import { TabMenuItem } from "./styled"
 import { UserForm } from "./UserForm"
+import { ChangePasswordForm } from "./ChangePasswordForm"
 import { Chat } from "./Chat"
 import { OrderHistory } from "./OrderHistory"
 
@@ -16,9 +18,10 @@ const tabs = [
   { value: "user", label: "Моя информация" },
   { value: "history", label: "История заказов" },
   { value: "chat", label: "Чат с админом" },
+  { value: "changePassword", label: "Изменить пароль" },
 ]
 
-const UserPage = () => {
+export const UserPage = () => {
   const dispatch = useDispatch()
 
   const navigate = useNavigate()
@@ -28,7 +31,7 @@ const UserPage = () => {
   const [tab, setTab] = useState(tabs[0].value)
 
   useEffect(() => {
-    if (!user) {
+    if (!getToken()) {
       navigate(PAGES.main)
     }
   }, [])
@@ -81,10 +84,12 @@ const UserPage = () => {
           <TabItem tab={tabs[2].value} currentTab={tab}>
             <Chat />
           </TabItem>
+
+          <TabItem tab={tabs[3].value} currentTab={tab}>
+            <ChangePasswordForm />
+          </TabItem>
         </Box>
       </Box>
     </Container>
   )
 }
-
-export default UserPage

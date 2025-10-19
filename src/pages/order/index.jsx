@@ -24,7 +24,7 @@ const options = [
   { value: "vanilla", label: "Vanilla" },
 ]
 
-const OrderPage = () => {
+export const OrderPage = () => {
   const dispatch = useDispatch()
 
   const { cart } = useSelector((state) => state.global)
@@ -458,5 +458,3 @@ const OrderPage = () => {
     </Box>
   )
 }
-
-export default OrderPage

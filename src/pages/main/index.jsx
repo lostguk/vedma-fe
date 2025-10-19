@@ -10,7 +10,7 @@ import LeftEye from "src/assets/left-eye.png"
 import RightEye from "src/assets/right-eye.png"
 import Book from "src/assets/book.png"
 
-const Main = () => {
+export const Main = () => {
   const dispatch = useDispatch()
 
   const navigate = useNavigate()
@@ -320,5 +320,3 @@ const Main = () => {
     </>
   )
 }
-
-export default Main

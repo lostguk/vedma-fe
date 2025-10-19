@@ -9,6 +9,8 @@ import {
 } from "src/store/slices/chat/slice"
 
 export const Chat = () => {
+  const [isLoading, setIsLoading] = useState(false)
+
   const dispatch = useDispatch()
 
   const [message, setMessage] = useState("")
@@ -24,6 +26,7 @@ export const Chat = () => {
   const backToThemesHandler = () => dispatch(resetCurrentTopic())
 
   const sendMessage = () => {
+    setIsLoading(true)
     axiosClient
       .post(`/topics/${currentTopic?.id}/messages`, {
         content: message,
@@ -32,6 +35,7 @@ export const Chat = () => {
         selectTopicHandler(currentTopic?.id)
         setMessage("")
       })
+      .finally(() => setIsLoading(false))
   }
 
   return (
@@ -91,7 +95,11 @@ export const Chat = () => {
           />
 
           <Box justify="flex-end" width="100%" marginTop="16px">
-            <Button disabled={!Boolean(message)} onClick={sendMessage}>
+            <Button
+              disabled={!Boolean(message)}
+              onClick={sendMessage}
+              isLoading={isLoading}
+            >
               Отправить
             </Button>
           </Box>

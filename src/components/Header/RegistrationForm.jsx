@@ -8,6 +8,8 @@ import { AddressSuggestions } from "react-dadata"
 import axiosClient from "src/core/axios-client"
 
 export const RegistrationForm = ({ modalStates, setModalState }) => {
+  const [isLoading, setIsLoading] = useState(false)
+
   const schema = Yup.object().shape({
     email: Yup.string()
       .email("Введите корректный адрес электронной почты")
@@ -39,6 +41,7 @@ export const RegistrationForm = ({ modalStates, setModalState }) => {
   })
 
   const onSubmit = (data) => {
+    setIsLoading(true)
     axiosClient
       .post("/register", {
         ...data,
@@ -47,6 +50,7 @@ export const RegistrationForm = ({ modalStates, setModalState }) => {
       .then(() => {
         setModalState(modalStates.registrationSuccess)
       })
+      .finally(() => setIsLoading(false))
   }
 
   return (
@@ -226,7 +230,12 @@ export const RegistrationForm = ({ modalStates, setModalState }) => {
           </Box>
         </Box>
 
-        <Button width="100%" type="submit" variant="black">
+        <Button
+          width="100%"
+          type="submit"
+          variant="black"
+          isLoading={isLoading}
+        >
           Зарегистрироваться
         </Button>
       </form>

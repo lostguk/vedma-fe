@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import { Box, Button, Input } from "src/components"
 import { useForm, Controller } from "react-hook-form"
 import { COLORS } from "src/core/constants"
@@ -10,6 +10,8 @@ import { useDispatch } from "react-redux"
 
 export const LoginForm = ({ modalStates, setModalState, setModalOpen }) => {
   const dispatch = useDispatch()
+
+  const [isLoading, setIsLoading] = useState(false)
 
   const schema = Yup.object().shape({
     email: Yup.string()
@@ -33,6 +35,7 @@ export const LoginForm = ({ modalStates, setModalState, setModalOpen }) => {
   })
 
   const onSubmit = ({ email, password }) => {
+    setIsLoading(true)
     axiosClient
       .post("/login", {
         email,
@@ -53,6 +56,7 @@ export const LoginForm = ({ modalStates, setModalState, setModalOpen }) => {
           message: err?.response?.data?.message,
         })
       })
+      .finally(() => setIsLoading(false))
   }
 
   useEffect(() => {
@@ -120,7 +124,13 @@ export const LoginForm = ({ modalStates, setModalState, setModalOpen }) => {
           </Box>
         </Box>
 
-        <Button width="100%" type="submit" from="loginForm" variant="black">
+        <Button
+          width="100%"
+          type="submit"
+          from="loginForm"
+          variant="black"
+          isLoading={isLoading}
+        >
           Войти
         </Button>
       </form>

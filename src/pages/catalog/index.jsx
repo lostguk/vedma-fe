@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { Pagination } from "./styled"
 import { ICON_NAMES } from "src/core/constants"
 
-const CatalogPage = () => {
+export const CatalogPage = () => {
   const dispatch = useDispatch()
 
   const {
@@ -60,5 +60,3 @@ const CatalogPage = () => {
     </Container>
   )
 }
-
-export default CatalogPage

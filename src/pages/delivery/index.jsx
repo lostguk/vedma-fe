@@ -4,7 +4,7 @@ import { Container, Box, Icon } from "src/components"
 import { useDispatch } from "react-redux"
 import { ICON_NAMES } from "src/core/constants"
 
-const DeliveryPage = () => {
+export const DeliveryPage = () => {
   const [page, setPage] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
 
@@ -55,5 +55,3 @@ const DeliveryPage = () => {
     </Box>
   )
 }
-
-export default DeliveryPage

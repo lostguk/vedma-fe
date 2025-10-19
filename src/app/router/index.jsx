@@ -1,15 +1,18 @@
 import { createBrowserRouter } from "react-router-dom"
 import { PAGES } from "src/core/constants"
-import DefaultLayout from "src/app/lauout"
+import DefaultLayout from "src/app/layout"
 
-import Main from "src/pages/main"
-import CatalogPage from "src/pages/catalog"
-import OrderPage from "src/pages/order"
-import UserPage from "src/pages/user"
-import DeliveryPage from "src/pages/delivery"
-import ContactsPage from "src/pages/contacts"
-import ReturnPage from "src/pages/return"
-import VerifyEmailPage from "src/pages/verify-registration"
+import {
+  Main,
+  CatalogPage,
+  OrderPage,
+  UserPage,
+  DeliveryPage,
+  ContactsPage,
+  ReturnPage,
+  VerifyEmailPage,
+  Product,
+} from "src/pages"
 
 export const router = createBrowserRouter([
   {
@@ -50,6 +53,10 @@ export const router = createBrowserRouter([
       {
         path: PAGES.verify,
         element: <VerifyEmailPage />,
+      },
+      {
+        path: PAGES.product,
+        element: <Product />,
       },
     ],
   },

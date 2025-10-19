@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { Box, Button, Input, PhoneInput } from "src/components"
 import { useForm, Controller } from "react-hook-form"
 import { PAGES } from "src/core/constants"
@@ -11,6 +11,8 @@ import { useNavigate } from "react-router-dom"
 import { setUser } from "src/store/slices/global/slice"
 
 export const UserForm = () => {
+  const [isLoading, setIsLoading] = useState(false)
+
   const navigate = useNavigate()
 
   const dispatch = useDispatch()
@@ -39,8 +41,8 @@ export const UserForm = () => {
     handleSubmit,
     formState: { errors },
     control,
-    watch,
     reset,
+    setValue,
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
@@ -54,9 +56,16 @@ export const UserForm = () => {
   })
 
   const onSubmit = async (data) => {
-    const response = await axiosClient.patch("/profile", {
-      ...data,
-    })
+    setIsLoading(true)
+
+    const response = await axiosClient
+      .patch("/profile", {
+        ...data,
+      })
+      .finally(() => {
+        setIsLoading(false)
+        setIsEdit(false)
+      })
   }
 
   const logout = () => {
@@ -64,6 +73,17 @@ export const UserForm = () => {
     navigate(PAGES.main)
     dispatch(setUser(null))
   }
+
+  useEffect(() => {
+    if (user) {
+      setValue("email", user?.email)
+      setValue("phone", user?.phone.replaceAll(" ", "-"))
+      setValue("address", user?.address)
+      setValue("last_name", user?.last_name)
+      setValue("first_name", user?.first_name)
+      setValue("middle_name", user?.middle_name)
+    }
+  }, [user])
 
   return (
     <div>
@@ -185,7 +205,7 @@ export const UserForm = () => {
               render={({ field: { onChange, value } }) => (
                 <AddressSuggestions
                   customInput={Input}
-                  defaultQuery={user?.address}
+                  defaultQuery={value}
                   token={import.meta.env.VITE_DADATA_TOKEN}
                   value={value}
                   onChange={onChange}
@@ -203,7 +223,12 @@ export const UserForm = () => {
         <Box gap="16px" marginTop="40px">
           {isEdit ? (
             <>
-              <Button width="auto" type="submit" variant="primary">
+              <Button
+                width="auto"
+                type="submit"
+                variant="primary"
+                isLoading={isLoading}
+              >
                 Сохранить
               </Button>
 

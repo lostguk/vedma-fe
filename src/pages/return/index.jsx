@@ -3,7 +3,7 @@ import axiosClient from "src/core/axios-client"
 import { Container, Box, Icon } from "src/components"
 import { ICON_NAMES } from "src/core/constants"
 
-const ReturnPage = () => {
+export const ReturnPage = () => {
   const [page, setPage] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
 
@@ -54,5 +54,3 @@ const ReturnPage = () => {
     </Box>
   )
 }
-
-export default ReturnPage

@@ -67,6 +67,15 @@ export const GlobalStyles = () => (
       .react-dadata__input::placeholder {
         font-size: 14px;
       }
+
+      .slick-track {
+        display: flex;
+      }
+
+      .slick-track .slick-slide {
+        display: flex;
+        height: auto;
+      }
     `}
   />
 )

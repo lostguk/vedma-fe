@@ -1,5 +1,7 @@
 import styled from "@emotion/styled"
 import { COLORS } from "src/core/constants"
+import { ICON_NAMES } from "src/core/constants"
+import { Icon, Box } from "src/components"
 
 const variants = {
   primary: {
@@ -69,10 +71,17 @@ const Styled = styled.button`
 export const Button = ({
   variant = "primary",
   size = "medium",
+  isLoading,
   children,
   ...props
 }) => (
   <Styled variant={variant} size={size} {...props}>
-    {children}
+    {isLoading ? (
+      <Box width="19px" height="19px">
+        <Icon name={ICON_NAMES.buttonLoader} />
+      </Box>
+    ) : (
+      children
+    )}
   </Styled>
 )

@@ -1,6 +1,6 @@
 import styled from "@emotion/styled"
 
-export const ActionButton = styled.div`
+export const Styled = styled.div`
   display: flex;
   width: 30px;
   height: 30px;
@@ -17,3 +17,5 @@ export const ActionButton = styled.div`
     opacity: 0.6;
   }
 `
+
+export const ActionButton = ({ children }) => <Styled>{children}</Styled>
