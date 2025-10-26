@@ -12,6 +12,7 @@ import {
   ReturnPage,
   VerifyEmailPage,
   Product,
+  CategoryPage,
 } from "src/pages"
 
 export const router = createBrowserRouter([
@@ -29,6 +30,10 @@ export const router = createBrowserRouter([
       {
         path: PAGES.catalog,
         element: <CatalogPage />,
+      },
+      {
+        path: PAGES.category,
+        element: <CategoryPage />,
       },
       {
         path: PAGES.order,

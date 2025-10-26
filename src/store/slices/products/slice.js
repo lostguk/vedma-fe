@@ -33,8 +33,10 @@ const initialState = {
   total: 0,
   filter: {
     search: "",
-    category: null,
+    slugs: [],
   },
+  catalogMenuLevel: 0,
+  catalogMenu: [],
   isLoading: false,
   isProductLoading: false,
 }
@@ -45,8 +47,25 @@ export const slice = createSlice({
   initialState,
 
   reducers: {
-    setFilter(state, { payload: { filter, value } }) {
-      state.filter[filter] = value
+    setCatalogMenuLevel(state, { payload }) {
+      state.catalogMenuLevel = payload
+      state.page = initialState.page
+    },
+
+    setCatalogMenu(state, { payload }) {
+      state.catalogMenu = payload
+      state.page = initialState.page
+    },
+
+    setFilter(state, { payload }) {
+      state.filter = { ...state.filter, ...payload }
+      state.page = initialState.page
+    },
+    resetCatalog(state) {
+      state.filter = initialState.filter
+      state.catalogMenuLevel = initialState.catalogMenuLevel
+      state.catalogMenu = initialState.catalogMenu
+      state.page = initialState.page
     },
     setPage(state, { payload }) {
       state.page = payload
@@ -75,8 +94,22 @@ export const slice = createSlice({
   },
 })
 
-const { setPage, setFilter } = slice.actions
+const {
+  setPage,
+  setFilter,
+  setCatalogMenu,
+  setCatalogMenuLevel,
+  resetCatalog,
+} = slice.actions
 
-export { fetchProducts, setPage, setFilter, fetchProduct }
+export {
+  fetchProducts,
+  setPage,
+  setFilter,
+  fetchProduct,
+  setCatalogMenu,
+  setCatalogMenuLevel,
+  resetCatalog,
+}
 
 export default slice.reducer

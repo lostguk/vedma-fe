@@ -1,12 +1,11 @@
 import React, { useEffect } from "react"
 import { Catalog, Container, Box, Card, Icon, Pagination } from "src/components"
 import { fetchProducts, setPage } from "src/store/slices/products/slice"
-import { resetCatalog } from "src/store/slices/products/slice"
 import { useDispatch, useSelector } from "react-redux"
 
 import { ICON_NAMES } from "src/core/constants"
 
-export const CatalogPage = () => {
+export const CategoryPage = () => {
   const dispatch = useDispatch()
 
   const {
@@ -15,18 +14,23 @@ export const CatalogPage = () => {
     per_page,
     total,
     isLoading,
-    filter: { search },
+    filter: { slug, search },
   } = useSelector((state) => state.products)
 
   const handlePageClick = ({ selected }) => dispatch(setPage(selected + 1))
 
   useEffect(() => {
-    dispatch(fetchProducts({ page, per_page, category: undefined, search }))
-  }, [page, search])
+    dispatch(
+      fetchProducts({
+        page,
+        per_page,
+        category: slug,
+        search,
+      }),
+    )
+  }, [page, slug, search])
 
-  useEffect(() => {
-    dispatch(resetCatalog())
-  }, [])
+  useEffect(() => {}, [])
 
   return (
     <Container>

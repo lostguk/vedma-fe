@@ -1,5 +1,6 @@
 export * from "./main"
 export * from "./catalog"
+export * from "./category"
 export * from "./user"
 export * from "./contacts"
 export * from "./delivery"

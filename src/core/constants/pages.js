@@ -1,7 +1,8 @@
 export const PAGES = {
   main: "/",
   catalog: "/catalog",
-  product: "/catalog/:slug",
+  category: "/catalog/:slug",
+  product: "/catalog/product/:slug",
   delivery: "/delivery",
   exchange: "/exchange",
   contacts: "/contacts",

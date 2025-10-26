@@ -12,6 +12,7 @@ import Slider from "react-slick"
 import { useParams } from "react-router-dom"
 import { fetchProduct } from "src/store/slices/products/slice"
 import { ICON_NAMES } from "src/core/constants"
+import { NumericFormat } from "react-number-format"
 import {
   addCartItem,
   plusCartItem,
@@ -41,7 +42,7 @@ export const Product = () => {
 
   useEffect(() => {
     dispatch(fetchProduct({ slug: params.slug }))
-  }, [])
+  }, [params.slug])
 
   const settings = {
     dots: true,
@@ -80,11 +81,21 @@ export const Product = () => {
                 direction="column"
                 padding=" 16px 16px 16px 32px"
               >
-                <Box fontSize="18px" color="white" marginBottom="32px">
-                  {product?.description}
+                <Box fontSize="32px" color="white" marginBottom="32px">
+                  <NumericFormat
+                    displayType="text"
+                    value={product.price}
+                    suffix=" ₽"
+                    thousandSeparator=" "
+                  />
                 </Box>
 
-                <Box width="100%" direction="column" align="center">
+                <Box
+                  width="100%"
+                  direction="column"
+                  align="flex-start"
+                  marginBottom="32px"
+                >
                   {currentItem ? (
                     <Box>
                       <Box onClick={minusItem}>
@@ -98,15 +109,14 @@ export const Product = () => {
                       </Box>
                     </Box>
                   ) : (
-                    <Button
-                      width="100%"
-                      maxWidth="200px"
-                      variant="secondary"
-                      onClick={addToCart}
-                    >
+                    <Button width="100%" maxWidth="200px" onClick={addToCart}>
                       В корзину
                     </Button>
                   )}
+                </Box>
+
+                <Box fontSize="18px" color="white" marginBottom="32px">
+                  {product?.description}
                 </Box>
               </Box>
             </Box>
@@ -125,7 +135,7 @@ export const Product = () => {
             {Boolean(product?.related?.length) && (
               <div className="slider-container">
                 <Slider {...settings}>
-                  {[...product.related, ...product.related].map((product) => (
+                  {product.related.map((product) => (
                     <Box height="100%" key={product.id} padding="0 8px">
                       <Card {...product} />
                     </Box>

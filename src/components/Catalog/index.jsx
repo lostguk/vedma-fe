@@ -1,49 +1,72 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useMemo } from "react"
 import { Box, Icon } from "src/components"
 import { fetchCategories } from "src/store/slices/categories/slice"
-import { setFilter } from "src/store/slices/products/slice"
+import {
+  setFilter,
+  setCatalogMenu,
+  setCatalogMenuLevel,
+} from "src/store/slices/products/slice"
 import { useDispatch, useSelector } from "react-redux"
+import { useNavigate, generatePath } from "react-router-dom"
 import { CatalogBody, CategoriesBody, Category, CategoriesItem } from "./styled"
-import { ICON_NAMES } from "src/core/constants"
+import { ICON_NAMES, PAGES } from "src/core/constants"
 
 export const Catalog = () => {
+  const navigate = useNavigate()
+
   const menu = useSelector((state) => state.categories.items)
-  const { category } = useSelector((state) => state.products.filter)
 
-  const [currentMenu, setCurrentMenu] = useState([])
+  const { slugs, slug: currentSlug } = useSelector(
+    (state) => state.products.filter,
+  )
 
-  const [currentLevel, setCurrentlevel] = useState(0)
+  const { catalogMenuLevel, catalogMenu } = useSelector(
+    (state) => state.products,
+  )
 
   const dispatch = useDispatch()
 
   const onCategoryClick = ({ menu, level, slug }) => {
-    if (!menu?.length) {
-      dispatch(setFilter({ filter: "category", value: slug }))
+    dispatch(setFilter({ slug }))
 
-      return null
-    }
+    if (menu?.length) {
+      dispatch(setFilter({ slugs: [...slugs, slug] }))
 
-    setCurrentlevel(level)
+      dispatch(setCatalogMenuLevel(level))
 
-    setCurrentMenu((prev) => {
-      const proxy = [...prev]
+      const proxy = [...catalogMenu]
 
       proxy[level] = menu
 
-      return proxy
-    })
+      dispatch(setCatalogMenu(proxy))
+    }
+
+    navigate(generatePath(PAGES.category, { slug }))
   }
 
   const LevelDown = (level) => {
-    setCurrentlevel(level)
+    dispatch(setCatalogMenuLevel(level))
 
-    setCurrentMenu((prev) => {
-      const proxy = [...prev]
+    dispatch(setCatalogMenu(catalogMenu.slice(0, catalogMenu.length - 1)))
 
-      proxy[level + 1] = menu
+    const proxySlugs = slugs.slice(0, slugs.length - 1)
 
-      return proxy
-    })
+    dispatch(
+      setFilter({
+        slugs: proxySlugs,
+        slug: proxySlugs[proxySlugs.length - 1],
+      }),
+    )
+
+    if (level) {
+      navigate(
+        generatePath(PAGES.category, {
+          slug: proxySlugs[proxySlugs.length - 1],
+        }),
+      )
+    } else {
+      navigate(PAGES.catalog)
+    }
   }
 
   useEffect(() => {
@@ -51,16 +74,18 @@ export const Catalog = () => {
   }, [])
 
   useEffect(() => {
-    setCurrentMenu([menu])
+    if (!catalogMenu.length && menu.length) {
+      dispatch(setCatalogMenu([menu]))
+    }
   }, [menu])
 
   return (
     <CatalogBody>
-      <CategoriesBody level={currentLevel}>
-        {currentMenu.map((item, i) => (
+      <CategoriesBody level={catalogMenuLevel}>
+        {catalogMenu.map((item, i) => (
           <CategoriesItem key={i}>
-            {currentLevel > 0 && (
-              <Category onClick={() => LevelDown(currentLevel - 1)}>
+            {catalogMenuLevel > 0 && (
+              <Category onClick={() => LevelDown(catalogMenuLevel - 1)}>
                 Назад
               </Category>
             )}
@@ -68,11 +93,11 @@ export const Catalog = () => {
             {item.map(({ name, children, slug }) => (
               <Category
                 key={slug}
-                isActive={category === slug}
+                isActive={currentSlug === slug}
                 onClick={() =>
                   onCategoryClick({
                     menu: children,
-                    level: currentLevel + 1,
+                    level: catalogMenuLevel + 1,
                     slug,
                   })
                 }
