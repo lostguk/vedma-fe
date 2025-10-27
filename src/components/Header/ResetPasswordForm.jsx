@@ -49,7 +49,7 @@ export const ResetPasswordForm = ({ modalStates, setModalState }) => {
           />
         </Box>
 
-        <Button width="100%" type="submit" from="loginForm" variant="black">
+        <Button width="100%" type="submit" form="loginForm" variant="black">
           Восстановить
         </Button>
       </form>

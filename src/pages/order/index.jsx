@@ -11,6 +11,7 @@ import {
 } from "src/components"
 import { useDispatch, useSelector } from "react-redux"
 import { useForm, Controller } from "react-hook-form"
+import axiosClient from "src/core/axios-client"
 import { yupResolver } from "@hookform/resolvers/yup"
 import * as Yup from "yup"
 import { AddressSuggestions } from "react-dadata"
@@ -27,48 +28,97 @@ const options = [
 export const OrderPage = () => {
   const dispatch = useDispatch()
 
-  const { cart } = useSelector((state) => state.global)
+  const { cart, user } = useSelector((state) => state.global)
 
-  const [regNeed, setRegNeed] = useState(true)
+  const [isRegLoading, setIsRegLoading] = useState(false)
+
+  const [isOrderLoading, setIsOrderLoading] = useState(false)
+
+  const [isRegNeed, setIsRegNeed] = useState(!Boolean(user))
+
+  const [promoCode, setPromoCode] = useState("")
 
   const [paymentType, setPaymentType] = useState("robo")
 
   const [selectedOption, setSelectedOption] = useState(null)
 
   const onSubmit = async (data) => {
-    const response = await axiosClient.post("/register", {
-      ...data,
-    })
+    console.log(data)
+    setIsOrderLoading(true)
+
+    axiosClient
+      .post("/order", {
+        items: cart.map(({ id, count }) => ({ id, count })),
+        register: isRegNeed,
+        ...data,
+        address: data.address.unrestricted_value,
+      })
+      .finally(() => setIsOrderLoading(false))
+
+    if (isRegNeed) {
+      setIsRegLoading(true)
+
+      axiosClient
+        .post("/register", {
+          ...data,
+          address: data.address.unrestricted_value,
+        })
+        .finally(() => setIsRegLoading(false))
+    }
   }
 
   const schema = Yup.object().shape({
     email: Yup.string()
       .email("Введите корректный адрес электронной почты")
-      .required("Поле email обязательно для заполнения"),
-    password: Yup.string().required("Поле пароль обязательно для заполнения"),
-    password_confirmation: Yup.string()
-      .oneOf([Yup.ref("password"), null], "Пароли не совпадают")
-      .min(8, "Минимальная длина пароля 8 символов")
-      .required("Пароль является обязательным"),
+      .required("Поле является обязательным"),
+    password: !isRegNeed
+      ? undefined
+      : Yup.string().required("Поле является обязательным"),
+    password_confirmation: !isRegNeed
+      ? undefined
+      : Yup.string()
+          .oneOf([Yup.ref("password"), null], "Пароли не совпадают")
+          .min(8, "Минимальная длина пароля 8 символов")
+          .required("Поле является обязательным"),
     phone: Yup.string()
-      .required("Поле email обязательно для заполнения")
+      .required("Поле является обязательным")
       .matches(
-        /^\+?[78][-\(]?\d{3}\)?-?\d{3}-?\d{2}-?\d{2}$/,
+        /^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$/,
         "Введите корректный телефон",
       ),
-    last_name: Yup.string().required("Пароль является обязательным"),
-    first_name: Yup.string().required("Пароль является обязательным"),
-    middle_name: Yup.string().required("Пароль является обязательным"),
+    last_name: Yup.string().required("Поле является обязательным"),
+    first_name: Yup.string().required("Поле является обязательным"),
+    middle_name: Yup.string().required("Поле является обязательным"),
   })
 
   const {
     handleSubmit,
     formState: { errors },
     control,
-    watch,
+    setValue,
   } = useForm({
     resolver: yupResolver(schema),
+    defaultValues: {
+      email: user?.email,
+      phone: user?.phone.replaceAll(" ", "-"),
+      address: user?.address,
+      last_name: user?.last_name,
+      first_name: user?.first_name,
+      middle_name: user?.middle_name,
+    },
   })
+
+  useEffect(() => {
+    if (Boolean(user)) {
+      setIsRegNeed(false)
+      setValue("email", user?.email)
+      setValue("phone", user?.phone.replaceAll(" ", "-"))
+      setValue("address", user?.address)
+      setValue("last_name", user?.last_name)
+      setValue("first_name", user?.first_name)
+      setValue("middle_name", user?.middle_name)
+    }
+  }, [user])
 
   return (
     <Box background="white" padding="48px 0 72px">
@@ -107,280 +157,261 @@ export const OrderPage = () => {
                 fontSize="16px"
                 fontWeight="600"
               >
-                Есть аккаунт (Войти)
+                {user?.first_name || "Есть аккаунт (Войти)"}
               </Box>
             </Box>
 
-            <Box
-              width="100%"
-              borderRadius="20px"
-              background="#0A0D1B"
-              padding="24px 32px"
-            >
-              <Box fontSize="16px" fontWeight="600">
-                Зарегистрироваться ?
-              </Box>
+            {!Boolean(user) && (
+              <Box
+                width="100%"
+                borderRadius="20px"
+                background="#0A0D1B"
+                padding="24px 32px"
+              >
+                <Box fontSize="16px" fontWeight="600">
+                  Зарегистрироваться ?
+                </Box>
 
-              <Box marginLeft="auto" gap="40px">
-                <Radio
-                  name="isReg"
-                  value={true}
-                  onChange={() => setRegNeed(!regNeed)}
-                  checked={regNeed}
-                  label="Да"
-                  color="white"
-                />
+                <Box marginLeft="auto" gap="40px">
+                  <Radio
+                    name="isReg"
+                    value={true}
+                    onChange={() => setIsRegNeed(!isRegNeed)}
+                    checked={isRegNeed}
+                    label="Да"
+                    color="white"
+                  />
 
-                <Radio
-                  name="isReg"
-                  value={false}
-                  onChange={() => setRegNeed(!regNeed)}
-                  checked={!regNeed}
-                  label="Нет"
-                  color="white"
-                />
+                  <Radio
+                    name="isReg"
+                    value={false}
+                    onChange={() => setIsRegNeed(!isRegNeed)}
+                    checked={!isRegNeed}
+                    label="Нет"
+                    color="white"
+                  />
+                </Box>
               </Box>
-            </Box>
+            )}
 
             <Box>
-              <form onSubmit={handleSubmit(onSubmit)}>
-                <Box gap="8px" wrap="wrap">
-                  <Box width="calc(33.3333% - 6px)">
-                    <Controller
-                      name="last_name"
-                      control={control}
-                      render={({ field }) => (
-                        <Input
-                          width="100%"
-                          placeholder="Фамилия"
-                          error={errors?.last_name?.message}
-                          {...field}
-                        />
-                      )}
-                    />
-                  </Box>
-
-                  <Box width="calc(33.3333% - 6px)">
-                    <Controller
-                      name="first_name"
-                      control={control}
-                      render={({ field }) => (
-                        <Input
-                          placeholder="Имя"
-                          error={errors?.first_name?.message}
-                          {...field}
-                        />
-                      )}
-                    />
-                  </Box>
-
-                  <Box width="calc(33.3333% - 6px)">
-                    <Controller
-                      name="middle_name"
-                      control={control}
-                      render={({ field }) => (
-                        <Input
-                          placeholder="Отчество"
-                          error={errors?.middle_name?.message}
-                          {...field}
-                        />
-                      )}
-                    />
-                  </Box>
-
-                  <Box width="calc(33.3333% - 6px)">
-                    <Controller
-                      name="phone"
-                      error={errors?.email?.phone}
-                      control={control}
-                      render={({ field }) => (
-                        <Box direction="column" maxWidth="100%" width="100%">
-                          <PhoneInput
-                            placeholder="+7(___) ___ __ __"
-                            id="my-date-input"
+              <form id="order-form" onSubmit={handleSubmit(onSubmit)}>
+                <Box direction="column" gap="40px">
+                  <Box gap="8px" wrap="wrap">
+                    <Box width="calc(33.3333% - 6px)">
+                      <Controller
+                        name="last_name"
+                        control={control}
+                        render={({ field }) => (
+                          <Input
+                            width="100%"
+                            placeholder="Фамилия"
+                            error={errors?.last_name?.message}
                             {...field}
-                            mask={[
-                              "+",
-                              "7",
-                              "(",
-                              /[1-9]/,
-                              /\d/,
-                              /\d/,
-                              ")",
-                              "-",
-                              /\d/,
-                              /\d/,
-                              /\d/,
-                              "-",
-                              /\d/,
-                              /\d/,
-                              "-",
-                              /\d/,
-                              /\d/,
-                            ]}
                           />
+                        )}
+                      />
+                    </Box>
 
-                          {errors?.phone?.message && (
-                            <Box marginTop="4px" paddingLeft="8px" color="red">
-                              {errors?.phone?.message}
-                            </Box>
-                          )}
+                    <Box width="calc(33.3333% - 6px)">
+                      <Controller
+                        name="first_name"
+                        control={control}
+                        render={({ field }) => (
+                          <Input
+                            placeholder="Имя"
+                            error={errors?.first_name?.message}
+                            {...field}
+                          />
+                        )}
+                      />
+                    </Box>
+
+                    <Box width="calc(33.3333% - 6px)">
+                      <Controller
+                        name="middle_name"
+                        control={control}
+                        render={({ field }) => (
+                          <Input
+                            placeholder="Отчество"
+                            error={errors?.middle_name?.message}
+                            {...field}
+                          />
+                        )}
+                      />
+                    </Box>
+
+                    <Box width="calc(33.3333% - 6px)">
+                      <Controller
+                        name="phone"
+                        error={errors?.email?.phone}
+                        control={control}
+                        render={({ field }) => (
+                          <Box direction="column" width="100%">
+                            <PhoneInput
+                              error={Boolean(errors?.phone?.message)}
+                              placeholder="+7(___) ___ __ __"
+                              id="my-date-input"
+                              {...field}
+                              mask={[
+                                "+",
+                                "7",
+                                " ",
+                                "(",
+                                /[1-9]/,
+                                /\d/,
+                                /\d/,
+                                ")",
+                                " ",
+                                /\d/,
+                                /\d/,
+                                /\d/,
+                                "-",
+                                /\d/,
+                                /\d/,
+                                "-",
+                                /\d/,
+                                /\d/,
+                              ]}
+                            />
+                            {errors?.phone?.message && (
+                              <Box
+                                marginTop="4px"
+                                paddingLeft="8px"
+                                color="red"
+                                fontSize="12px"
+                              >
+                                {errors?.phone?.message}
+                              </Box>
+                            )}
+                          </Box>
+                        )}
+                      />
+                    </Box>
+
+                    <Box width="calc(33.3333% - 6px)">
+                      <Controller
+                        name="email"
+                        control={control}
+                        render={({ field }) => (
+                          <Input
+                            placeholder="Email"
+                            error={errors?.email?.message}
+                            {...field}
+                          />
+                        )}
+                      />
+                    </Box>
+
+                    {isRegNeed && (
+                      <>
+                        <Box width="calc(33.3333% - 6px)">
+                          <Controller
+                            name="password"
+                            control={control}
+                            render={({ field }) => (
+                              <Input
+                                placeholder="Пароль"
+                                type="password"
+                                error={errors?.password?.message}
+                                {...field}
+                              />
+                            )}
+                          />
                         </Box>
-                      )}
-                    />
+
+                        <Box width="calc(33.3333% - 6px)">
+                          <Controller
+                            name="password_confirmation"
+                            control={control}
+                            render={({ field }) => (
+                              <Input
+                                type="password"
+                                placeholder="Подтвердите пароль"
+                                error={errors?.password_confirmation?.message}
+                                {...field}
+                              />
+                            )}
+                          />
+                        </Box>
+                      </>
+                    )}
                   </Box>
 
-                  <Box width="calc(33.3333% - 6px)">
+                  <Box align="center">
+                    <Box
+                      width="30px"
+                      height="30px"
+                      borderRadius="5px"
+                      background={COLORS.main}
+                      justify="center"
+                      align="center"
+                    >
+                      <Icon name={ICON_NAMES.address} />
+                    </Box>
+
+                    <Box
+                      marginLeft="12px"
+                      fontWeight="400"
+                      fontSize="20px"
+                      color="#000"
+                    >
+                      Адрес доставки
+                    </Box>
+                  </Box>
+
+                  <Box>
                     <Controller
-                      name="email"
+                      name="address"
                       control={control}
-                      render={({ field }) => (
-                        <Input
-                          placeholder="Email"
-                          error={errors?.email?.message}
-                          {...field}
+                      render={({ field: { onChange, value } }) => (
+                        <AddressSuggestions
+                          customInput={Input}
+                          defaultQuery={value}
+                          token={import.meta.env.VITE_DADATA_TOKEN}
+                          value={value}
+                          onChange={onChange}
+                          inputProps={{
+                            placeholder: "Адрес доставки",
+                            error: errors?.address?.message,
+                          }}
                         />
                       )}
                     />
                   </Box>
 
-                  {regNeed && (
-                    <>
-                      <Box width="calc(33.3333% - 6px)">
-                        <Controller
-                          name="password"
-                          control={control}
-                          render={({ field }) => (
-                            <Input
-                              placeholder="Пароль"
-                              type="password"
-                              error={errors?.password?.message}
-                              {...field}
-                            />
-                          )}
-                        />
-                      </Box>
+                  <Box align="center">
+                    <Box
+                      width="30px"
+                      height="30px"
+                      borderRadius="5px"
+                      background={COLORS.main}
+                      justify="center"
+                      align="center"
+                    >
+                      <Icon name={ICON_NAMES.delivery} />
+                    </Box>
 
-                      <Box width="calc(33.3333% - 6px)">
-                        <Controller
-                          name="password_confirmation"
-                          control={control}
-                          render={({ field }) => (
-                            <Input
-                              type="password"
-                              placeholder="Подтвердите пароль"
-                              error={errors?.password_confirmation?.message}
-                              {...field}
-                            />
-                          )}
-                        />
-                      </Box>
-                    </>
-                  )}
+                    <Box
+                      marginLeft="12px"
+                      fontWeight="400"
+                      fontSize="20px"
+                      color="#000"
+                    >
+                      Доставка
+                    </Box>
+                  </Box>
+
+                  <Box width="100%" maxWidth="600px">
+                    <SelectUI
+                      value={selectedOption}
+                      onChange={setSelectedOption}
+                      options={options}
+                      placeholder="Выберите способ доставки"
+                    />
+                  </Box>
                 </Box>
               </form>
-            </Box>
-
-            <Box align="center">
-              <Box
-                width="30px"
-                height="30px"
-                borderRadius="5px"
-                background={COLORS.main}
-                justify="center"
-                align="center"
-              >
-                <Icon name={ICON_NAMES.address} />
-              </Box>
-
-              <Box
-                marginLeft="12px"
-                fontWeight="400"
-                fontSize="20px"
-                color="#000"
-              >
-                Адрес доставки
-              </Box>
-            </Box>
-
-            <Box>
-              <AddressSuggestions
-                customInput={Input}
-                token={import.meta.env.VITE_DADATA_TOKEN}
-              />
-            </Box>
-
-            <Box align="center">
-              <Box
-                width="30px"
-                height="30px"
-                borderRadius="5px"
-                background={COLORS.main}
-                justify="center"
-                align="center"
-              >
-                <Icon name={ICON_NAMES.delivery} />
-              </Box>
-
-              <Box
-                marginLeft="12px"
-                fontWeight="400"
-                fontSize="20px"
-                color="#000"
-              >
-                Доставка
-              </Box>
-            </Box>
-
-            <Box width="100%" maxWidth="600px">
-              <SelectUI
-                value={selectedOption}
-                onChange={setSelectedOption}
-                options={options}
-                placeholder="Выберите способ доставки"
-              />
-            </Box>
-
-            <Box align="center">
-              <Box
-                width="30px"
-                height="30px"
-                borderRadius="5px"
-                background={COLORS.main}
-                justify="center"
-                align="center"
-              >
-                <Icon name={ICON_NAMES.payment} />
-              </Box>
-
-              <Box
-                marginLeft="12px"
-                fontWeight="400"
-                fontSize="20px"
-                color="#000"
-              >
-                Оплата
-              </Box>
-            </Box>
-
-            <Box width="100%" gap="40px">
-              <Radio
-                name="payment"
-                value="robo"
-                onChange={() => setPaymentType("robo")}
-                checked={paymentType === "robo"}
-                label="Робокасса"
-                color="#000"
-              />
-
-              <Radio
-                name="payment"
-                value="manager"
-                onChange={() => setPaymentType("manager")}
-                checked={paymentType === "manager"}
-                label="Согласовать оплату по телефону с менеджером"
-                color="#000"
-              />
             </Box>
           </Box>
 
@@ -446,11 +477,21 @@ export const OrderPage = () => {
             </Box>
 
             <Box direction="column" gap="8px">
-              <Input placeholder="Введите промокод" />
+              <Input
+                value={promoCode}
+                onChange={(e) => setPromoCode(e.target.value)}
+                placeholder="Введите промокод"
+              />
 
               <Button variant="black">Применить</Button>
 
-              <Button>Оформить заказ</Button>
+              <Button
+                type="submit"
+                form="order-form"
+                isLoading={isOrderLoading || isRegLoading}
+              >
+                Оформить заказ
+              </Button>
             </Box>
           </Box>
         </Box>

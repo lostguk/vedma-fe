@@ -13,22 +13,22 @@ export const RegistrationForm = ({ modalStates, setModalState }) => {
   const schema = Yup.object().shape({
     email: Yup.string()
       .email("Введите корректный адрес электронной почты")
-      .required("Поле email обязательно для заполнения"),
-    password: Yup.string().required("Поле пароль обязательно для заполнения"),
+      .required("Поле является обязательным"),
+    password: Yup.string().required("Поле является обязательным"),
     password_confirmation: Yup.string()
       .oneOf([Yup.ref("password"), null], "Пароли не совпадают")
       .min(8, "Минимальная длина пароля 8 символов")
-      .required("Пароль является обязательным"),
+      .required("Поле является обязательным"),
     phone: Yup.string()
-      .required("Поле email обязательно для заполнения")
+      .required("Поле является обязательным")
       .matches(
         /^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$/,
         "Введите корректный телефон",
       ),
-    last_name: Yup.string().required("Пароль является обязательным"),
-    first_name: Yup.string().required("Пароль является обязательным"),
-    middle_name: Yup.string().required("Пароль является обязательным"),
-    address: Yup.object().required("Пароль является обязательным"),
+    last_name: Yup.string().required("Поле является обязательным"),
+    first_name: Yup.string().required("Поле является обязательным"),
+    middle_name: Yup.string().required("Поле является обязательным"),
+    address: Yup.object().required("Поле является обязательным"),
   })
 
   const {
@@ -42,6 +42,7 @@ export const RegistrationForm = ({ modalStates, setModalState }) => {
 
   const onSubmit = (data) => {
     setIsLoading(true)
+
     axiosClient
       .post("/register", {
         ...data,
