@@ -10,5 +10,6 @@ export const store = configureStore({
     mainPage: slices.mainPage,
     chat: slices.chat,
     orderHistory: slices.orderHistory,
+    modals: slices.modals,
   },
 })

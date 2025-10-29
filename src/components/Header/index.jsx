@@ -9,9 +9,10 @@ import {
   SidePage,
   Badge,
 } from "src/components"
-import { COLORS, ICON_NAMES, PAGES } from "src/core/constants"
+import { COLORS, ICON_NAMES, MODAL_NAMES, PAGES } from "src/core/constants"
 import { setCart } from "src/core/helpers"
 import { setUser } from "src/store/slices/global/slice"
+import { toggleModal } from "src/store/slices/modals/slice"
 import { useNavigate } from "react-router-dom"
 import { useSelector, useDispatch } from "react-redux"
 import axiosClient, { getToken } from "src/core/axios-client"
@@ -49,13 +50,17 @@ export const Header = () => {
   const [isCartOpen, setCartOpen] = useState(false)
   const navigate = useNavigate()
 
+  const { authModal } = useSelector((state) => state.modals)
   const { cart, user } = useSelector((state) => state.global)
+
+  const toggleAuthModal = (isOpen) =>
+    dispatch(toggleModal({ name: MODAL_NAMES.authModal, isOpen }))
 
   const onProfileClick = () => {
     if (Boolean(user)) {
       navigate(PAGES.user)
     } else {
-      setModalOpen(true)
+      toggleAuthModal(true)
     }
   }
 
@@ -81,8 +86,11 @@ export const Header = () => {
         </SidePage>
       )}
 
-      {isModalOpen && (
-        <AuthModal isModalOpen={isModalOpen} setModalOpen={setModalOpen} />
+      {authModal.isOpen && (
+        <AuthModal
+          isModalOpen={authModal.isOpen}
+          toggleModal={toggleAuthModal}
+        />
       )}
 
       <Container>

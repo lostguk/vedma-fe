@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react"
-import { Box, Button, TextArea } from "src/components"
+import { Box, Button, TextArea, AddMedia } from "src/components"
 import axiosClient from "src/core/axios-client"
 import { useDispatch, useSelector } from "react-redux"
 import {
@@ -8,8 +8,12 @@ import {
   resetCurrentTopic,
 } from "src/store/slices/chat/slice"
 
+import { MediaButton } from "./styled"
+
 export const Chat = () => {
   const [isLoading, setIsLoading] = useState(false)
+
+  const [files, setFiles] = useState([])
 
   const dispatch = useDispatch()
 
@@ -21,21 +25,35 @@ export const Chat = () => {
     dispatch(fetchTopics())
   }, [])
 
+  useEffect(() => {
+    console.log(files[0])
+  }, [files])
+
   const selectTopicHandler = (id) => dispatch(fetchTopic(id))
 
   const backToThemesHandler = () => dispatch(resetCurrentTopic())
 
   const sendMessage = () => {
     setIsLoading(true)
-    axiosClient
-      .post(`/topics/${currentTopic?.id}/messages`, {
-        content: message,
-      })
-      .then(() => {
-        selectTopicHandler(currentTopic?.id)
-        setMessage("")
-      })
-      .finally(() => setIsLoading(false))
+
+    let formData = new FormData()
+
+    if (files.length) {
+      formData.append("file", files[0])
+    }
+
+    console.log(formData.file)
+
+    // axiosClient
+    //   .post(`/topics/${currentTopic?.id}/messages`, {
+    //     content: message,
+    //     attachments: files.length ? formData : undefined,
+    //   })
+    //   .then(() => {
+    //     selectTopicHandler(currentTopic?.id)
+    //     setMessage("")
+    //   })
+    //   .finally(() => setIsLoading(false))
   }
 
   return (
@@ -94,7 +112,15 @@ export const Chat = () => {
             onChange={(e) => setMessage(e.target.value)}
           />
 
-          <Box justify="flex-end" width="100%" marginTop="16px">
+          <Box justify="flex-end" width="100%" marginTop="16px" gap="16px">
+            <AddMedia
+              setFiles={(newFiles) =>
+                setFiles((prev) => [...prev, ...newFiles])
+              }
+            >
+              <MediaButton set>Прикрепить файл</MediaButton>
+            </AddMedia>
+
             <Button
               disabled={!Boolean(message)}
               onClick={sendMessage}

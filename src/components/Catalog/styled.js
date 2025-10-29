@@ -13,8 +13,6 @@ export const CatalogBody = styled.div`
 export const CategoriesBody = styled.div`
   display: flex;
   transition: all 0.2s;
-  transform: ${({ level }) =>
-    `translateX(calc(-${100 * level}% - ${20 * level}px))`};
 `
 
 export const CategoriesItem = styled.div`

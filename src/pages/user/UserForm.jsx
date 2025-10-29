@@ -8,7 +8,7 @@ import { AddressSuggestions } from "react-dadata"
 import { useDispatch, useSelector } from "react-redux"
 import axiosClient, { removeToken } from "src/core/axios-client"
 import { useNavigate } from "react-router-dom"
-import { setUser } from "src/store/slices/global/slice"
+import { setUser, resetCart } from "src/store/slices/global/slice"
 
 export const UserForm = () => {
   const [isLoading, setIsLoading] = useState(false)
@@ -72,6 +72,7 @@ export const UserForm = () => {
     removeToken()
     navigate(PAGES.main)
     dispatch(setUser(null))
+    dispatch(resetCart())
   }
 
   useEffect(() => {

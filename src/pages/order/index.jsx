@@ -9,13 +9,14 @@ import {
   PhoneInput,
   SelectUI,
 } from "src/components"
+import { toggleModal } from "src/store/slices/modals/slice"
 import { useDispatch, useSelector } from "react-redux"
 import { useForm, Controller } from "react-hook-form"
 import axiosClient from "src/core/axios-client"
 import { yupResolver } from "@hookform/resolvers/yup"
 import * as Yup from "yup"
 import { AddressSuggestions } from "react-dadata"
-import { COLORS, ICON_NAMES } from "src/core/constants"
+import { COLORS, ICON_NAMES, MODAL_NAMES } from "src/core/constants"
 
 import { Card } from "./OrderCard"
 
@@ -43,15 +44,14 @@ export const OrderPage = () => {
   const [selectedOption, setSelectedOption] = useState(null)
 
   const onSubmit = async (data) => {
-    console.log(data)
     setIsOrderLoading(true)
+    console.log(data)
 
     axiosClient
       .post("/order", {
         items: cart.map(({ id, count }) => ({ id, count })),
         register: isRegNeed,
         ...data,
-        address: data.address.unrestricted_value,
       })
       .finally(() => setIsOrderLoading(false))
 
@@ -156,6 +156,16 @@ export const OrderPage = () => {
                 color={COLORS.main}
                 fontSize="16px"
                 fontWeight="600"
+                onClick={() => {
+                  if (!user?.first_name) {
+                    dispatch(
+                      toggleModal({
+                        name: MODAL_NAMES.authModal,
+                        isOpen: true,
+                      }),
+                    )
+                  }
+                }}
               >
                 {user?.first_name || "Есть аккаунт (Войти)"}
               </Box>
@@ -370,7 +380,9 @@ export const OrderPage = () => {
                           defaultQuery={value}
                           token={import.meta.env.VITE_DADATA_TOKEN}
                           value={value}
-                          onChange={onChange}
+                          onChange={(suggestion) =>
+                            onChange(suggestion ? suggestion.value : "")
+                          }
                           inputProps={{
                             placeholder: "Адрес доставки",
                             error: errors?.address?.message,

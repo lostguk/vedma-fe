@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from "react"
-import { Catalog, Container, Box, Card, Icon, TabItem } from "src/components"
-import { fetchProducts, setPage } from "src/store/slices/products/slice"
-import { useDispatch, useSelector } from "react-redux"
+import { Container, Box, TabItem } from "src/components"
 import { useNavigate } from "react-router-dom"
 import { PAGES } from "src/core/constants"
 import { getToken } from "src/core/axios-client"
 
-import { COLORS, ICON_NAMES } from "src/core/constants"
+import { COLORS } from "src/core/constants"
 
 import { TabMenuItem } from "./styled"
 import { UserForm } from "./UserForm"
@@ -22,11 +20,7 @@ const tabs = [
 ]
 
 export const UserPage = () => {
-  const dispatch = useDispatch()
-
   const navigate = useNavigate()
-
-  const user = useSelector((state) => state.global.user)
 
   const [tab, setTab] = useState(tabs[0].value)
 

@@ -47,11 +47,6 @@ export const slice = createSlice({
   initialState,
 
   reducers: {
-    setCatalogMenuLevel(state, { payload }) {
-      state.catalogMenuLevel = payload
-      state.page = initialState.page
-    },
-
     setCatalogMenu(state, { payload }) {
       state.catalogMenu = payload
       state.page = initialState.page
@@ -94,13 +89,7 @@ export const slice = createSlice({
   },
 })
 
-const {
-  setPage,
-  setFilter,
-  setCatalogMenu,
-  setCatalogMenuLevel,
-  resetCatalog,
-} = slice.actions
+const { setPage, setFilter, setCatalogMenu, resetCatalog } = slice.actions
 
 export {
   fetchProducts,
@@ -108,7 +97,6 @@ export {
   setFilter,
   fetchProduct,
   setCatalogMenu,
-  setCatalogMenuLevel,
   resetCatalog,
 }
 

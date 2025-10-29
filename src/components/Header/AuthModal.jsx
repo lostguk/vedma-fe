@@ -15,7 +15,7 @@ const modalStates = {
   resetPasswordSuccess: "resetPasswordSuccess",
 }
 
-export const AuthModal = ({ setModalOpen, isModalOpen }) => {
+export const AuthModal = ({ toggleModal, isModalOpen }) => {
   const [modalState, setModalState] = useState(modalStates.login)
 
   return (
@@ -28,20 +28,20 @@ export const AuthModal = ({ setModalOpen, isModalOpen }) => {
         },
       }}
       open={isModalOpen}
-      onClose={() => setModalOpen(false)}
+      onClose={() => toggleModal(false)}
     >
       <TabItem tab={modalStates.login} currentTab={modalState}>
         <LoginForm
           setModalState={setModalState}
           modalStates={modalStates}
-          setModalOpen={setModalOpen}
+          setModalOpen={toggleModal}
         />
       </TabItem>
 
       <TabItem
         tab={modalStates.registration}
         currentTab={modalState}
-        setModalOpen={setModalOpen}
+        setModalOpen={toggleModal}
       >
         <RegistrationForm
           setModalState={setModalState}
@@ -52,7 +52,7 @@ export const AuthModal = ({ setModalOpen, isModalOpen }) => {
       <TabItem
         tab={modalStates.resetPassword}
         currentTab={modalState}
-        setModalOpen={setModalOpen}
+        setModalOpen={toggleModal}
       >
         <ResetPasswordForm
           setModalState={setModalState}
@@ -61,13 +61,13 @@ export const AuthModal = ({ setModalOpen, isModalOpen }) => {
       </TabItem>
 
       <TabItem tab={modalStates.registrationSuccess} currentTab={modalState}>
-        <RegistrationSuccess setModalOpen={setModalOpen} />
+        <RegistrationSuccess setModalOpen={toggleModal} />
       </TabItem>
 
       <TabItem
         tab={modalStates.resetPasswordSuccess}
         currentTab={modalState}
-        setModalOpen={setModalOpen}
+        setModalOpen={toggleModal}
       >
         <ResetPasswordSuccess
           setModalState={setModalState}
