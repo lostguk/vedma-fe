@@ -45,26 +45,20 @@ export const OrderPage = () => {
 
   const onSubmit = async (data) => {
     setIsOrderLoading(true)
-    console.log(data)
 
-    axiosClient
-      .post("/order", {
+    const body = {
         items: cart.map(({ id, count }) => ({ id, count })),
         register: isRegNeed,
         ...data,
-      })
-      .finally(() => setIsOrderLoading(false))
-
-    if (isRegNeed) {
-      setIsRegLoading(true)
-
-      axiosClient
-        .post("/register", {
-          ...data,
-          address: data.address.unrestricted_value,
-        })
-        .finally(() => setIsRegLoading(false))
     }
+
+    if(isRegLoading){
+      body.address = data.address.value
+    }
+
+    axiosClient
+      .post("/order", body)
+      .finally(() => setIsOrderLoading(false))
   }
 
   const schema = Yup.object().shape({
@@ -380,9 +374,7 @@ export const OrderPage = () => {
                           defaultQuery={value}
                           token={import.meta.env.VITE_DADATA_TOKEN}
                           value={value}
-                          onChange={(suggestion) =>
-                            onChange(suggestion ? suggestion.value : "")
-                          }
+                          onChange={onChange}
                           inputProps={{
                             placeholder: "Адрес доставки",
                             error: errors?.address?.message,

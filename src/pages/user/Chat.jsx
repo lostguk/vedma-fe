@@ -8,10 +8,14 @@ import {
   resetCurrentTopic,
 } from "src/store/slices/chat/slice"
 
+import { AddTopicModal } from './AddTopicModal'
 import { MediaButton } from "./styled"
+import { COLORS } from "src/core/constants"
 
 export const Chat = () => {
   const [isLoading, setIsLoading] = useState(false)
+  
+  const [isCreateTopicModalOpen, setIsCreateTopicModalOpen] = useState(false)
 
   const [files, setFiles] = useState([])
 
@@ -21,13 +25,7 @@ export const Chat = () => {
 
   const { items, currentTopic } = useSelector((state) => state.chat)
 
-  useEffect(() => {
-    dispatch(fetchTopics())
-  }, [])
-
-  useEffect(() => {
-    console.log(files[0])
-  }, [files])
+  const toggleTopicModal = (isOpen) => setIsCreateTopicModalOpen(isOpen)
 
   const selectTopicHandler = (id) => dispatch(fetchTopic(id))
 
@@ -36,32 +34,38 @@ export const Chat = () => {
   const sendMessage = () => {
     setIsLoading(true)
 
-    let formData = new FormData()
-
-    if (files.length) {
-      formData.append("file", files[0])
-    }
-
-    console.log(formData.file)
-
-    // axiosClient
-    //   .post(`/topics/${currentTopic?.id}/messages`, {
-    //     content: message,
-    //     attachments: files.length ? formData : undefined,
-    //   })
-    //   .then(() => {
-    //     selectTopicHandler(currentTopic?.id)
-    //     setMessage("")
-    //   })
-    //   .finally(() => setIsLoading(false))
+    axiosClient
+      .post(`/topics/${currentTopic?.id}/messages`, {
+        content: message,
+        attachments: files.length ? files : undefined,
+      },
+      {
+        headers: {
+          "Content-Type": 'multipart/form-data'
+        }
+      })
+      .then(() => {
+        selectTopicHandler(currentTopic?.id)
+        setMessage("")
+      })
+      .finally(() => setIsLoading(false))
   }
+  
+  useEffect(() => {
+    dispatch(fetchTopics())
+  }, [])
 
   return (
     <Box direction="column" width="100%" align="flex-start">
+      
+      {isCreateTopicModalOpen && (
+        <AddTopicModal refetchTopics={() => dispatch(fetchTopics())}  toggleModal={toggleTopicModal} isModalOpen={isCreateTopicModalOpen} />
+      )}
+
       {Boolean(currentTopic) ? (
         <Button onClick={backToThemesHandler}>Назад к темам</Button>
       ) : (
-        <Button>Создать новую тему</Button>
+        <Button onClick={() => toggleTopicModal(true)}>Создать новую тему</Button>
       )}
 
       {Boolean(items.length) && !currentTopic && (
@@ -91,7 +95,7 @@ export const Chat = () => {
             minHeight="300px"
             direction="column"
           >
-            {currentTopic.messages.map(({ id, content, user }) => (
+            {currentTopic.messages.map(({ id, content, user, attachments }) => (
               <Box
                 padding="12px"
                 background="#181e39"
@@ -100,8 +104,19 @@ export const Chat = () => {
                 key={id}
                 alignSelf={user?.is_admin ? "flex-start" : "flex-end"}
                 marginBottom="8px"
+                direction="column"
               >
-                {content}
+                <Box marginBottom="4px">
+                  {content}
+                </Box>
+
+                {Boolean(attachments?.length) && attachments.map(({ file_name, url }) => (
+                  <Box margin="2px 0" color={COLORS.main}>
+                    <a href={url} target="_blank">
+                      {file_name}
+                    </a>
+                  </Box>
+                ))}
               </Box>
             ))}
           </Box>
@@ -114,11 +129,13 @@ export const Chat = () => {
 
           <Box justify="flex-end" width="100%" marginTop="16px" gap="16px">
             <AddMedia
-              setFiles={(newFiles) =>
-                setFiles((prev) => [...prev, ...newFiles])
+              setFiles={
+                (newFiles) => {
+                  setFiles((prev) => [...prev, ...newFiles])
+                }
               }
             >
-              <MediaButton set>Прикрепить файл</MediaButton>
+              <MediaButton set>Прикрепить файл&nbsp;{Boolean(files.length) && `(${files.length})`}</MediaButton>
             </AddMedia>
 
             <Button

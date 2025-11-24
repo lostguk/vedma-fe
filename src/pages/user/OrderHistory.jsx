@@ -4,6 +4,8 @@ import axiosClient from "src/core/axios-client"
 import { useDispatch, useSelector } from "react-redux"
 import { fetchOrderHistory } from "src/store/slices/orderHistory/slice"
 
+import HistoryItem from './HistoryItem'
+
 export const OrderHistory = () => {
   const dispatch = useDispatch()
 
@@ -14,8 +16,8 @@ export const OrderHistory = () => {
   }, [])
 
   return (
-    <Box direction="column" width="100%" align="flex-start">
-      asds
+    <Box wrap="wrap" width="100%"  background="#181E39" padding="16px" gap="12px" borderRadius="20px">
+      {items.map(order => <HistoryItem {...order} />)}
     </Box>
   )
 }

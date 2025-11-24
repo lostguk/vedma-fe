@@ -31,7 +31,17 @@ export const UserForm = () => {
         /^\+?[78][-\(]?\d{3}\)?-?\d{3}-?\d{2}-?\d{2}$/,
         "Введите корректный телефон",
       ),
-    address: Yup.string().required("Пароль является обязательным"),
+    address: Yup.object()
+    .required("Введите адрес")
+    .test(
+      "is-full-address",
+      "Выберите полный адрес",
+      (value) => {
+        if (!value || !value.data) return false;
+        const { street, house, city } = value.data;
+        return Boolean(street && house && city);
+      }
+    ),
     last_name: Yup.string().required("Пароль является обязательным"),
     first_name: Yup.string().required("Пароль является обязательным"),
     middle_name: Yup.string().required("Пароль является обязательным"),
@@ -61,6 +71,7 @@ export const UserForm = () => {
     const response = await axiosClient
       .patch("/profile", {
         ...data,
+        address: data.address.value
       })
       .finally(() => {
         setIsLoading(false)
@@ -209,7 +220,9 @@ export const UserForm = () => {
                   defaultQuery={value}
                   token={import.meta.env.VITE_DADATA_TOKEN}
                   value={value}
-                  onChange={onChange}
+                  onChange={value => {
+                    onChange(value)
+                  }}
                   inputProps={{
                     placeholder: "Адрес доставки",
                     error: errors?.address?.message,

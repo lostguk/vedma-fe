@@ -2,7 +2,7 @@ import React, { useEffect } from "react"
 import { Container, Button, Box, Card } from "src/components"
 import { COLORS, PAGES } from "src/core/constants"
 import { useDispatch, useSelector } from "react-redux"
-import { fetchCandels } from "src/store/slices/mainPage/slice"
+import { fetchCandels, fetchMainPage } from "src/store/slices/mainPage/slice"
 import { useNavigate } from "react-router-dom"
 import MainImg from "src/assets/main-card.jpg"
 import MagicBook from "src/assets/magic-book.png"
@@ -15,7 +15,9 @@ export const Main = () => {
 
   const navigate = useNavigate()
 
-  const { items, isLoading } = useSelector((state) => state.mainPage.candels)
+  const { items, isLoading: isCandelsLoading } = useSelector((state) => state.mainPage.candels)
+
+  const { data, isLoading } = useSelector((state) => state.mainPage.mainData)
 
   const infoItems = [
     {
@@ -52,6 +54,7 @@ export const Main = () => {
 
   useEffect(() => {
     dispatch(fetchCandels())
+    dispatch(fetchMainPage())
   }, [])
 
   return (
@@ -197,7 +200,7 @@ export const Main = () => {
             justify="center"
             textAlign="center"
           >
-            🔮 Наша магия – ваша сила
+            {data?.about?.title}
           </Box>
           <Box
             width="100%"
@@ -207,9 +210,7 @@ export const Main = () => {
             margin="40px 0"
             textAlign="center"
           >
-            Мы верим в силу природы, традиционных знаний и искреннего намерения.
-            Наши изделия создаются с соблюдением обрядов, а каждый талисман и
-            свеча проходят ритуал зарядки.
+            {data?.about?.description}
           </Box>
 
           <Box
@@ -220,7 +221,7 @@ export const Main = () => {
             margin="40px auto"
             justify="center"
           >
-            🌙 Почему нам доверяют?
+            {data?.about?.trust?.title}
           </Box>
 
           <Box width="100%" maxWidth="700px" gap="12px" margin="0 auto">
@@ -250,7 +251,7 @@ export const Main = () => {
             margin="80px auto 40px"
             justify="center"
           >
-            ✨ Магия в ваших руках – главное, использовать ее с осознанием.
+            {data?.about?.motto}
           </Box>
 
           <Box gap="12px">
@@ -284,11 +285,11 @@ export const Main = () => {
             justify="center"
             textAlign="center"
           >
-            🧮 Мы в цифрах
+            {data?.about?.stats?.title}
           </Box>
 
           <Box gap="24px">
-            {ourNumbers.map(({ title, subtitle, desc }) => (
+            {data?.about?.stats?.items?.map(({ value, label, text }) => (
               <Box
                 width="calc(33.3333% - 16px)"
                 direction="column"
@@ -297,7 +298,7 @@ export const Main = () => {
                 padding="24px 16px"
               >
                 <Box color={COLORS.main} fontSize="24px" fontWeight="800">
-                  {title}
+                  {value}
                 </Box>
 
                 <Box
@@ -306,11 +307,11 @@ export const Main = () => {
                   fontWeight="600"
                   margin="16px 0px 8px"
                 >
-                  {subtitle}
+                  {label}
                 </Box>
 
                 <Box color="#1E1E1E" fontSize="12px" fontWeight="400">
-                  {desc}
+                  {text}
                 </Box>
               </Box>
             ))}
