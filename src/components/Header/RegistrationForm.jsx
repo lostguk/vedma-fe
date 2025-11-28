@@ -28,7 +28,17 @@ export const RegistrationForm = ({ modalStates, setModalState }) => {
     last_name: Yup.string().required("Поле является обязательным"),
     first_name: Yup.string().required("Поле является обязательным"),
     middle_name: Yup.string().required("Поле является обязательным"),
-    address: Yup.object().required("Поле является обязательным"),
+    address: Yup.object()
+      .required("Введите адрес")
+      .test(
+        "is-full-address",
+        "Выберите полный адрес",
+        (value) => {
+          if (!value || !value.data) return false;
+          const { street, house, city } = value.data;
+          return Boolean(street && house && city);
+        }
+    ),
   })
 
   const {
@@ -46,7 +56,7 @@ export const RegistrationForm = ({ modalStates, setModalState }) => {
     axiosClient
       .post("/register", {
         ...data,
-        address: data.address.unrestricted_value,
+        address: data.address.value,
       })
       .then(() => {
         setModalState(modalStates.registrationSuccess)

@@ -12,11 +12,20 @@ const fetchCandels = createAsyncThunk("fetchCandels", async () => {
   return response.data.data
 })
 
+const fetchMainPage= createAsyncThunk("fetchMainPage", async () => {
+  const response = await axiosClient.get("/home")
+  return response.data.data
+})
+
 const initialState = {
   candels: {
     isLoading: false,
     items: [],
   },
+  mainData: {
+    isLoading: false,
+    data: {}
+  }
 }
 
 export const slice = createSlice({
@@ -28,13 +37,24 @@ export const slice = createSlice({
     builder.addCase(fetchCandels.pending, (state) => {
       state.candels.isLoading = true
     })
+
+    
+    builder.addCase(fetchMainPage.pending, (state) => {
+      state.candels.isLoading = true
+    })
+
     builder.addCase(fetchCandels.fulfilled, (state, { payload }) => {
       state.candels.items = payload
       state.candels.isLoading = false
     })
+    
+    builder.addCase(fetchMainPage.fulfilled, (state, { payload }) => {
+      state.mainData.data = payload
+      state.mainData.isLoading = false
+    })
   },
 })
 
-export { fetchCandels }
+export { fetchCandels, fetchMainPage }
 
 export default slice.reducer

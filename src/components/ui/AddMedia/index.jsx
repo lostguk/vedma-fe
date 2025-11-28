@@ -7,6 +7,7 @@ export const AddMedia = ({ children, setFiles, accept }) => {
         accept={accept}
         type="file"
         hidden
+        multiple 
         onChange={(e) => {
           if (e.target.files?.length) {
             setFiles(e.target.files)
