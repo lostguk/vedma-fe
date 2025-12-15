@@ -46,9 +46,12 @@ export const Chat = () => {
       })
       .then(() => {
         selectTopicHandler(currentTopic?.id)
+      })
+      .finally(() => {
+        setIsLoading(false)
+        setFiles([])
         setMessage("")
       })
-      .finally(() => setIsLoading(false))
   }
   
   useEffect(() => {

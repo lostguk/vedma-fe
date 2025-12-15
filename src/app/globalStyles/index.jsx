@@ -17,7 +17,7 @@ export const GlobalStyles = () => (
       body {
         margin: 0;
         height: 100%;
-        font-family: "Roboto", "HelveticaNeue", "Helvetica Neue", sans-serif;
+        font-family: "Gilroy", sans-serif;
         color: white;
       }
 
@@ -76,6 +76,69 @@ export const GlobalStyles = () => (
       .slick-track .slick-slide {
         display: flex;
         height: auto;
+      }
+
+
+
+
+
+
+
+      
+       /* Анимация для mask - точно по примеру */
+      .mask-motion-enter,
+      .mask-motion-appear,
+      .mask-motion-leave {
+        &-active {
+          transition: all 0.3s;
+        }
+      }
+
+      .mask-motion-enter,
+      .mask-motion-appear {
+        opacity: 0;
+
+        &-active {
+          opacity: 1;
+        }
+      }
+
+      .mask-motion-leave {
+        opacity: 1;
+
+        &-active {
+          opacity: 0;
+        }
+      }
+
+      /* Анимация для panel справа - точно по примеру */
+      .panel-motion-right-enter,
+      .panel-motion-right-appear,
+      .panel-motion-right-leave {
+        &-start {
+          transition: none !important;
+        }
+
+        &-active {
+          transition: all 0.3s;
+        }
+      }
+
+      .panel-motion-right-enter,
+      .panel-motion-right-appear {
+        transform: translateX(100%);
+
+        &-active {
+          transform: translateX(0);
+        }
+      }
+
+      .panel-motion-right-leave {
+        transform: translateX(0);
+
+        &-active {
+          transform: translateX(100%) !important;
+        }
       }
     `}
   />

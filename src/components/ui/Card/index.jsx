@@ -15,8 +15,8 @@ export const Card = (props) => {
   const navigate = useNavigate()
 
   const {
-    name = "Свеча «Защита»",
-    description = "Oчищает от негатива, ставит магический барьер.",
+    name = "",
+    description = "",
     price = 300,
     old_price,
     id,
@@ -35,8 +35,21 @@ export const Card = (props) => {
     dispatch(addCartItem(props))
   }
 
+  const isHit = true
+  const isNew = true
+
   return (
-    <Box direction="column" height="100%">
+    <Box direction="column" height="100%" position="relative">
+      <Box position='absolute' top='10px' left="10px" direction='column' gap="8px" align="start">
+        {isHit && (
+          <Box background="#FF0000" padding="4px 8px" borderRadius="5px" fontWeight="600">Хит продаж</Box>
+        )}
+
+        {isNew && (
+          <Box background="#2445D9" padding="4px 8px" borderRadius="5px" fontWeight="600">Новинка</Box>
+        )}
+      </Box>
+
       <Box
         borderRadius="20px"
         overflow="hidden"
@@ -48,9 +61,9 @@ export const Card = (props) => {
         <img width="100%" src={props.thumb_url} />
       </Box>
 
-      <Box marginBottom="8px" fontSize="14px" fontWeight="400" opacity="0.5">
+      {/* <Box marginBottom="8px" fontSize="14px" fontWeight="400" opacity="0.5">
         {description}
-      </Box>
+      </Box> */}
 
       <Box marginBottom="8px">{name}</Box>
 

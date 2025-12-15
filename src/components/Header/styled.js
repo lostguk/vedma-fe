@@ -3,6 +3,11 @@ import MaskedInput from "react-text-mask"
 
 export const StyledHeader = styled.header`
   padding: 24px 0;
+  position: sticky;
+  background: #0A0D1B;
+  width: 100%;
+  top: 0;
+  z-index: 1;
 `
 
 export const MaskInput = styled(MaskedInput)`

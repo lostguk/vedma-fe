@@ -80,11 +80,9 @@ export const Header = () => {
 
   return (
     <StyledHeader>
-      {isCartOpen && (
-        <SidePage isOpen={isCartOpen} toggle={toggleCart}>
-          <Cart toggleCart={toggleCart} />
-        </SidePage>
-      )}
+      <SidePage isOpen={isCartOpen} toggle={toggleCart}>
+        <Cart toggleCart={toggleCart} />
+      </SidePage>
 
       {authModal.isOpen && (
         <AuthModal
@@ -115,7 +113,11 @@ export const Header = () => {
         </Box>
         <Box width="100%" align="center" marginTop="16px">
           <Box color="#fff">
-            <img width="100%" src={Logo} />
+            <Link
+              to={PAGES.main}
+            >
+              <img width="100%" src={Logo} />
+            </Link>
           </Box>
 
           <Box marginLeft="auto" gap="8px" align="center">

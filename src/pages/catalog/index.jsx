@@ -31,7 +31,7 @@ export const CatalogPage = () => {
   return (
     <Container>
       <Box width="100%" align="flex-start">
-        <Box width="25%">
+        <Box width="25%" position="sticky" top="133px">
           <Catalog />
         </Box>
 

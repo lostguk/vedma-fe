@@ -97,12 +97,14 @@ export const Catalog = () => {
 
         if (currentCategory.children?.length) {
           dispatch(setCatalogMenu(currentCategory.children))
-        } else {
+        } else if(currentCategory.parent_id) {
           dispatch(
             setCatalogMenu(
               findCategoryById(menu, currentCategory.parent_id).children,
             ),
           )
+        } else {
+          dispatch(setCatalogMenu(menu))
         }
       } else {
         dispatch(setCatalogMenu(menu))
@@ -110,11 +112,13 @@ export const Catalog = () => {
     }
   }, [menu, params.slug])
 
+  const selectedCategory = catalogMenu.find(({ slug }) => params?.slug)
+
   return (
     <CatalogBody>
       <CategoriesBody>
         <CategoriesItem>
-          {Boolean(params.slug) && (
+          {Boolean(params.slug && selectedCategory?.parent_id) && (
             <Category onClick={LevelDown}>Назад</Category>
           )}
 

@@ -30,6 +30,8 @@ export const Cart = ({ toggleCart }) => {
     }
   }, [cart])
 
+  const productCount = cart?.reduce((acc, item) => item.count + acc, 0)
+
   return (
     <CartBody>
       <Box
@@ -55,7 +57,7 @@ export const Cart = ({ toggleCart }) => {
             marginBottom="16px"
           >
             В корзине &nbsp;
-            <Box fontWeight="600">{cart.length} товар(ов)</Box>&nbsp; на сумму
+            <Box fontWeight="600">{productCount} товар(ов)</Box>&nbsp; на сумму
             &nbsp;
             <Box fontWeight="600">
               <NumericFormat
@@ -86,7 +88,7 @@ export const Cart = ({ toggleCart }) => {
         ) : (
           cart.map((item) => (
             <Box>
-              <Card {...item} />
+              <Card {...item} toggleCart={toggleCart} />
             </Box>
           ))
         )}
