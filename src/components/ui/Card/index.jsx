@@ -21,6 +21,8 @@ export const Card = (props) => {
     old_price,
     id,
     slug,
+    is_bestseller,
+    is_new
   } = props
 
   const cart = useSelector((state) => state.global.cart)
@@ -35,17 +37,14 @@ export const Card = (props) => {
     dispatch(addCartItem(props))
   }
 
-  const isHit = true
-  const isNew = true
-
   return (
     <Box direction="column" height="100%" position="relative">
       <Box position='absolute' top='10px' left="10px" direction='column' gap="8px" align="start">
-        {isHit && (
+        {is_bestseller && (
           <Box background="#FF0000" padding="4px 8px" borderRadius="5px" fontWeight="600">Хит продаж</Box>
         )}
 
-        {isNew && (
+        {is_new && (
           <Box background="#2445D9" padding="4px 8px" borderRadius="5px" fontWeight="600">Новинка</Box>
         )}
       </Box>

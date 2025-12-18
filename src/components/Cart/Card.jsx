@@ -12,7 +12,8 @@ import {
 
 export const Card = (props) => {
   const dispatch = useDispatch()
-    const navigate = useNavigate()
+
+  const navigate = useNavigate()
 
   const removeProduct = () => dispatch(removeCartItem(props.id))
 

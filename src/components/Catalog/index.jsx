@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useMemo } from "react"
-import { Box, Icon } from "src/components"
+import { useEffect } from "react"
+import { Icon } from "src/components"
 import { useParams } from "react-router-dom"
 import { fetchCategories } from "src/store/slices/categories/slice"
 import { setFilter, setCatalogMenu } from "src/store/slices/products/slice"
@@ -31,6 +31,7 @@ const findCategoryBySlug = (categories, slug) => {
 
     if (category.children && category.children.length > 0) {
       const found = findCategoryBySlug(category.children, slug)
+      
       if (found) return found
     }
   }

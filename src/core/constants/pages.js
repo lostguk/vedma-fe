@@ -6,6 +6,8 @@ export const PAGES = {
   delivery: "/delivery",
   exchange: "/exchange",
   contacts: "/contacts",
+  oferta: "/oferta",
+  politics: "/politics",
   order: "/order",
   user: "/user",
   return: "/user",

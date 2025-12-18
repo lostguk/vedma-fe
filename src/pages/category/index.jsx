@@ -64,6 +64,16 @@ export const CategoryPage = () => {
               ))
             )}
           </Box>
+          
+          <Pagination
+            breakLabel="..."
+            nextLabel=">"
+            onPageChange={handlePageClick}
+            pageRangeDisplayed={5}
+            pageCount={Math.ceil(total / per_page)}
+            previousLabel="<"
+            renderOnZeroPageCount={null}
+          />
         </Box>
       </Box>
     </Container>

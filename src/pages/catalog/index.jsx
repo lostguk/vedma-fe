@@ -59,6 +59,16 @@ export const CatalogPage = () => {
               ))
             )}
           </Box>
+          
+          <Pagination
+            breakLabel="..."
+            nextLabel=">"
+            onPageChange={handlePageClick}
+            pageRangeDisplayed={5}
+            pageCount={Math.ceil(total / per_page)}
+            previousLabel="<"
+            renderOnZeroPageCount={null}
+          />
         </Box>
       </Box>
     </Container>

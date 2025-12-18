@@ -13,6 +13,8 @@ import {
   VerifyEmailPage,
   Product,
   CategoryPage,
+  PoliticsPage,
+  OfertaPage
 } from "src/pages"
 
 export const router = createBrowserRouter([
@@ -62,6 +64,14 @@ export const router = createBrowserRouter([
       {
         path: PAGES.product,
         element: <Product />,
+      },
+      {
+        path: PAGES.oferta,
+        element: <OfertaPage />,
+      },
+      {
+        path: PAGES.politics,
+        element: <PoliticsPage />,
       },
     ],
   },

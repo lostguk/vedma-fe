@@ -6,12 +6,13 @@ import {
   Button,
   Card,
   Icon,
+  Link
 } from "src/components"
 import { useDispatch, useSelector } from "react-redux"
 import Slider from "react-slick"
-import { useParams } from "react-router-dom"
+import { generatePath, useParams } from "react-router-dom"
 import { fetchProduct } from "src/store/slices/products/slice"
-import { ICON_NAMES } from "src/core/constants"
+import { ICON_NAMES, PAGES } from "src/core/constants"
 import { NumericFormat } from "react-number-format"
 import {
   addCartItem,
@@ -52,6 +53,7 @@ export const Product = () => {
     slidesToScroll: 1,
   }
 
+    // navigate(generatePath(PAGES.category, { slug }))
   return (
     <Box padding="48px 0 72px">
       <Container>
@@ -69,6 +71,18 @@ export const Product = () => {
               marginBottom="50px"
             >
               {product?.name}
+            </Box>
+
+            <Box gap="8px" marginBottom="16px">
+              {product?.breadcrumbs?.map(({ slug, type, name }, index) => 
+                product?.breadcrumbs.length - 1 > index 
+                  ? <>
+                      <Link to={type === 'home' ? PAGES.home : generatePath(PAGES.category, { slug })}>
+                        {name}
+                      </Link>&nbsp;/
+                    </>
+                  : <>&nbsp;{name}</>
+              )}
             </Box>
 
             <Box width="100%">
