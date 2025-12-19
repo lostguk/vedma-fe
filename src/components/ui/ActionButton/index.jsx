@@ -1,4 +1,5 @@
 import styled from "@emotion/styled"
+import { COLORS } from "src/core/constants"
 
 export const Styled = styled.div`
   display: flex;
@@ -14,7 +15,11 @@ export const Styled = styled.div`
   cursor: pointer;
 
   &:hover {
-    opacity: 0.6;
+    &:hover {
+      background: ${COLORS.main};
+      color: white;
+      border: 1px solid ${COLORS.main};
+    }
   }
 `
 

@@ -1,5 +1,5 @@
 import React from "react"
-import { Button, Box, Icon } from "src/components"
+import { Box, Icon, ActionButton } from "src/components"
 import { ICON_NAMES } from "src/core/constants"
 import { useDispatch } from "react-redux"
 import { NumericFormat } from "react-number-format"
@@ -8,26 +8,6 @@ import {
   plusCartItem,
   minusCartItem,
 } from "src/store/slices/global/slice"
-
-import styled from "@emotion/styled"
-
-export const ActionButton = styled.div`
-  display: flex;
-  width: 30px;
-  height: 30px;
-  padding: 8px;
-  align-items: center;
-  justify-content: center;
-  color: #a5a5a5;
-  border-radius: 5px;
-  border: 1px solid #a5a5a5;
-  transition: all 0.3s;
-  cursor: pointer;
-
-  &:hover {
-    opacity: 0.6;
-  }
-`
 
 export const Card = (props) => {
   const dispatch = useDispatch()

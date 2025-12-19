@@ -21,9 +21,8 @@ import { COLORS, ICON_NAMES, MODAL_NAMES } from "src/core/constants"
 import { Card } from "./OrderCard"
 
 const options = [
-  { value: "chocolate", label: "Chocolate" },
-  { value: "strawberry", label: "Strawberry" },
-  { value: "vanilla", label: "Vanilla" },
+  { value: "cdek", label: "СДЭК " },
+  { value: "post", label: "Почта России" },
 ]
 
 export const OrderPage = () => {

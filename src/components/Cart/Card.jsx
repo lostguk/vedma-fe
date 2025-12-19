@@ -1,9 +1,9 @@
 import React from "react"
-import { Button, Box, Icon } from "src/components"
-import { ActionButton } from "./styled"
-import { ICON_NAMES } from "src/core/constants"
+import { Box, Icon, ActionButton } from "src/components"
+import { ICON_NAMES, PAGES, COLORS } from "src/core/constants"
 import { useDispatch } from "react-redux"
 import { NumericFormat } from "react-number-format"
+import { generatePath, useNavigate } from "react-router-dom"
 import {
   removeCartItem,
   plusCartItem,
@@ -13,11 +13,18 @@ import {
 export const Card = (props) => {
   const dispatch = useDispatch()
 
+  const navigate = useNavigate()
+
   const removeProduct = () => dispatch(removeCartItem(props.id))
 
   const plusItem = () => dispatch(plusCartItem(props.id))
 
   const minusItem = () => dispatch(minusCartItem(props.id))
+
+  const navigateToProduct = () => {
+    props.toggleCart()
+    navigate(generatePath(PAGES.product, { slug: props.slug }))
+  }
 
   return (
     <Box width="100%" align="flex-end" position="relative">
@@ -36,7 +43,7 @@ export const Card = (props) => {
         <Icon name={ICON_NAMES.cross} color="#FF0000" />
       </Box>
 
-      <Box borderRadius="20px" overflow="hidden" width="35%">
+      <Box cursor="pointer" borderRadius="20px" overflow="hidden" width="35%" onClick={navigateToProduct}>
         <img width="100%" src={props.thumb_url} />
       </Box>
 
@@ -49,10 +56,16 @@ export const Card = (props) => {
         height="100%"
       >
         <Box
+          cursor="pointer"
           fontSize="18px"
           fontWeight="600"
           color="#000000"
           margin="0 0 8px 4px"
+          onClick={navigateToProduct}
+          hoverStyles={{
+            color: COLORS.main
+          }}
+          transition="all 0.3s"
         >
           {props.name}
         </Box>

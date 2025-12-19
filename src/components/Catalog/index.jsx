@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useMemo } from "react"
-import { Box, Icon } from "src/components"
+import { useEffect } from "react"
+import { Icon } from "src/components"
 import { useParams } from "react-router-dom"
 import { fetchCategories } from "src/store/slices/categories/slice"
 import { setFilter, setCatalogMenu } from "src/store/slices/products/slice"
@@ -31,6 +31,7 @@ const findCategoryBySlug = (categories, slug) => {
 
     if (category.children && category.children.length > 0) {
       const found = findCategoryBySlug(category.children, slug)
+      
       if (found) return found
     }
   }
@@ -97,12 +98,14 @@ export const Catalog = () => {
 
         if (currentCategory.children?.length) {
           dispatch(setCatalogMenu(currentCategory.children))
-        } else {
+        } else if(currentCategory.parent_id) {
           dispatch(
             setCatalogMenu(
               findCategoryById(menu, currentCategory.parent_id).children,
             ),
           )
+        } else {
+          dispatch(setCatalogMenu(menu))
         }
       } else {
         dispatch(setCatalogMenu(menu))
@@ -110,11 +113,13 @@ export const Catalog = () => {
     }
   }, [menu, params.slug])
 
+  const selectedCategory = catalogMenu.find(({ slug }) => params?.slug)
+
   return (
     <CatalogBody>
       <CategoriesBody>
         <CategoriesItem>
-          {Boolean(params.slug) && (
+          {Boolean(params.slug && selectedCategory?.parent_id) && (
             <Category onClick={LevelDown}>Назад</Category>
           )}
 

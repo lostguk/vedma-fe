@@ -36,7 +36,7 @@ export const CategoryPage = () => {
   return (
     <Container>
       <Box width="100%" align="flex-start">
-        <Box width="25%">
+        <Box width="25%" position="sticky" top="133px">
           <Catalog />
         </Box>
 
@@ -64,6 +64,16 @@ export const CategoryPage = () => {
               ))
             )}
           </Box>
+          
+          <Pagination
+            breakLabel="..."
+            nextLabel=">"
+            onPageChange={handlePageClick}
+            pageRangeDisplayed={5}
+            pageCount={Math.ceil(total / per_page)}
+            previousLabel="<"
+            renderOnZeroPageCount={null}
+          />
         </Box>
       </Box>
     </Container>

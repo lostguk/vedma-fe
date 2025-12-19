@@ -17,3 +17,24 @@ export const FooterItem = styled.div`
     background: #232b4d;
   }
 `
+
+
+export const StyledContacts = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  & > h2 {
+    font-size: 12px;
+    font-weight: 600;
+    margin: 0;
+    padding: 0;
+  }
+
+  & > p {
+    font-size: 12px;
+    font-weight: 400;
+    margin: 0;
+    padding: 0;
+  }
+`

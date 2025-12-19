@@ -164,7 +164,7 @@ export const Main = () => {
             justify="center"
             margin="0 auto"
           >
-            🕯️ Магические свечи
+            🕯️ МАГИЧЕСКИЕ СВЕЧИ
           </Box>
 
           <Box
@@ -225,10 +225,10 @@ export const Main = () => {
           </Box>
 
           <Box width="100%" maxWidth="700px" gap="12px" margin="0 auto">
-            {infoItems.map(({ img, desc }) => (
+            {data?.about?.trust?.items.map(({ image, title }) => (
               <Box width="calc(33.3333% - 8px)" direction="column">
                 <Box maxWidth="70px">
-                  <img width="100%" src={img} />
+                  <img width="100%" src={image} />
                 </Box>
 
                 <Box
@@ -237,7 +237,7 @@ export const Main = () => {
                   fontWeight="600"
                   marginTop="16px"
                 >
-                  {desc}
+                  {title}
                 </Box>
               </Box>
             ))}
