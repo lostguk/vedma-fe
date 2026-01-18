@@ -65,7 +65,7 @@ export const Header = () => {
         <Cart toggleCart={toggleCart} />
       </SidePage>
 
-      <SidePage isOpen={isMobileMenu} toggle={toggleMobileMenu}>
+      <SidePage isOpen={isMobileMenu} toggle={toggleMobileMenu} placement="left">
         <MobileMenu toggleMenu={toggleMobileMenu} />
       </SidePage>
 

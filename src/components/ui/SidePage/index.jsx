@@ -1,5 +1,7 @@
 import Drawer from "rc-drawer"
 
+import { SidePageGlobalStyles } from './store'
+
 import "rc-drawer/assets/index.css"
 
 export const maskMotion = {
@@ -19,14 +21,18 @@ const motionProps = {
 
 export const SidePage = ({ isOpen, children, toggle, width = 420, placement = "right" }) => {
   return (
-    <Drawer 
-      open={isOpen}
-      onClose={toggle}
-      placement={placement}
-      width={width}
-      {...motionProps}
-    >
-      {children}
-    </Drawer>
+    <>
+      <SidePageGlobalStyles  />
+
+      <Drawer 
+        open={isOpen}
+        onClose={toggle}
+        placement={placement}
+        width={width}
+        {...motionProps}
+      >
+        {children}
+      </Drawer>
+    </>
   )
 }
