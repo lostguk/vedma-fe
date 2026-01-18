@@ -14,6 +14,11 @@ export const Styled = styled.div`
   transition: all 0.3s;
   cursor: pointer;
 
+  @media (max-width: 767px) {
+    width: 25px;
+    height: 25px;
+  }
+
   &:hover {
     &:hover {
       background: ${COLORS.main};

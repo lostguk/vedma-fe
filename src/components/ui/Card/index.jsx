@@ -94,7 +94,7 @@ export const Card = (props) => {
 
       <Box marginTop="auto" justify="center">
         {currentItem ? (
-          <>
+          <Box minHeight="44px" align="center">
             <Box onClick={minusItem}>
               <ActionButton>-</ActionButton>
             </Box>
@@ -104,7 +104,7 @@ export const Card = (props) => {
             <Box onClick={plusItem}>
               <ActionButton>+</ActionButton>
             </Box>
-          </>
+          </Box>
         ) : (
           <Button
             width="100%"

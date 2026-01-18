@@ -43,13 +43,13 @@ export const Card = (props) => {
         <Icon name={ICON_NAMES.cross} color="#FF0000" />
       </Box>
 
-      <Box cursor="pointer" borderRadius="20px" overflow="hidden" width="35%" onClick={navigateToProduct}>
+      <Box cursor="pointer" borderRadius="20px" overflow="hidden" width="35%" onClick={navigateToProduct} alignSelf="flex-start">
         <img width="100%" src={props.thumb_url} />
       </Box>
 
       <Box
         width="45%"
-        padding="0 16px"
+        padding="0 12px"
         direction="column"
         marginBottom="5px"
         alignSelf="flex-start"
@@ -57,7 +57,7 @@ export const Card = (props) => {
       >
         <Box
           cursor="pointer"
-          fontSize="18px"
+          fontSize="16px"
           fontWeight="600"
           color="#000000"
           margin="0 0 8px 4px"
@@ -100,9 +100,11 @@ export const Card = (props) => {
         <Box onClick={minusItem}>
           <ActionButton>-</ActionButton>
         </Box>
-        <Box color="#000" align="center" justify="center" margin="0 auto">
+
+        <Box color="#000" align="center" justify="center" margin="0 auto" padding="0 3px" flexShrink={0}>
           {props.count}
         </Box>
+        
         <Box onClick={plusItem}>
           <ActionButton>+</ActionButton>
         </Box>

@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { fetchCandels, fetchMainPage } from "src/store/slices/mainPage/slice"
 import { useNavigate } from "react-router-dom"
 import MainImg from "src/assets/main-card.jpg"
+import { useBreakpoints } from "src/core/hooks"
 import MagicBook from "src/assets/magic-book.png"
 import LeftEye from "src/assets/left-eye.png"
 import RightEye from "src/assets/right-eye.png"
@@ -12,6 +13,8 @@ import Book from "src/assets/book.png"
 
 export const Main = () => {
   const dispatch = useDispatch()
+
+  const { table, tablet, phone } = useBreakpoints()
 
   const navigate = useNavigate()
 
@@ -25,37 +28,97 @@ export const Main = () => {
   return (
     <>
       <Container>
-        <Box padding="24px 0 40px" gap="56px" width="100%">
-          <Box width="40%" borderRadius="20px" overflow="hidden">
-            <img width="100%" src={MainImg} />
-          </Box>
-
-          <Box width="60%" direction="column">
-            <Box
-              marginBottom="24px"
-              width="100%"
-              maxWidth="300px"
-              marginTop="auto"
-            >
-              <Button width="100%" onClick={() => navigate(PAGES.catalog)}>
-                Каталог
-              </Button>
+        <Box padding="24px 0 40px" gap={table ? "56px" : "20px"} width="100%" wrap="wrap">
+          {(table || tablet) && (
+            <Box width={table ? "40%" : "50%"} borderRadius="20px" overflow="hidden">
+              <img width="100%" src={MainImg} />
             </Box>
+          )}
+
+          <Box width={table ? "calc(60% - 56px)" : tablet ? "calc(50% - 20px)" : '100%'} direction="column" height="100%">
+            {(table || tablet) && (
+              <Box
+                marginBottom="24px"
+                width="100%"
+                maxWidth="300px"
+                marginTop="auto"
+              >
+                <Button width="100%" onClick={() => navigate(PAGES.catalog)}>
+                  Каталог
+                </Button>
+              </Box>
+            )}
 
             <Box
-              maxWidth="60%"
-              fontSize="52px"
-              lineHeight="52px"
+              fontSize={table ? "52px" : tablet ? "42px" : "32px"}
               marginBottom="32px"
+              fontWeight="700"
             >
-              Магия живет в каждом из нас
+              МАГИЯ ЖИВЕТ <br /> В КАЖДОМ ИЗ НАС
             </Box>
 
-            <Box maxWidth="60%" fontSize="22px">
+            <Box fontSize="22px">
               Вопрос в том, готовы ли вы ее пробудить?
             </Box>
 
-            <Box width="100%" gap="12px" marginTop="80px">
+            {phone && (
+              <Box
+                marginBottom="24px"
+                width="100%"
+                marginTop="32px"
+                marginRight="auto"
+                marginLeft="auto"
+              >
+                <Button width="100%" onClick={() => navigate(PAGES.catalog)}>
+                  Каталог
+                </Button>
+              </Box>
+            )}
+
+            {table && (
+              <Box width="100%" gap="12px" marginTop="auto">
+                <Box
+                  padding="8px"
+                  width="calc(33% - 8px)"
+                  background="#000"
+                  borderRadius="40px"
+                  aling="center"
+                >
+                  <Box marginRight="5px">🔮</Box>
+
+                  <Box flexGrow={1}>Авторские изделия заряженные энергией</Box>
+                </Box>
+
+                <Box
+                  padding="8px"
+                  width="calc(33% - 8px)"
+                  background="#000"
+                  borderRadius="40px"
+                  aling="center"
+                >
+                  <Box marginRight="5px">🌙</Box>
+
+                  <Box flexGrow={1}>Традиционные рецепты и обряды</Box>
+                </Box>
+
+                <Box
+                  padding="8px"
+                  width="calc(33% - 8px)"
+                  background="#000"
+                  borderRadius="40px"
+                  aling="center"
+                >
+                  <Box marginRight="5px">🕯️</Box>
+
+                  <Box flexGrow={1}>Ручная работа и натуральные материалы</Box>
+                </Box>
+              </Box>
+            )}
+          </Box>
+        </Box>
+
+        {tablet && (
+            <Box width="100%" gap="12px" marginBottom="24px">
               <Box
                 padding="8px"
                 width="calc(33% - 8px)"
@@ -92,13 +155,12 @@ export const Main = () => {
                 <Box flexGrow={1}>Ручная работа и натуральные материалы</Box>
               </Box>
             </Box>
-          </Box>
-        </Box>
+          )}
       </Container>
 
-      <Box padding="40px 0" background="#fff">
+      <Box padding={`${phone ? '20px' : '40px'} 0`} background="#fff">
         <Container>
-          <Box gap="32px">
+          <Box gap="32px" direction={phone ? 'column' : 'row'} align="center">
             <Box maxWidth="130px">
               <img width="100%" src={MagicBook} />
             </Box>
@@ -147,9 +209,9 @@ export const Main = () => {
               {description}
             </Box>
 
-            <Box gap="15px" marginTop="40px">
+            <Box gap="15px" marginTop="40px" wrap="wrap">
               {products.map((item) => (
-                <Box width="calc(25% - 11px)">
+                <Box width={table ? "calc(25% - 11px)" : tablet ? 'calc(33.33333% - 10px)' : 'calc(50% - 8px)'}>
                   <Card {...item} />
                 </Box>
               ))}
@@ -158,11 +220,11 @@ export const Main = () => {
         ))}
       </Container>
 
-      <Box padding="56px 0 48px" width="100%" background="#fff">
+      <Box padding={phone ? "36px 16px 28px" : "56px 36px 48px"} width="100%" background="#fff" >
         <Box width="100%" maxWidth="1100px" margin="0 auto" direction="column">
           <Box
             color="#000"
-            fontSize="70px"
+            fontSize={table ? "70px" : tablet ? "50px" : "30px"}
             fontWeight="800"
             width="100%"
             justify="center"
@@ -173,9 +235,9 @@ export const Main = () => {
           <Box
             width="100%"
             color="#000"
-            fontSize="24px"
+            fontSize={phone ? "20px" : "24px"}
             fontWeight="400"
-            margin="40px 0"
+            margin={phone ? "20px 0" : "40px 0"}
             textAlign="center"
           >
             {data?.about?.description}
@@ -186,7 +248,7 @@ export const Main = () => {
             color="#000"
             fontSize="24px"
             fontWeight="800"
-            margin="40px auto"
+            margin={phone ? "20px auto" : "40px auto"}
             justify="center"
           >
             {data?.about?.trust?.title}
@@ -216,7 +278,7 @@ export const Main = () => {
             color="#000"
             fontSize="24px"
             fontWeight="800"
-            margin="80px auto 40px"
+            margin={phone ? "40px auto 20px" : "80px auto 40px"}
             justify="center"
           >
             {data?.about?.motto}
@@ -249,17 +311,17 @@ export const Main = () => {
             color="#000"
             fontSize="24px"
             fontWeight="800"
-            margin="56px auto 32px"
+            margin={phone ? "36px auto 22px" : "56px auto 32px"}
             justify="center"
             textAlign="center"
           >
             {data?.about?.stats?.title}
           </Box>
 
-          <Box gap="24px">
+          <Box gap={phone ? '12px' : "24px"} wrap="wrap">
             {data?.about?.stats?.items?.map(({ value, label, text }) => (
               <Box
-                width="calc(33.3333% - 16px)"
+                width={phone ? "calc(50% - 6px)" : "calc(33.3333% - 16px)"}
                 direction="column"
                 background="#FAFAFC"
                 borderRadius="20px"
