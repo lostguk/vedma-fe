@@ -38,7 +38,7 @@ export const Card = (props) => {
   }
 
   return (
-    <Box direction="column" height="100%" position="relative">
+    <Box direction="column" height="100%" position="relative" width="100%">
       <Box position='absolute' top='10px' left="10px" direction='column' gap="8px" align="start">
         {is_bestseller && (
           <Box background="#FF0000" padding="4px 8px" borderRadius="5px" fontWeight="600">Хит продаж</Box>
@@ -53,7 +53,6 @@ export const Card = (props) => {
         borderRadius="20px"
         overflow="hidden"
         marginBottom="8px"
-        height="260px"
         onClick={() => navigate(generatePath(PAGES.product, { slug }))}
         cursor="pointer"
       >

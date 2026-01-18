@@ -15,42 +15,7 @@ export const Main = () => {
 
   const navigate = useNavigate()
 
-  const { items, isLoading: isCandelsLoading } = useSelector((state) => state.mainPage.candels)
-
   const { data, isLoading } = useSelector((state) => state.mainPage.mainData)
-
-  const infoItems = [
-    {
-      img: Book,
-      desc: "Проверенные рецепты",
-    },
-    {
-      img: Book,
-      desc: "Только натуральные материалы",
-    },
-    {
-      img: Book,
-      desc: "Энергетическая зарядка каждого изделия",
-    },
-  ]
-
-  const ourNumbers = [
-    {
-      title: "3600 +",
-      subtitle: "Довольных клиентов",
-      desc: "В нашем магазине каждый найдет инструмент для улучшения своей жизни",
-    },
-    {
-      title: "6",
-      subtitle: "Лет",
-      desc: "Изготавливаем для людей волшебные свечи",
-    },
-    {
-      title: "500 +",
-      subtitle: "Моделей свечей",
-      desc: "Используем только натуральный пчелиный воск, травы и эфирные масла",
-    },
-  ]
 
   useEffect(() => {
     dispatch(fetchCandels())
@@ -154,40 +119,43 @@ export const Main = () => {
       </Box>
 
       <Container>
-        <Box padding="48px 0" direction="column" width="100%">
-          <Box
-            maxWidth="800px"
-            width="100%"
-            fontWeight="600"
-            fontSize="24px"
-            marginBottom="8px"
-            justify="center"
-            margin="0 auto"
-          >
-            🕯️ МАГИЧЕСКИЕ СВЕЧИ
-          </Box>
+        {data?.categories
+        ?.filter(({ products }) => Boolean(products?.length))
+        .map(({ products, description, name, icon }) => (
+          <Box padding="48px 0" direction="column" width="100%">
+            <Box
+              maxWidth="800px"
+              width="100%"
+              fontWeight="600"
+              fontSize="24px"
+              marginBottom="8px"
+              justify="center"
+              margin="0 auto"
+            >
+              <img src={icon} />&nbsp;{name}
+            </Box>
 
-          <Box
-            maxWidth="800px"
-            width="100%"
-            fontWeight="400"
-            fontSize="14px"
-            opacity="0.5"
-            justify="center"
-            margin="0 auto"
-          >
-            Зажгите свечу, сосредоточьтесь на своем желании, наблюдайте за
-            пламенем и отпустите намерение во Вселенную.
-          </Box>
+            <Box
+              maxWidth="800px"
+              width="100%"
+              fontWeight="400"
+              fontSize="14px"
+              opacity="0.5"
+              justify="center"
+              margin="0 auto"
+            >
+              {description}
+            </Box>
 
-          <Box gap="15px" marginTop="40px">
-            {items.map((item) => (
-              <Box width="calc(33.3333% - 10px)">
-                <Card {...item} />
-              </Box>
-            ))}
+            <Box gap="15px" marginTop="40px">
+              {products.map((item) => (
+                <Box width="calc(25% - 11px)">
+                  <Card {...item} />
+                </Box>
+              ))}
+            </Box>
           </Box>
-        </Box>
+        ))}
       </Container>
 
       <Box padding="56px 0 48px" width="100%" background="#fff">

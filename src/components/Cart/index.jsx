@@ -23,9 +23,7 @@ export const Cart = ({ toggleCart }) => {
           items: cart.map(({ id, count }) => ({ id, count })),
         })
         .then((res) => {
-          setTotalCartPrice(
-            res?.data?.data.reduce((acc, item) => item.summery + acc, 0),
-          )
+          setTotalCartPrice(res?.data?.data.total_with_discount)
         })
     }
   }, [cart])
