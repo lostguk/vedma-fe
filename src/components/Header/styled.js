@@ -8,6 +8,10 @@ export const StyledHeader = styled.header`
   width: 100%;
   top: 0;
   z-index: 1;
+
+  @media (max-width: 767px) {
+    padding: 12px 0;
+  }
 `
 
 export const MaskInput = styled(MaskedInput)`

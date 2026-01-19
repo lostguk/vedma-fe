@@ -2,6 +2,10 @@ import styled from "@emotion/styled"
 
 export const StyledFooter = styled.footer`
   padding: 36px 0;
+  
+  @media (max-width: 767px) {
+    padding: 16px 0;
+  }
 `
 
 export const FooterItem = styled.div`

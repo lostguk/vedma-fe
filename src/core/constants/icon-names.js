@@ -9,4 +9,5 @@ export const ICON_NAMES = {
   delivery: "delivery",
   address: "address",
   payment: "payment",
+  mobileMenu: "mobileMenu",
 }

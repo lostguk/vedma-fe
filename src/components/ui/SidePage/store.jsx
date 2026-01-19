@@ -58,6 +58,36 @@ export const SidePageGlobalStyles = () => (
           transform: translateX(100%) !important;
         }
       }
+
+      /* Анимация для panel слева - точно по примеру */
+      .panel-motion-left-enter,
+      .panel-motion-left-appear,
+      .panel-motion-left-leave {
+        &-start {
+          transition: none !important;
+        }
+
+        &-active {
+          transition: all 0.3s;
+        }
+      }
+
+      .panel-motion-left-enter,
+      .panel-motion-left-appear {
+        transform: translateX(-100%);
+
+        &-active {
+          transform: translateX(0);
+        }
+      }
+
+      .panel-motion-left-leave {
+        transform: translateX(0);
+
+        &-active {
+          transform: translateX(-100%) !important;
+        }
+      }
     `}
   />
 )

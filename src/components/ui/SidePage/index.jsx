@@ -1,5 +1,3 @@
-import React from "react"
-
 import Drawer from "rc-drawer"
 
 import { SidePageGlobalStyles } from './store'
@@ -21,16 +19,20 @@ const motionProps = {
   motion,
 }
 
-export const SidePage = ({ isOpen, children, toggle, width = 500 }) => {
+export const SidePage = ({ isOpen, children, toggle, width = 420, placement = "right" }) => {
   return (
-    <Drawer 
-      open={isOpen}
-      onClose={toggle}
-      placement="right"
-      width={width}
-      {...motionProps}
-    >
-      {children}
-    </Drawer>
+    <>
+      <SidePageGlobalStyles  />
+
+      <Drawer 
+        open={isOpen}
+        onClose={toggle}
+        placement={placement}
+        width={width}
+        {...motionProps}
+      >
+        {children}
+      </Drawer>
+    </>
   )
 }

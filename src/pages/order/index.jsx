@@ -10,6 +10,7 @@ import {
   SelectUI,
 } from "src/components"
 import { toggleModal } from "src/store/slices/modals/slice"
+import { NumericFormat } from "react-number-format"
 import { useDispatch, useSelector } from "react-redux"
 import { useForm, Controller } from "react-hook-form"
 import axiosClient from "src/core/axios-client"
@@ -30,15 +31,13 @@ export const OrderPage = () => {
 
   const { cart, user } = useSelector((state) => state.global)
 
-  const [isRegLoading, setIsRegLoading] = useState(false)
-
   const [isOrderLoading, setIsOrderLoading] = useState(false)
+  
+  const [deliveryCost, setDeliveryCost] = useState(0)
 
   const [isRegNeed, setIsRegNeed] = useState(!Boolean(user))
 
   const [promoCode, setPromoCode] = useState("")
-
-  const [paymentType, setPaymentType] = useState("robo")
 
   const [selectedOption, setSelectedOption] = useState(null)
 
@@ -46,13 +45,10 @@ export const OrderPage = () => {
     setIsOrderLoading(true)
 
     const body = {
+        ...data,
         items: cart.map(({ id, count }) => ({ id, count })),
         register: isRegNeed,
-        ...data,
-    }
-
-    if(isRegLoading){
-      body.address = data.address.value
+        address:  data.address.value,
     }
 
     axiosClient
@@ -82,6 +78,17 @@ export const OrderPage = () => {
     last_name: Yup.string().required("Поле является обязательным"),
     first_name: Yup.string().required("Поле является обязательным"),
     middle_name: Yup.string().required("Поле является обязательным"),
+    address: Yup.object()
+    .required("Введите адрес")
+    .test(
+      "is-full-address",
+      "Выберите полный адрес",
+      (value) => {
+        if (!value || !value.data) return false;
+        const { street, house, city } = value.data;
+        return Boolean(street && house && city);
+      }
+    ),
   })
 
   const {
@@ -89,6 +96,7 @@ export const OrderPage = () => {
     formState: { errors },
     control,
     setValue,
+    watch
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
@@ -106,7 +114,7 @@ export const OrderPage = () => {
       setIsRegNeed(false)
       setValue("email", user?.email)
       setValue("phone", user?.phone.replaceAll(" ", "-"))
-      setValue("address", user?.address)
+      setValue("address", { value: user?.address })
       setValue("last_name", user?.last_name)
       setValue("first_name", user?.first_name)
       setValue("middle_name", user?.middle_name)
@@ -466,7 +474,7 @@ export const OrderPage = () => {
               justify="flex-end"
               marginBottom="12px"
             >
-              Доставка СДЭК до ПВЗ: 650₽
+              Доставка СДЭК до ПВЗ: {deliveryCost ? <NumericFormat displayType="text" value={deliveryCost} suffix=" ₽" thousandSeparator=" " /> : 'Не рассчитана'}
             </Box>
 
             <Box
@@ -491,7 +499,7 @@ export const OrderPage = () => {
               <Button
                 type="submit"
                 form="order-form"
-                isLoading={isOrderLoading || isRegLoading}
+                isLoading={isOrderLoading}
               >
                 Оформить заказ
               </Button>
