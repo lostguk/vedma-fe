@@ -9,8 +9,11 @@ import { useDispatch, useSelector } from "react-redux"
 import axiosClient, { removeToken } from "src/core/axios-client"
 import { useNavigate } from "react-router-dom"
 import { setUser, resetCart } from "src/store/slices/global/slice"
+import { useBreakpoints } from "src/core/hooks"
 
 export const UserForm = () => {
+  const { phone } = useBreakpoints()
+
   const [isLoading, setIsLoading] = useState(false)
 
   const navigate = useNavigate()
@@ -101,7 +104,7 @@ export const UserForm = () => {
     <div>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Box gap="8px" wrap="wrap">
-          <Box width="calc(33.3333% - 6px)">
+          <Box width={phone ? "100%" : "calc(33.3333% - 6px)"}>
             <Controller
               name="last_name"
               control={control}
@@ -116,7 +119,7 @@ export const UserForm = () => {
             />
           </Box>
 
-          <Box width="calc(33.3333% - 6px)">
+          <Box width={phone ? "100%" : "calc(33.3333% - 6px)"}>
             <Controller
               name="first_name"
               control={control}
@@ -131,7 +134,7 @@ export const UserForm = () => {
             />
           </Box>
 
-          <Box width="calc(33.3333% - 6px)">
+          <Box width={phone ? "100%" : "calc(33.3333% - 6px)"}>
             <Controller
               name="middle_name"
               control={control}
@@ -147,7 +150,7 @@ export const UserForm = () => {
             />
           </Box>
 
-          <Box width="calc(33.3333% - 6px)">
+          <Box width={phone ? "100%" : "calc(33.3333% - 6px)"}>
             <Controller
               name="phone"
               error={errors?.phone}
@@ -195,7 +198,7 @@ export const UserForm = () => {
             />
           </Box>
 
-          <Box width="calc(33.3333% - 6px)">
+          <Box width={phone ? "100%" : "calc(33.3333% - 6px)"}>
             <Controller
               name="email"
               control={control}

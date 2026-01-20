@@ -4,6 +4,9 @@ import { getCart, removeCart } from "src/core/helpers"
 const initialState = {
   cart: getCart() || [],
   user: null,
+  catalogSidePage: {
+    isOpen: false
+  },
   isLoginLoading: false,
 }
 
@@ -15,6 +18,9 @@ export const slice = createSlice({
   reducers: {
     setUser(state, { payload }) {
       state.user = payload
+    },
+    toggleCatalogSidePage(state) {
+      state.catalogSidePage.isOpen = !state.catalogSidePage.isOpen
     },
     addCartItem(state, { payload }) {
       state.cart = [...state.cart, { ...payload, count: 1 }]
@@ -56,6 +62,7 @@ const {
   minusCartItem,
   setUser,
   resetCart,
+  toggleCatalogSidePage
 } = slice.actions
 
 export {
@@ -65,6 +72,7 @@ export {
   minusCartItem,
   setUser,
   resetCart,
+  toggleCatalogSidePage
 }
 
 export default slice.reducer

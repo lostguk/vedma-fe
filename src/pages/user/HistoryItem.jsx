@@ -2,6 +2,7 @@ import React from "react"
 import { format } from 'date-fns'
 import { Box } from "src/components"
 import { NumericFormat } from "react-number-format"
+import { useBreakpoints } from "src/core/hooks"
 
 import HistoryItemCard from './HistoryItemCard'
 
@@ -15,10 +16,11 @@ export const HistoryItem = ({
     phone,
     total_price,
 }) => {
+  const { table, phone: phoneBreakpoint } = useBreakpoints()
 
   return (
-    <Box direction="column" width="calc(50% - 6px)" background="#0A0D1B" padding="24px 40px" borderRadius="20px">
-        <Box justify="space-between" marginBottom="24px" align="center">
+    <Box direction="column" width={phoneBreakpoint ? "100%" : "calc(50% - 6px)"} background="#0A0D1B" padding={table ? "24px 40px" : "12px 20px"} borderRadius="20px">
+        <Box justify="space-between" marginBottom="24px" align="center" direction={table ? 'row' : 'column'}>
             <Box fontSize="18px">
                 Заказ:&nbsp;{format(new Date(created_at), 'dd.MM.yyyy')}
             </Box>

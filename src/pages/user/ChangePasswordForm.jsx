@@ -5,9 +5,12 @@ import { yupResolver } from "@hookform/resolvers/yup"
 import * as Yup from "yup"
 import axiosClient from "src/core/axios-client"
 import { toast } from "react-toastify"
+import { useBreakpoints } from "src/core/hooks"
 
 export const ChangePasswordForm = () => {
   const [isLoading, setIsLoading] = useState(false)
+
+  const { phone } = useBreakpoints()
 
   const schema = Yup.object().shape({
     current_password: Yup.string().required(
@@ -54,7 +57,7 @@ export const ChangePasswordForm = () => {
   return (
     <form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%" }}>
       <Box gap="8px" wrap="wrap" width="100%">
-        <Box width="calc(33.3333% - 6px)">
+        <Box width={phone ? "100%" : "calc(33.3333% - 6px)"}>
           <Controller
             name="current_password"
             control={control}
@@ -68,7 +71,7 @@ export const ChangePasswordForm = () => {
           />
         </Box>
 
-        <Box width="calc(33.3333% - 6px)">
+        <Box width={phone ? "100%" : "calc(33.3333% - 6px)"}>
           <Controller
             name="new_password"
             control={control}
@@ -82,7 +85,7 @@ export const ChangePasswordForm = () => {
           />
         </Box>
 
-        <Box width="calc(33.3333% - 6px)">
+        <Box width={phone ? "100%" : "calc(33.3333% - 6px)"}>
           <Controller
             name="new_password_confirmation"
             control={control}

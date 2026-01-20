@@ -10,4 +10,9 @@ export const ICON_NAMES = {
   address: "address",
   payment: "payment",
   mobileMenu: "mobileMenu",
-}
+  catalog: "catalog",
+  changePassword: "changePassword",
+  myInfo: "myInfo",
+  orderHistory: "orderHistory",
+  chat: "chat",
+}   
