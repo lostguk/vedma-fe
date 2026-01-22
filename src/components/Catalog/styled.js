@@ -8,6 +8,12 @@ export const CatalogBody = styled.div`
   flex-direction: column;
   overflow-x: hidden;
   background: ${COLORS.secondary};
+
+  
+  @media (max-width: 1199px) {
+    width: 100%;
+  }
+
 `
 
 export const CategoriesBody = styled.div`

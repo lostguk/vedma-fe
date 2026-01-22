@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import {
   Box,
   Link,
@@ -8,12 +8,14 @@ import {
   Cart,
   SidePage,
   Badge,
+  Catalog
 } from "src/components"
 import { useBreakpoints } from "src/core/hooks"
 import { COLORS, ICON_NAMES, MODAL_NAMES, PAGES, HEADER_LINKS } from "src/core/constants"
 import { setCart } from "src/core/helpers"
 import { setUser } from "src/store/slices/global/slice"
 import { toggleModal } from "src/store/slices/modals/slice"
+import { toggleCatalogSidePage } from "src/store/slices/global/slice"
 import { useNavigate } from "react-router-dom"
 import { useSelector, useDispatch } from "react-redux"
 import axiosClient, { getToken } from "src/core/axios-client"
@@ -25,13 +27,20 @@ import { MobileMenu } from "./MobileMenu"
 
 export const Header = () => {
   const dispatch = useDispatch()
+
   const [isCartOpen, setCartOpen] = useState(false)
+
   const [isMobileMenu, setMobileMenuOpen] = useState(false)
+
   const navigate = useNavigate()
+
   const { table, tablet, phone } = useBreakpoints()
 
   const { authModal } = useSelector((state) => state.modals)
+
   const { cart, user } = useSelector((state) => state.global)
+
+  const { isOpen: isCatalogSidePageOpen } = useSelector(state => state.global.catalogSidePage)
 
   const toggleAuthModal = (isOpen) =>
     dispatch(toggleModal({ name: MODAL_NAMES.authModal, isOpen }))
@@ -58,9 +67,26 @@ export const Header = () => {
 
   const toggleCart = () => setCartOpen((prev) => !prev)
   const toggleMobileMenu = () => setMobileMenuOpen((prev) => !prev)
+  const toggleCatalog = () => dispatch(toggleCatalogSidePage())
 
   return (
     <StyledHeader>
+      <SidePage isOpen={isCatalogSidePageOpen} toggle={toggleCatalog} width={phone ? 420 : 500} placement="left">
+        <Box height="100%" background={COLORS.secondary} direction="column">
+          <Box justify="space-between" padding="16px 20px">
+            <Box fontSize="24px" fontWeight="600" align="center">
+              Каталог
+            </Box>
+
+            <Box cursor="pointer" onClick={toggleCatalog} align="center">
+              <Icon name={ICON_NAMES.cross} color="white"/>
+            </Box>
+          </Box>
+
+          <Catalog />
+        </Box>
+      </SidePage>
+
       <SidePage isOpen={isCartOpen} toggle={toggleCart} width={phone ? 420 : 500}>
         <Cart toggleCart={toggleCart} />
       </SidePage>

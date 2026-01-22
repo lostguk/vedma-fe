@@ -14,6 +14,7 @@ import { generatePath, useParams } from "react-router-dom"
 import { fetchProduct } from "src/store/slices/products/slice"
 import { ICON_NAMES, PAGES } from "src/core/constants"
 import { NumericFormat } from "react-number-format"
+import { useBreakpoints } from "src/core/hooks"
 import {
   addCartItem,
   plusCartItem,
@@ -22,6 +23,8 @@ import {
 
 export const Product = () => {
   const params = useParams()
+
+  const { phone } = useBreakpoints()
 
   const dispatch = useDispatch()
 
@@ -49,11 +52,11 @@ export const Product = () => {
     dots: true,
     infinite: true,
     speed: 500,
-    slidesToShow: 3,
+    slidesToShow: phone ? 2 : 3,
     slidesToScroll: 1,
+    arrows: phone ? false : true
   }
 
-    // navigate(generatePath(PAGES.category, { slug }))
   return (
     <Box padding="48px 0 72px">
       <Container>
@@ -64,7 +67,7 @@ export const Product = () => {
         ) : (
           <Box direction="column" width="100%">
             <Box
-              fontSize="56px"
+              fontSize={phone ? "36px" : "56px"}
               color="white"
               fontWeight="900"
               paddingRight="48px"
@@ -73,7 +76,7 @@ export const Product = () => {
               {product?.name}
             </Box>
 
-            <Box gap="8px" marginBottom="16px">
+            <Box gap="8px" marginBottom="16px" whiteSpace="nowrap" wrap="wrap">
               {product?.breadcrumbs?.map(({ slug, type, name }, index) => 
                 product?.breadcrumbs.length - 1 > index 
                   ? <>
@@ -85,13 +88,13 @@ export const Product = () => {
               )}
             </Box>
 
-            <Box width="100%">
-              <Box width="50%">
+            <Box width="100%" wrap="wrap">
+              <Box width={phone ? "100%" : "50%"}>
                 <img width="100%" src={product?.images_urls} />
               </Box>
 
               <Box
-                width="50%"
+                width={phone ? "100%" : "50%"}
                 direction="column"
                 padding=" 16px 16px 16px 32px"
               >

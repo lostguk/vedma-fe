@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react"
-import { Container, Box, TabItem } from "src/components"
+import { Container, Box, TabItem, Icon } from "src/components"
 import { useNavigate } from "react-router-dom"
 import { PAGES } from "src/core/constants"
 import { getToken } from "src/core/axios-client"
+import { useBreakpoints } from "src/core/hooks"
 
-import { COLORS } from "src/core/constants"
+import { COLORS, ICON_NAMES } from "src/core/constants"
 
 import { TabMenuItem } from "./styled"
 import { UserForm } from "./UserForm"
@@ -13,14 +14,16 @@ import { Chat } from "./Chat"
 import { OrderHistory } from "./OrderHistory"
 
 const tabs = [
-  { value: "user", label: "Моя информация" },
-  { value: "history", label: "История заказов" },
-  { value: "chat", label: "Чат с админом" },
-  { value: "changePassword", label: "Изменить пароль" },
+  { value: "user", label: "Моя информация", icon: ICON_NAMES.orderHistory },
+  { value: "history", label: "История заказов", icon: ICON_NAMES.myInfo },
+  { value: "chat", label: "Чат с админом", icon: ICON_NAMES.chat },
+  { value: "changePassword", label: "Изменить пароль", icon: ICON_NAMES.changePassword },
 ]
-
+              
 export const UserPage = () => {
   const navigate = useNavigate()
+
+  const { table, tablet, phone } = useBreakpoints()
 
   const [tab, setTab] = useState(tabs[0].value)
 
@@ -49,17 +52,18 @@ export const UserPage = () => {
           gap="8px"
           padding="8px"
           marginBottom="24px"
-          width="auto"
+          width={phone ? "100%" : 'auto'}
           alignSelf="flex-start"
+          justify="space-evenly"
         >
-          {tabs.map(({ label, value }) => (
+          {tabs.map(({ label, value, icon }) => (
             <TabMenuItem
               onClick={() => setTab(value)}
               active={Boolean(value === tab)}
               color="#181E39"
               key={value}
             >
-              {label}
+              {phone ? <Icon name={icon} color={tab === value ? "#ffffff": "#000000"}/> : label}
             </TabMenuItem>
           ))}
         </Box>
