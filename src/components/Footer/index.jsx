@@ -37,34 +37,41 @@ export const Footer = () => {
 
             <FooterItem onClick={() => navigate(PAGES.exchange)}>Обмен и возврат</FooterItem>
 
-            <FooterItem onClick={() => navigate(PAGES.contacts)}>Контакты</FooterItem>
+            {(!phone ) && (
+              <FooterItem onClick={() => navigate(PAGES.contacts)}>Контакты</FooterItem>
+            )}  
 
             {
-              tablet || phone && (
+              tablet  && (
                 <>
                   <FooterItem onClick={() => navigate(PAGES.oferta)}>Оферта</FooterItem>
 
                   <FooterItem onClick={() => navigate(PAGES.politics)}>Политика конфиденциальности</FooterItem>
+
                 </>
               )
             }
           </Box>
           
           {
-            table && (
-              <Box width="calc(25% - 12px)" direction="column" gap="4px">
+            (table || phone) && (
+              <Box width={table ? "calc(25% - 12px)" : 'calc(50% - 6px)'} direction="column" gap="4px">
                 <FooterItem onClick={() => navigate(PAGES.oferta)}>Оферта</FooterItem>
 
                 <FooterItem onClick={() => navigate(PAGES.politics)}>Политика конфиденциальности</FooterItem>
+
+                {phone && (
+                  <FooterItem onClick={() => navigate(PAGES.contacts)}>Контакты</FooterItem>
+                )}
               </Box>
             )
           }
 
           <Box
-            width={table ? 'calc(25% - 12px)' : tablet ? 'calc(33.33333% - 8px)' : 'calc(50% - 6px)'}
+            width={table ? 'calc(25% - 12px)' : tablet ? 'calc(33.33333% - 8px)' : '100%'}
             borderRadius="10px"
             background={COLORS.main}
-            padding="36px 24px"
+            padding={table ? "36px 24px" : "26px 14px"}
             direction="column"
           >
             Контакты

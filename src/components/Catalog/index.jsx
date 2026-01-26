@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { useNavigate, generatePath } from "react-router-dom"
 import { CatalogBody, CategoriesBody, Category, CategoriesItem } from "./styled"
 import { ICON_NAMES, PAGES } from "src/core/constants"
+import { toggleCatalogSidePage } from "src/store/slices/global/slice"
 
 const findCategoryById = (categories, id) => {
   for (const category of categories) {
@@ -50,10 +51,14 @@ export const Catalog = () => {
 
   const dispatch = useDispatch()
 
-  const onCategoryClick = ({ slug }) => {
+  const onCategoryClick = ({ slug, needToggle }) => {
     dispatch(setFilter({ slug }))
 
     navigate(generatePath(PAGES.category, { slug }))
+
+    if(needToggle){
+      dispatch(toggleCatalogSidePage())
+    }
   }
 
   const LevelDown = () => {
@@ -130,6 +135,7 @@ export const Catalog = () => {
               onClick={() =>
                 onCategoryClick({
                   slug,
+                  needToggle: !children?.length
                 })
               }
             >

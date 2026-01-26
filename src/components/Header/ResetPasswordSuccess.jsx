@@ -1,9 +1,12 @@
 import { Box } from "src/components"
+import { useBreakpoints } from "src/core/hooks"
 
-export const ResetPasswordSuccess = ({ modalStates, setModalState }) => {
+export const ResetPasswordSuccess = () => {
+  const { table } = useBreakpoints()
+
   return (
-    <Box padding="32px" direction="column" color="black">
-      <Box fontSize="40px" color="#292929" marginBottom="16px">
+    <Box padding={table ? "32px" : '8px'} direction="column" color="black">
+      <Box fontSize={table ? "40px" : "24px"} color="#292929" marginBottom="16px">
         Запрос на восстановление отправлен
       </Box>
 

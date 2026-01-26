@@ -2,9 +2,13 @@ import { useEffect, useState } from "react"
 import axiosClient from "src/core/axios-client"
 import { Container, Box, Icon } from "src/components"
 import { ICON_NAMES } from "src/core/constants"
+import { useBreakpoints } from "src/core/hooks"
 
 export const ContactsPage = () => {
   const [page, setPage] = useState(null)
+
+  const { table, tablet } = useBreakpoints()
+
   const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
@@ -26,7 +30,7 @@ export const ContactsPage = () => {
           ) : (
             <Box width="100%" direction="column">
               <Box
-                fontSize="68px"
+                fontSize={table ? "68px" : tablet ? "48px" : "34px"}
                 color="white"
                 fontWeight="900"
                 paddingRight="48px"

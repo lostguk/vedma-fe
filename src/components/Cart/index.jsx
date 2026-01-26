@@ -1,20 +1,21 @@
-import React, { useEffect, useState } from "react"
-import { useSelector } from "react-redux"
+import React, { useEffect } from "react"
+import { useSelector, useDispatch } from "react-redux"
 import { NumericFormat } from "react-number-format"
 import axiosClient from "src/core/axios-client"
 import { useNavigate } from "react-router-dom"
 import { ICON_NAMES, PAGES } from "src/core/constants"
+import { setCartTotalValue } from "src/store/slices/global/slice"
 
 import { CartBody } from "./styled"
 import { Card } from "./Card"
 import { Box, Icon, Button } from "../ui"
 
 export const Cart = ({ toggleCart }) => {
-  const { cart } = useSelector((state) => state.global)
+  const dispatch = useDispatch()
+
+  const { cart, cartTotalValue } = useSelector((state) => state.global)
 
   const navigate = useNavigate()
-
-  const [totalCartPrice, setTotalCartPrice] = useState(0)
 
   useEffect(() => {
     if (cart.length) {
@@ -23,7 +24,7 @@ export const Cart = ({ toggleCart }) => {
           items: cart.map(({ id, count }) => ({ id, count })),
         })
         .then((res) => {
-          setTotalCartPrice(res?.data?.data.total_with_discount)
+          dispatch(setCartTotalValue(res?.data?.data.total_without_discount))
         })
     }
   }, [cart])
@@ -60,7 +61,7 @@ export const Cart = ({ toggleCart }) => {
             <Box fontWeight="600">
               <NumericFormat
                 displayType="text"
-                value={totalCartPrice}
+                value={cartTotalValue}
                 suffix=" ₽"
                 thousandSeparator=" "
               />

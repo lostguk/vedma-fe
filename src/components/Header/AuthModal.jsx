@@ -6,6 +6,7 @@ import { ResetPasswordForm } from "./ResetPasswordForm"
 import { RegistrationForm } from "./RegistrationForm"
 import { RegistrationSuccess } from "./RegistrationSuccess"
 import { ResetPasswordSuccess } from "./ResetPasswordSuccess"
+import { useBreakpoints } from "src/core/hooks"
 
 const modalStates = {
   login: "login",
@@ -18,13 +19,16 @@ const modalStates = {
 export const AuthModal = ({ toggleModal, isModalOpen }) => {
   const [modalState, setModalState] = useState(modalStates.login)
 
+  const { table } = useBreakpoints()
+
   return (
     <Modal
       styles={{
         modal: {
           borderRadius: "30px",
+          margin: table ? '20px' : "20px 0 0",
           width: "100%",
-          maxWidth: "700px",
+          maxWidth: table ? '700px' : "95vw",
         },
       }}
       open={isModalOpen}

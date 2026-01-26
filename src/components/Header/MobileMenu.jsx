@@ -1,5 +1,5 @@
 import { Box, Link, Icon } from "src/components"
-import { COLORS, ICON_NAMES, MODAL_NAMES, PAGES, HEADER_LINKS } from "src/core/constants"
+import { COLORS, ICON_NAMES, PAGES, HEADER_LINKS } from "src/core/constants"
 import Logo from "src/assets/logo.png"
 
 export const MobileMenu = ({ toggleMenu }) => {
@@ -22,7 +22,7 @@ export const MobileMenu = ({ toggleMenu }) => {
 
       <Box direction="column" gap="12px" align="flex-start" marginTop="32px">
         {HEADER_LINKS.map(({ link, title }) => (
-            <Box color="#fff" key={title} fontSize="20px">
+            <Box color="#fff" key={title} fontSize="20px" onClick={toggleMenu}>
               <Link
                   to={link}
                   className={({ isActive }) => (isActive ? "active" : "")}

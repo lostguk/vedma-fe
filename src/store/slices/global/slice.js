@@ -3,6 +3,7 @@ import { getCart, removeCart } from "src/core/helpers"
 
 const initialState = {
   cart: getCart() || [],
+  cartTotalValue: 0,
   user: null,
   catalogSidePage: {
     isOpen: false
@@ -35,10 +36,6 @@ export const slice = createSlice({
 
       state.cart = proxy
     },
-    resetCart(state) {
-      state.cart = []
-      removeCart()
-    },
     minusCartItem(state, { payload }) {
       const proxy = [...state.cart]
 
@@ -52,6 +49,13 @@ export const slice = createSlice({
         state.cart = state.cart.filter(({ id }) => id !== payload)
       }
     },
+    resetCart(state) {
+      state.cart = []
+      removeCart()
+    },
+    setCartTotalValue(state, { payload }) {
+      state.cartTotalValue = payload
+    },
   },
 })
 
@@ -62,7 +66,8 @@ const {
   minusCartItem,
   setUser,
   resetCart,
-  toggleCatalogSidePage
+  toggleCatalogSidePage,
+  setCartTotalValue
 } = slice.actions
 
 export {
@@ -72,7 +77,8 @@ export {
   minusCartItem,
   setUser,
   resetCart,
-  toggleCatalogSidePage
+  toggleCatalogSidePage,
+  setCartTotalValue
 }
 
 export default slice.reducer

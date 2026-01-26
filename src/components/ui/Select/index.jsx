@@ -34,8 +34,8 @@ const StyledSelect = styled(Select)`
     }
   }
 `
-export const SelectUI = ({ options, onChange, value, placeholder }) => (
-  <Box width="100%">
+export const SelectUI = ({ options, onChange, value, placeholder, error }) => (
+  <Box width="100%" direction="column">
     <StyledSelect
       placeholder={placeholder}
       className="control"
@@ -43,6 +43,13 @@ export const SelectUI = ({ options, onChange, value, placeholder }) => (
       value={value}
       onChange={onChange}
       options={options}
+      error={error}
     />
+
+    {error?.length && (
+      <Box marginTop="4px" fontSize="12px" paddingLeft="8px" color="red">
+        {error}
+      </Box>
+    )}
   </Box>
 )

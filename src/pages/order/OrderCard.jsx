@@ -24,6 +24,7 @@ export const Card = (props) => {
       position="relative"
       padding="8px 0"
       borderBottom="1px solid rgba(210, 210, 210, 0.3)"
+      direction="column"
     >
       <Box
         width="20px"
@@ -34,7 +35,7 @@ export const Card = (props) => {
         right="0"
         borderRadius="5px"
         justify="center"
-        aling="center"
+        align="center"
         background="rgba(246, 178, 115, .2)"
         padding="4px"
       >
@@ -42,52 +43,65 @@ export const Card = (props) => {
       </Box>
 
       <Box
-        borderRadius="20px"
-        overflow="hidden"
-        marginBottom="8px"
-        width="100%%"
-        maxWidth="140px"
+        fontSize="16px"
+        fontWeight="600"
+        color="#000000"
+        margin="0 0 8px 4px"
+        paddingRight="40px"
       >
-        <img width="100%" src={props.thumb_url} />
+        {props.name}
       </Box>
 
-      <Box flexGrow={1} padding="0 16px" direction="column" marginBottom="5px">
-        <Box width="100%" marginBottom="auto" maxWidth="90px">
-          <Box onClick={minusItem}>
-            <ActionButton>-</ActionButton>
-          </Box>
-
-          <Box color="#000" align="center" justify="center" margin="0 auto">
-            {props.count}
-          </Box>
-
-          <Box onClick={plusItem}>
-            <ActionButton>+</ActionButton>
-          </Box>
+      <Box>
+        <Box
+          borderRadius="20px"
+          overflow="hidden"
+          marginBottom="8px"
+          width="100%%"
+          maxWidth="140px"
+        >
+          <img width="100%" src={props.thumb_url} />
         </Box>
 
-        <Box
-          fontSize="22px"
-          fontWeight="600"
-          color="#3A3A3A"
-          marginRight="8px"
-          align="flex-end"
-        >
-          <NumericFormat
-            displayType="text"
-            value={props.price}
-            suffix=" ₽"
-            thousandSeparator=" "
-          />
+        <Box flexGrow={1} padding="0 16px" direction="column" marginBottom="5px">
+          <Box width="100%" marginBottom="auto" maxWidth="90px">
+            <Box onClick={minusItem}>
+              <ActionButton>-</ActionButton>
+            </Box>
+
+            <Box color="#000" align="center" justify="center" margin="0 auto">
+              {props.count}
+            </Box>
+
+            <Box onClick={plusItem}>
+              <ActionButton>+</ActionButton>
+            </Box>
+          </Box>
 
           <Box
-            fontSize="14px"
+            fontSize="22px"
             fontWeight="600"
-            color="#000000"
-            opacity="0.5"
-            margin="0 0 3px 5px"
+            color="#3A3A3A"
+            marginRight="8px"
+            align="flex-end"
+            direction="column"
           >
-            цена за штуку
+            <NumericFormat
+              displayType="text"
+              value={props.price}
+              suffix=" ₽"
+              thousandSeparator=" "
+            />
+
+            <Box
+              fontSize="14px"
+              fontWeight="600"
+              color="#000000"
+              opacity="0.5"
+              margin="0 0 3px 5px"
+            >
+              цена за штуку
+            </Box>
           </Box>
         </Box>
       </Box>

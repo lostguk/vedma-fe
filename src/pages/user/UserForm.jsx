@@ -91,12 +91,14 @@ export const UserForm = () => {
 
   useEffect(() => {
     if (user) {
-      setValue("email", user?.email)
-      setValue("phone", user?.phone.replaceAll(" ", "-"))
-      setValue("address", user?.address)
-      setValue("last_name", user?.last_name)
-      setValue("first_name", user?.first_name)
-      setValue("middle_name", user?.middle_name)
+      axiosClient.post('/order/address/suggest', { query: user?.address }).then(res => {
+        setValue("email", user?.email)
+        setValue("phone", user?.phone.replaceAll(" ", "-"))
+        setValue("address", res.data.data.suggestions[0])
+        setValue("last_name", user?.last_name)
+        setValue("first_name", user?.first_name)
+        setValue("middle_name", user?.middle_name)
+      })
     }
   }, [user])
 

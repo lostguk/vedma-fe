@@ -5,6 +5,7 @@ import { COLORS } from "src/core/constants"
 import { yupResolver } from "@hookform/resolvers/yup"
 import * as Yup from "yup"
 import axiosClient from "src/core/axios-client"
+import { useBreakpoints } from "src/core/hooks"
 
 export const ResetPasswordForm = ({ modalStates, setModalState }) => {
   const schema = Yup.object().shape({
@@ -12,6 +13,8 @@ export const ResetPasswordForm = ({ modalStates, setModalState }) => {
       .email("Введите корректный адрес электронной почты")
       .required("Поле email обязательно для заполнения"),
   })
+
+  const { table } = useBreakpoints()
 
   const {
     handleSubmit,
@@ -29,8 +32,8 @@ export const ResetPasswordForm = ({ modalStates, setModalState }) => {
   }
 
   return (
-    <Box padding="32px" direction="column">
-      <Box fontSize="40px" color="#292929" marginBottom="16px">
+    <Box padding={table ? "32px" : '8px'} direction="column">
+      <Box fontSize={table ? "40px" : "24px"} color="#292929" marginBottom="16px">
         Восстановить пароль
       </Box>
 
