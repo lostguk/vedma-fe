@@ -1,6 +1,7 @@
 import { StrictMode } from "react"
 import { createRoot } from "react-dom/client"
 import { Provider } from "react-redux"
+import { CookiesProvider } from 'react-cookie';
 import { store } from "./store"
 
 import "react-dadata/dist/react-dadata.css"
@@ -11,8 +12,10 @@ import App from "src/app/App"
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <Provider store={store}>
-      <App />
-    </Provider>
+    <CookiesProvider defaultSetOptions={{ path: '/' }}>
+      <Provider store={store}>
+        <App />
+      </Provider>
+    </CookiesProvider>
   </StrictMode>,
 )

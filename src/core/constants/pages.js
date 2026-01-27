@@ -13,5 +13,5 @@ export const PAGES = {
   paymentSuccess: "/payment-success",
   paymentError: "/payment-error",
   return: "/user",
-  verify: "/verify-registration/:id/:hash",
+  verify: "/verify-registration",
 }

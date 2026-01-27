@@ -17,7 +17,8 @@ export const RegistrationForm = ({ modalStates, setModalState }) => {
     email: Yup.string()
       .email("Введите корректный адрес электронной почты")
       .required("Поле является обязательным"),
-    password: Yup.string().required("Поле является обязательным"),
+    password: Yup.string().required("Поле является обязательным")
+             .min(8, "Минимальная длина пароля 8 символов"),
     password_confirmation: Yup.string()
       .oneOf([Yup.ref("password"), null], "Пароли не совпадают")
       .min(8, "Минимальная длина пароля 8 символов")
