@@ -17,7 +17,9 @@ export const OrderHistory = () => {
 
   return (
     <Box wrap="wrap" width="100%"  background="#181E39" padding="16px" gap="12px" borderRadius="20px">
-      {items.map(order => <HistoryItem {...order} />)}
+      {items?.length
+       ? items.map(order => <HistoryItem {...order} />)
+       : <Box>Список заказов пуст</Box>}
     </Box>
   )
 }

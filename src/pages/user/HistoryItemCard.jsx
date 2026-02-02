@@ -5,15 +5,15 @@ import { NumericFormat } from "react-number-format"
 export const HistoryItemCard = ({
     img,
     price,
-    name
+    name,
 }) => {
   return (
     <Box>
         <Box width="75px" marginRight="16px">
             <img src={img} style={{ maxWidth: '100%' }} /> 
         </Box>
-
-        <Box justify="center" color="#3A3A3A" direction="column">
+        
+        <Box justify="center" direction="column">
             <Box fontSize="22px" marginBottom="4px">
                 <NumericFormat
                     displayType="text"

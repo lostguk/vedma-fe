@@ -6,8 +6,11 @@ import { Header, Footer, Box, AgeVerificationModal } from "src/components"
 
 const Layout = () => {
   const { pathname } = useLocation()
+
   const scrollRef = useRef(null)
+
   const [isConfirmAgeModalOpen, setIsConfirmAgeModalOpen] = useState(false)
+  
   const [cookies] = useCookies(['ageConfirmed'])
 
   useEffect(() => {

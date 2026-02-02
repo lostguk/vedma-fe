@@ -16,7 +16,8 @@ import {
   PoliticsPage,
   OfertaPage,
   PaymentError,
-  PaymentSuccess
+  PaymentSuccess,
+  ResetPassword
 } from "src/pages"
 
 export const router = createBrowserRouter([
@@ -82,6 +83,10 @@ export const router = createBrowserRouter([
       {
         path: PAGES.paymentSuccess,
         element: <PaymentSuccess />,
+      },
+      {
+        path: PAGES.resetPassword,
+        element: <ResetPassword />,
       },
     ],
   },

@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { useNavigate, generatePath } from "react-router-dom"
 import { CatalogBody, CategoriesBody, Category, CategoriesItem } from "./styled"
 import { ICON_NAMES, PAGES } from "src/core/constants"
+import { useBreakpoints } from "src/core/hooks"
 import { toggleCatalogSidePage } from "src/store/slices/global/slice"
 
 const findCategoryById = (categories, id) => {
@@ -42,6 +43,8 @@ const findCategoryBySlug = (categories, slug) => {
 
 export const Catalog = () => {
   const params = useParams()
+
+  const { table } = useBreakpoints()
 
   const navigate = useNavigate()
 
@@ -135,7 +138,7 @@ export const Catalog = () => {
               onClick={() =>
                 onCategoryClick({
                   slug,
-                  needToggle: !children?.length
+                  needToggle: (!children?.length) && (!table)
                 })
               }
             >

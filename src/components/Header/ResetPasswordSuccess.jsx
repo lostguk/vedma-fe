@@ -6,11 +6,11 @@ export const ResetPasswordSuccess = () => {
 
   return (
     <Box padding={table ? "32px" : '8px'} direction="column" color="black">
-      <Box fontSize={table ? "40px" : "24px"} color="#292929" marginBottom="16px">
+      <Box fontSize={table ? "32px" : "24px"} color="#292929" marginBottom="16px" textAlign="center">
         Запрос на восстановление отправлен
       </Box>
 
-      <Box fontSize="24px" color="#292929" marginBottom="16px">
+      <Box fontSize="24px" color="#292929" marginBottom="16px" textAlign="center">
         Следуйте иструкциям в письме, отправленным на почту
       </Box>
     </Box>
