@@ -54,6 +54,12 @@ export const OrderPage = () => {
 
   const onSubmit = async (data) => {
     setIsOrderLoading(true)
+    
+    const currentUrl = window.location.href
+  
+    const url = new URL(currentUrl)
+
+    const baseUrl = `${url.protocol}//${url.hostname}`
 
     const body = {
         ...data,
@@ -68,8 +74,8 @@ export const OrderPage = () => {
       .then(res => {
         axiosClient.post('/payments', {
           order_id: res?.data.data?.id,
-          success_url: `http://localhost:3005${PAGES.paymentSuccess}`,
-          fail_url: `http://localhost:3005${PAGES.paymentError}`
+          success_url: `${baseUrl}${PAGES.paymentSuccess}`,
+          fail_url: `${baseUrl}${PAGES.paymentError}`
         })
           .then(res => {
             dispatch(resetCart())
