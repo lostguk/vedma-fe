@@ -38,9 +38,11 @@ export const RegistrationForm = ({ modalStates, setModalState }) => {
         "is-full-address",
         "Выберите полный адрес",
         (value) => {
-          if (!value || !value.data) return false;
-          const { street, house, city } = value.data;
-          return Boolean(street && house && city);
+          if (!value || !value.data) return false
+
+          const { street, house, city, settlement } = value.data
+
+          return Boolean(street && house && (city || settlement))
         }
     ),
   })
@@ -67,6 +69,8 @@ export const RegistrationForm = ({ modalStates, setModalState }) => {
       })
       .finally(() => setIsLoading(false))
   }
+
+  console.log(watch("address"))
 
   return (
     <Box padding={table ? "32px" : '8px'} direction="column" color="black">

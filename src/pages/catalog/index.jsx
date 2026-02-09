@@ -15,16 +15,15 @@ export const CatalogPage = () => {
   const {
     items,
     page,
-    per_page,
-    total,
     isLoading,
+    totalPages,
     filter: { search },
   } = useSelector((state) => state.products)
 
   const handlePageClick = ({ selected }) => dispatch(setPage(selected + 1))
 
   useEffect(() => {
-    dispatch(fetchProducts({ page, per_page, category: undefined, search }))
+    dispatch(fetchProducts({ page, per_page: 2, category: undefined, search }))
   }, [page, search])
   
   const toggleCatalog = () => dispatch(toggleCatalogSidePage())
@@ -52,8 +51,8 @@ export const CatalogPage = () => {
               breakLabel="..."
               nextLabel=">"
               onPageChange={handlePageClick}
-              pageRangeDisplayed={5}
-              pageCount={Math.ceil(total / per_page)}
+              pageRangeDisplayed={3}
+              pageCount={totalPages}
               previousLabel="<"
               renderOnZeroPageCount={null}
             />
@@ -79,8 +78,8 @@ export const CatalogPage = () => {
               breakLabel="..."
               nextLabel=">"
               onPageChange={handlePageClick}
-              pageRangeDisplayed={5}
-              pageCount={Math.ceil(total / per_page)}
+              pageRangeDisplayed={3}
+              pageCount={totalPages}
               previousLabel="<"
               renderOnZeroPageCount={null}
             />

@@ -19,8 +19,8 @@ import * as Yup from "yup"
 import { AddressSuggestions } from "react-dadata"
 import { COLORS, ICON_NAMES, MODAL_NAMES, PAGES } from "src/core/constants"
 import { useBreakpoints } from "src/core/hooks"
-import { useNavigate } from "react-router-dom"
 import { resetCart } from "src/store/slices/global/slice"
+import { toast } from "react-toastify"
 
 import { Card } from "./OrderCard"
 
@@ -31,8 +31,6 @@ const options = [
 
 export const OrderPage = () => {
   const dispatch = useDispatch()
-
-  const navigate = useNavigate()
 
   const { table, phone } = useBreakpoints()
 
@@ -116,9 +114,9 @@ export const OrderPage = () => {
       (value) => {
         if (!value || !value.data) return false
 
-        const { street, house, city } = value.data
+        const { street, house, city, settlement } = value.data
 
-        return Boolean(street && house && city)
+        return Boolean(street && house && (city || settlement))
       }
     ),
   })
@@ -184,7 +182,7 @@ export const OrderPage = () => {
           address: watch('address')?.unrestricted_value
         })
         .then((res) => {
-          setDeliveryCost(res?.data?.data[deliveryType][0].service?.total)
+          setDeliveryCost(Math.round(res?.data?.data[deliveryType][0].service?.total))
         })
     }
   }
@@ -202,6 +200,8 @@ export const OrderPage = () => {
 
         if(res?.data?.data.promo_code_status === "applied"){
           setIsPromo(true)
+        } else {
+          toast.error("Промокод не существует или истек его срок действия")
         }
       })
   }

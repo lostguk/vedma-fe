@@ -16,7 +16,7 @@ export const HistoryItem = ({
     last_name,
     middle_name,
     phone,
-    total_price,
+    total_with_discount,
     status_code,
     status,
     id
@@ -53,7 +53,7 @@ export const HistoryItem = ({
 
                 <NumericFormat
                   displayType="text"
-                  value={total_price}
+                  value={total_with_discount}
                   suffix=" ₽"
                   thousandSeparator=" "
                 />
@@ -79,7 +79,7 @@ export const HistoryItem = ({
         </Box>
 
         <Box direction="column" gap="20px" marginTop="16px">
-          {items.map(({ product: { name, price, thumb_url }}) => <HistoryItemCard img={thumb_url} price={price} name={name} />)}
+          {items.map(({ product: { name, price, thumb_url }, id, count}) => <HistoryItemCard count={count} key={id} img={thumb_url} price={price} name={name} />)}
         </Box>
     </Box>
   )

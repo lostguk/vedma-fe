@@ -54,6 +54,7 @@ export const Cart = ({ toggleCart }) => {
             fontWeight="400"
             color="#3A3A3A"
             marginBottom="16px"
+            whiteSpace="nowrap"
           >
             В корзине &nbsp;
             <Box fontWeight="600">{productCount} товар(ов)</Box>&nbsp; на сумму

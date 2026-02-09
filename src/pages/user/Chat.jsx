@@ -7,6 +7,7 @@ import {
   fetchTopic,
   resetCurrentTopic,
 } from "src/store/slices/chat/slice"
+import { useBreakpoints } from "src/core/hooks"
 
 import { AddTopicModal } from './AddTopicModal'
 import { MediaButton } from "./styled"
@@ -14,6 +15,8 @@ import { COLORS } from "src/core/constants"
 
 export const Chat = () => {
   const [isLoading, setIsLoading] = useState(false)
+
+  const { phone } = useBreakpoints()
   
   const [isCreateTopicModalOpen, setIsCreateTopicModalOpen] = useState(false)
 
@@ -130,7 +133,7 @@ export const Chat = () => {
             onChange={(e) => setMessage(e.target.value)}
           />
 
-          <Box justify="flex-end" width="100%" marginTop="16px" gap="16px">
+          <Box justify="flex-end" width="100%" marginTop="16px" gap="16px" direction={phone ? "column" : 'row'}>
             <AddMedia
               setFiles={
                 (newFiles) => {

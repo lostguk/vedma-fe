@@ -19,7 +19,7 @@ const motionProps = {
   motion,
 }
 
-export const SidePage = ({ isOpen, children, toggle, width = 420, placement = "right" }) => {
+export const SidePage = ({ isOpen, children, toggle, width = "100%", placement = "right" }) => {
   return (
     <>
       <SidePageGlobalStyles  />

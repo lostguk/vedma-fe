@@ -40,9 +40,11 @@ export const UserForm = () => {
       "is-full-address",
       "Выберите полный адрес",
       (value) => {
-        if (!value || !value.data) return false;
-        const { street, house, city } = value.data;
-        return Boolean(street && house && city);
+        if (!value || !value.data) return false
+        
+        const { street, house, city, settlement } = value.data
+
+        return Boolean(street && house && (city || settlement))
       }
     ),
     last_name: Yup.string().required("Пароль является обязательным"),

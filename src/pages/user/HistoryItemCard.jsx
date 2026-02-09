@@ -6,14 +6,15 @@ export const HistoryItemCard = ({
     img,
     price,
     name,
+    count
 }) => {
   return (
-    <Box>
-        <Box width="75px" marginRight="16px">
+    <Box align="flex-start">
+        <Box width="150px" marginRight="16px">
             <img src={img} style={{ maxWidth: '100%' }} /> 
         </Box>
         
-        <Box justify="center" direction="column">
+        <Box justify="center" direction="column" height="100%">
             <Box fontSize="22px" marginBottom="4px">
                 <NumericFormat
                     displayType="text"
@@ -25,6 +26,10 @@ export const HistoryItemCard = ({
             
             <Box fontSize="14px">
                 {name}
+            </Box>
+
+            <Box marginTop="auto">
+                Количество: {count}
             </Box>
         </Box>
     </Box>

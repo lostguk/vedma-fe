@@ -39,7 +39,7 @@ export const PoliticsPage = () => {
               </Box>
 
               <Box
-                fontSize="48px"
+                fontSize={table ? "48px" : tablet ? "38px" : "24px"}
                 color="white"
                 fontWeight="900"
                 marginBottom="24px"

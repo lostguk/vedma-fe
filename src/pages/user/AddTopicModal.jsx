@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react"
+import React, { useState } from "react"
 import { useForm, Controller } from "react-hook-form"
 import { Modal } from "react-responsive-modal"
 import * as Yup from "yup"
 import { yupResolver } from "@hookform/resolvers/yup"
 import { Box, Button, TextArea, AddMedia, Input } from "src/components"
 import axiosClient from "src/core/axios-client"
+import { useBreakpoints } from "src/core/hooks"
 
 import { MediaButton } from "./styled"
 
@@ -12,6 +13,8 @@ export const AddTopicModal = ({ toggleModal, isModalOpen, refetchTopics }) => {
   const [isLoading, setIsLoading] = useState(false)
 
   const [files, setFiles] = useState([])
+
+  const { table, phone } = useBreakpoints()
 
   const schema = Yup.object().shape({
       title: Yup.string().required("Поле является обязательным"),
@@ -50,8 +53,9 @@ export const AddTopicModal = ({ toggleModal, isModalOpen, refetchTopics }) => {
       styles={{
         modal: {
           borderRadius: "30px",
+          margin: table ? '20px' : "20px 0 0",
           width: "100%",
-          maxWidth: "700px",
+          maxWidth: table ? '700px' : "95vw",
         },
       }}
       open={isModalOpen}
@@ -59,7 +63,7 @@ export const AddTopicModal = ({ toggleModal, isModalOpen, refetchTopics }) => {
     > 
       <Box padding="16px" width='100%'>
         <form onSubmit={handleSubmit(onSubmit)} style={{ width: '100%' }}>
-          <Box direction="column" gap="8px">
+          <Box direction="column" gap="8px" >
             <Controller
               name="title"
               control={control}
@@ -88,7 +92,7 @@ export const AddTopicModal = ({ toggleModal, isModalOpen, refetchTopics }) => {
               )}
             />
 
-            <Box justify="flex-end" width="100%" marginTop="16px" gap="16px">
+            <Box justify="flex-end" width="100%" marginTop="16px" gap="16px" direction={phone ? "column" : 'row'}>
               <AddMedia
                 setFiles={(newFiles) =>
                   setFiles((prev) => [...prev, ...newFiles])
