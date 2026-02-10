@@ -1,4 +1,5 @@
 import styled from "@emotion/styled"
+import { COLORS } from "src/core/constants"
 
 export const TabMenuItem = styled.div`
   display: flex;
@@ -10,6 +11,7 @@ export const TabMenuItem = styled.div`
   transition: all 0.3s;
   cursor: pointer;
   border-radius: 30px;
+  position: relative;
   background: ${({ active }) => (active ? "#181e39" : "white")};
   color: ${({ active }) => (active ? "white" : "#181e39")};
 
@@ -17,6 +19,23 @@ export const TabMenuItem = styled.div`
     background: #181e39;
     color: white;
   }
+`
+
+export const MessageCount = styled.div`
+  width: 22px;
+  height: 22px;
+  position: absolute;
+  top: ${({ top }) => top};
+  right: ${({ right }) => right};
+  background: ${COLORS.main};
+  border-radius: 50%;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 500;
+  font-size: 12px;
+  padding-right: 1px;
 `
 
 export const MediaButton = styled.div`

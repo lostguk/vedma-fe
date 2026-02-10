@@ -4,10 +4,11 @@ import { useNavigate } from "react-router-dom"
 import { PAGES } from "src/core/constants"
 import { getToken } from "src/core/axios-client"
 import { useBreakpoints } from "src/core/hooks"
+import axiosClient from "src/core/axios-client"
 
 import { COLORS, ICON_NAMES } from "src/core/constants"
 
-import { TabMenuItem } from "./styled"
+import { TabMenuItem, MessageCount } from "./styled"
 import { UserForm } from "./UserForm"
 import { ChangePasswordForm } from "./ChangePasswordForm"
 import { Chat } from "./Chat"
@@ -23,7 +24,9 @@ const tabs = [
 export const UserPage = () => {
   const navigate = useNavigate()
 
-  const { table, tablet, phone } = useBreakpoints()
+  const [unreadMessages, setUnreadMessages] = useState(0)
+
+  const { phone } = useBreakpoints()
 
   const [tab, setTab] = useState(tabs[0].value)
 
@@ -31,6 +34,25 @@ export const UserPage = () => {
     if (!getToken()) {
       navigate(PAGES.main)
     }
+  }, [])
+
+  
+  useEffect(() => {
+
+  }, [])
+
+  useEffect(() => {
+    axiosClient.get("/topics/unread-count")
+      .then(res => setUnreadMessages(res.data.data.unread_messages_count))
+
+    const unreadMessagesInterval = setInterval(() => {
+      axiosClient.get("/topics/unread-count")
+        .then(res => setUnreadMessages(res.data.data.unread_messages_count))
+    }, 5000)
+
+    return () => {
+        clearInterval(unreadMessagesInterval)
+    };
   }, [])
 
   return (
@@ -63,6 +85,8 @@ export const UserPage = () => {
               color="#181E39"
               key={value}
             >
+              {value === "chat" && unreadMessages > 0 && (<MessageCount top="-5px" right="-5px">{unreadMessages}</MessageCount>)}
+              
               {phone ? <Icon name={icon} color={tab === value ? "#ffffff": "#000000"}/> : label}
             </TabMenuItem>
           ))}
