@@ -26,7 +26,7 @@ export const RegistrationForm = ({ modalStates, setModalState }) => {
     phone: Yup.string()
       .required("Поле является обязательным")
       .matches(
-        /^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$/,
+        /\+7\s?\(?\d{3}\)?[\s-]?\d{3}[\s-]?\d{2}[\s-]?\d{2}/,
         "Введите корректный телефон",
       ),
     last_name: Yup.string().required("Поле является обязательным"),

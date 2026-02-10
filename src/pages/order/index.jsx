@@ -99,7 +99,7 @@ export const OrderPage = () => {
     phone: Yup.string()
       .required("Поле является обязательным")
       .matches(
-        /^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$/,
+        /\+7\s?\(?\d{3}\)?[\s-]?\d{3}[\s-]?\d{2}[\s-]?\d{2}/,
         "Введите корректный телефон",
       ),
     delivery: Yup.object().required("Поле является обязательным"),
@@ -126,7 +126,7 @@ export const OrderPage = () => {
     formState: { errors },
     control,
     setValue,
-    trigger,
+    clearErrors,
     watch
   } = useForm({
     resolver: yupResolver(schema),
@@ -145,13 +145,14 @@ export const OrderPage = () => {
       axiosClient.post('/order/address/suggest', { query: user?.address }).then(res => {
         setIsRegNeed(false)
         setValue("email", user?.email)
-        setValue("phone", user?.phone.replaceAll(" ", "-"))
+        setValue("phone", user?.phone)
         setValue("address", res.data.data.suggestions[0])
         setValue("last_name", user?.last_name)
         setValue("first_name", user?.first_name)
         setValue("middle_name", user?.middle_name)
       })
     }
+    clearErrors()
   }, [user])
 
   useEffect(() => {

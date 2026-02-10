@@ -30,7 +30,7 @@ export const ContactsPage = () => {
           ) : (
             <Box width="100%" direction="column">
               <Box
-                fontSize={table ? "68px" : tablet ? "48px" : "34px"}
+                fontSize={table ? "68px" : tablet ? "48px" : "26px"}
                 color="white"
                 fontWeight="900"
                 paddingRight="48px"

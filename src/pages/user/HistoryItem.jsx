@@ -24,10 +24,16 @@ export const HistoryItem = ({
   const { table, phone: phoneBreakpoint } = useBreakpoints()
 
   const paymentHandler = () => {
+    const currentUrl = window.location.href
+    
+    const url = new URL(currentUrl)
+
+    const baseUrl = `${url.protocol}//${url.hostname}`
+
     axiosClient.post('/payments', {
       order_id: id,
-      success_url: `http://localhost:3005${PAGES.paymentSuccess}`,
-      fail_url: `http://localhost:3005${PAGES.paymentError}`
+      success_url: `${baseUrl}${PAGES.paymentSuccess}`,
+      fail_url: `${baseUrl}${PAGES.paymentError}`
     })
       .then(res => {
         window.open(res?.data?.data?.payment_url)

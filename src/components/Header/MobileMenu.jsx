@@ -35,7 +35,7 @@ export const MobileMenu = ({ toggleMenu }) => {
       </Box>
 
       <Box marginTop="auto" justify="center">
-            Ведьмино зелье 2024 ©
+            Ведьмино зелье 2026 ©
       </Box>
     </Box>
   )

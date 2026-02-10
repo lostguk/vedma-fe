@@ -82,7 +82,7 @@ export const Footer = () => {
           </Box>
 
           <Box width="100%" justify="center" color={COLORS.main}>
-            Ведьмино зелье 2024 ©
+            Ведьмино зелье 2026 ©
           </Box>
         </Box>
       </Container>
