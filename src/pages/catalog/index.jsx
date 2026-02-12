@@ -62,7 +62,7 @@ export const CatalogPage = () => {
             )}
           </Box>
 
-          <Box wrap="wrap" gap="16px">
+          <Box wrap="wrap" gap="16px" rowGap="32px">
             {isLoading ? (
               <Box width="100px" height="80vh" margin="0 auto">
                 <Icon name={ICON_NAMES.loader} />

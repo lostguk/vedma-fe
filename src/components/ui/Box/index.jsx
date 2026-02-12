@@ -25,6 +25,7 @@ export const Box = styled.div`
   padding-left: ${({ paddingLeft = "none" }) => paddingLeft};
   padding-right: ${({ paddingRight = "none" }) => paddingRight};
   gap: ${({ gap = 0 }) => gap};
+  row-gap: ${({ rowGap = 0 }) => rowGap};
   background: ${({ background = "none" }) => background};
   justify-content: ${({ justify = "normal" }) => justify};
   align-items: ${({ align = "normal" }) => align};
