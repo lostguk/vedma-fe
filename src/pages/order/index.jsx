@@ -172,7 +172,7 @@ export const OrderPage = () => {
   const calculateDeliveryCost = () => {
     const currentAddressValue = watch('address')
 
-    const isAddressValid = Boolean(currentAddressValue?.data?.street) && Boolean(currentAddressValue?.data?.house) && Boolean(currentAddressValue?.data?.city)
+    const isAddressValid = Boolean(currentAddressValue?.data?.street) && Boolean(currentAddressValue?.data?.house) && (Boolean(currentAddressValue?.data?.city) || Boolean(currentAddressValue?.data?.settlement))
 
     const deliveryType = watch('delivery')?.value
 
@@ -213,6 +213,7 @@ export const OrderPage = () => {
   }
 
   useEffect(() => {
+    console.log(1)
     calculateDeliveryCost()
   }, [watch('address'), watch('delivery'), cart])
 

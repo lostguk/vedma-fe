@@ -36,11 +36,6 @@ export const UserPage = () => {
     }
   }, [])
 
-  
-  useEffect(() => {
-
-  }, [])
-
   useEffect(() => {
     axiosClient.get("/topics/unread-count")
       .then(res => setUnreadMessages(res.data.data.unread_messages_count))
