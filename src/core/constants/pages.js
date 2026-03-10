@@ -10,6 +10,9 @@ export const PAGES = {
   politics: "/politics",
   order: "/order",
   user: "/user",
+  paymentSuccess: "/payment-success",
+  paymentError: "/payment-error",
   return: "/user",
-  verify: "/verify-registration/:id/:hash",
+  verify: "/verify-registration/:user/:hash",
+  resetPassword: "reset-password",
 }

@@ -82,7 +82,7 @@ export const Main = () => {
                   width="calc(33% - 8px)"
                   background="#000"
                   borderRadius="40px"
-                  aling="center"
+                  align="center"
                 >
                   <Box marginRight="5px">🔮</Box>
 
@@ -94,7 +94,7 @@ export const Main = () => {
                   width="calc(33% - 8px)"
                   background="#000"
                   borderRadius="40px"
-                  aling="center"
+                  align="center"
                 >
                   <Box marginRight="5px">🌙</Box>
 
@@ -106,7 +106,7 @@ export const Main = () => {
                   width="calc(33% - 8px)"
                   background="#000"
                   borderRadius="40px"
-                  aling="center"
+                  align="center"
                 >
                   <Box marginRight="5px">🕯️</Box>
 
@@ -124,7 +124,7 @@ export const Main = () => {
                 width="calc(33% - 8px)"
                 background="#000"
                 borderRadius="40px"
-                aling="center"
+                align="center"
               >
                 <Box marginRight="5px">🔮</Box>
 
@@ -136,7 +136,7 @@ export const Main = () => {
                 width="calc(33% - 8px)"
                 background="#000"
                 borderRadius="40px"
-                aling="center"
+                align="center"
               >
                 <Box marginRight="5px">🌙</Box>
 
@@ -148,7 +148,7 @@ export const Main = () => {
                 width="calc(33% - 8px)"
                 background="#000"
                 borderRadius="40px"
-                aling="center"
+                align="center"
               >
                 <Box marginRight="5px">🕯️</Box>
 
@@ -254,9 +254,9 @@ export const Main = () => {
             {data?.about?.trust?.title}
           </Box>
 
-          <Box width="100%" maxWidth="700px" gap="12px" margin="0 auto">
+          <Box width="100%" maxWidth="700px" gap="12px" margin="0 auto" wrap="wrap">
             {data?.about?.trust?.items.map(({ image, title }) => (
-              <Box width="calc(33.3333% - 8px)" direction="column">
+              <Box width={phone ? "calc(50% - 6px)" : "calc(33.3333% - 8px)"} direction="column">
                 <Box maxWidth="70px">
                   <img width="100%" src={image} />
                 </Box>

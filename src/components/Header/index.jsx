@@ -71,7 +71,7 @@ export const Header = () => {
 
   return (
     <StyledHeader>
-      <SidePage isOpen={isCatalogSidePageOpen} toggle={toggleCatalog} width={phone ? 420 : 500} placement="left">
+      <SidePage isOpen={isCatalogSidePageOpen} toggle={toggleCatalog} width={phone ? "100%" : 500} placement="left">
         <Box height="100%" background={COLORS.secondary} direction="column">
           <Box justify="space-between" padding="16px 20px">
             <Box fontSize="24px" fontWeight="600" align="center">
@@ -87,7 +87,7 @@ export const Header = () => {
         </Box>
       </SidePage>
 
-      <SidePage isOpen={isCartOpen} toggle={toggleCart} width={phone ? 420 : 500}>
+      <SidePage isOpen={isCartOpen} toggle={toggleCart} width={phone ? "100%" : 500}>
         <Cart toggleCart={toggleCart} />
       </SidePage>
 

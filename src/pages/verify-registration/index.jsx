@@ -1,29 +1,41 @@
 import { useEffect, useState } from "react"
 import axiosClient from "src/core/axios-client"
 import { Container, Box, Button, Icon } from "src/components"
-import { useParams } from "react-router-dom"
-import { useNavigate } from "react-router-dom"
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { PAGES } from "src/core/constants"
 import { ICON_NAMES } from "src/core/constants"
 
 export const VerifyEmailPage = () => {
   const navigate = useNavigate()
 
-  const [isLoading, setIsLoading] = useState(true)
+  const location = useLocation()
+  
+  const queryParams = new URLSearchParams(location.search);
+
+  const expires = queryParams.get('expires')
+
+  const signature = queryParams.get('signature')
+
+  const [isLoading, setIsLoading] = useState(false)
   const [isWrong, setIsWrong] = useState(false)
   const [isExpired, setIsExpired] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
 
-  const params = useParams()
+  const { user, hash } = useParams()
 
   useEffect(() => {
-    axiosClient
-      .get(`/verify-registration/${params.id}/${params.hash}`)
-      .then((res) => {
-        setIsSuccess(true)
-      })
-      .catch(() => setIsWrong(true))
-      .finally(() => setIsLoading(false))
+    if(new Date(Number(expires) * 1000) < new Date()){
+      setIsExpired(true)
+    } else {
+      axiosClient
+        .get(`/verify-registration/${user}/${hash}`, { params: { expires, signature }})
+        .then((res) => {
+          setIsSuccess(true)
+        })
+        .catch(() => setIsWrong(true))
+        .finally(() => setIsLoading(false))
+    }
+
   }, [])
   return (
     <Box padding="48px 0 72px">

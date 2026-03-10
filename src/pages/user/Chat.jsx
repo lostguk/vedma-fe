@@ -7,13 +7,16 @@ import {
   fetchTopic,
   resetCurrentTopic,
 } from "src/store/slices/chat/slice"
+import { useBreakpoints } from "src/core/hooks"
 
 import { AddTopicModal } from './AddTopicModal'
-import { MediaButton } from "./styled"
+import { MediaButton, MessageCount } from "./styled"
 import { COLORS } from "src/core/constants"
 
 export const Chat = () => {
   const [isLoading, setIsLoading] = useState(false)
+
+  const { phone } = useBreakpoints()
   
   const [isCreateTopicModalOpen, setIsCreateTopicModalOpen] = useState(false)
 
@@ -53,9 +56,21 @@ export const Chat = () => {
         setMessage("")
       })
   }
-  
+
   useEffect(() => {
     dispatch(fetchTopics())
+
+    const chatInterval = setInterval(() => {
+      if(currentTopic?.id){
+        dispatch(fetchTopic(currentTopic?.id))
+
+        dispatch(fetchTopics())
+      }
+    }, 5000)
+
+    return () => {
+        clearInterval(chatInterval)
+    };
   }, [])
 
   return (
@@ -73,13 +88,21 @@ export const Chat = () => {
 
       {Boolean(items.length) && !currentTopic && (
         <Box wrap="wrap" gap="8px" marginTop="32px">
-          {items.map(({ id, title }) => (
+          {items.map(({ id, title, unread_messages_count }) => (
             <Button
               variant="secondary"
               key={id}
               onClick={() => selectTopicHandler(id)}
             >
-              <Box whiteSpace="nowrap">{title}</Box>
+              <Box whiteSpace="nowrap" position="relative">
+                {unread_messages_count > 0 && (
+                  <MessageCount top="-15px" right="-25px">
+                    {unread_messages_count}
+                  </MessageCount>
+                )}
+                
+                {title}
+              </Box>
             </Button>
           ))}
         </Box>
@@ -130,7 +153,7 @@ export const Chat = () => {
             onChange={(e) => setMessage(e.target.value)}
           />
 
-          <Box justify="flex-end" width="100%" marginTop="16px" gap="16px">
+          <Box justify="flex-end" width="100%" marginTop="16px" gap="16px" direction={phone ? "column" : 'row'}>
             <AddMedia
               setFiles={
                 (newFiles) => {

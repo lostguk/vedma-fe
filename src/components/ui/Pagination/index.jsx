@@ -20,6 +20,11 @@ export const Pagination = styled(ReactPaginate)`
       margin: 0 4px;
       transition: all 0.3s;
       cursor: pointer;
+
+      @media (max-width: 767px) {
+        width: 30px;
+        height: 30px;
+      }
     }
 
     &.selected > a {

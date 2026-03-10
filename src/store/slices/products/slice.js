@@ -31,6 +31,7 @@ const initialState = {
   page: 1,
   per_page: 9,
   total: 0,
+  totalPages: 0,
   filter: {
     search: "",
     slugs: [],
@@ -75,6 +76,7 @@ export const slice = createSlice({
     builder.addCase(fetchProducts.fulfilled, (state, { payload }) => {
       state.items = payload.data
       state.total = payload.meta.total
+      state.totalPages = payload.meta.last_page
       state.isLoading = false
     })
 

@@ -9,7 +9,7 @@ const StyledInput = styled.input`
   color: ${({ color = "#000" }) => color};
   background: #f5f5f5;
   outline: none;
-  border: 1px solid ${({ error }) => (error ? "red" : "transparent")};
+  border: 2px solid ${({ error, success }) => (error ? "red" : success? '#71dd8a' : "transparent")};
   height: 50px;
 
   &:focus {

@@ -7,9 +7,12 @@ import * as Yup from "yup"
 import axiosClient, { setToken } from "src/core/axios-client"
 import { setUser } from "src/store/slices/global/slice"
 import { useDispatch } from "react-redux"
+import { useBreakpoints } from "src/core/hooks"
 
 export const LoginForm = ({ modalStates, setModalState, setModalOpen }) => {
   const dispatch = useDispatch()
+
+  const { table } = useBreakpoints()
 
   const [isLoading, setIsLoading] = useState(false)
 
@@ -64,8 +67,8 @@ export const LoginForm = ({ modalStates, setModalState, setModalOpen }) => {
   }, [watch("email"), watch("password")])
 
   return (
-    <Box padding="32px" direction="column">
-      <Box fontSize="40px" color="#292929" marginBottom="16px">
+    <Box padding={table ? "32px" : '8px'} direction="column">
+      <Box fontSize={table ? "40px" : "24px"} color="#292929" marginBottom="16px">
         Войти
       </Box>
 

@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react"
 import axiosClient from "src/core/axios-client"
 import { Container, Box, Icon } from "src/components"
-import { useDispatch } from "react-redux"
 import { ICON_NAMES } from "src/core/constants"
+import { useBreakpoints } from "src/core/hooks"
 
 export const PoliticsPage = () => {
   const [page, setPage] = useState(null)
+
+  const { table, tablet } = useBreakpoints()
+
   const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
@@ -27,7 +30,7 @@ export const PoliticsPage = () => {
           ) : (
             <Box width="100%" direction="column">
               <Box
-                fontSize="68px"
+                fontSize={table ? "68px" : tablet ? "48px" : "26px"}
                 color="white"
                 fontWeight="900"
                 paddingRight="48px"
@@ -36,7 +39,7 @@ export const PoliticsPage = () => {
               </Box>
 
               <Box
-                fontSize="48px"
+                fontSize={table ? "48px" : tablet ? "38px" : "24px"}
                 color="white"
                 fontWeight="900"
                 marginBottom="24px"

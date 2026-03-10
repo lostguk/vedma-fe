@@ -1,17 +1,22 @@
-import React from "react"
-import { Box, Link, Container, Button, Icon, Input } from "src/components"
+import React, { useState } from "react"
+import { Box, Button, Input } from "src/components"
 import { useForm, Controller } from "react-hook-form"
 import { COLORS } from "src/core/constants"
 import { yupResolver } from "@hookform/resolvers/yup"
 import * as Yup from "yup"
 import axiosClient from "src/core/axios-client"
+import { useBreakpoints } from "src/core/hooks"
 
 export const ResetPasswordForm = ({ modalStates, setModalState }) => {
+  const [isLoading, setIsLoading] = useState(false)
+
   const schema = Yup.object().shape({
     email: Yup.string()
       .email("Введите корректный адрес электронной почты")
       .required("Поле email обязательно для заполнения"),
   })
+
+  const { table } = useBreakpoints()
 
   const {
     handleSubmit,
@@ -22,15 +27,19 @@ export const ResetPasswordForm = ({ modalStates, setModalState }) => {
     resolver: yupResolver(schema),
   })
 
-  const onSubmit = async (data) => {
-    const response = await axiosClient.post("/forgot-password", {
+  const onSubmit = (data) => {
+    setIsLoading(true)
+
+    axiosClient.post("/forgot-password", {
       ...data,
     })
+    .then(() => setModalState(modalStates.resetPasswordSuccess))
+    .finally(() => setIsLoading(false))
   }
 
   return (
-    <Box padding="32px" direction="column">
-      <Box fontSize="40px" color="#292929" marginBottom="16px">
+    <Box padding={table ? "32px" : '8px'} direction="column">
+      <Box fontSize={table ? "40px" : "24px"} color="#292929" marginBottom="16px">
         Восстановить пароль
       </Box>
 
@@ -49,7 +58,7 @@ export const ResetPasswordForm = ({ modalStates, setModalState }) => {
           />
         </Box>
 
-        <Button width="100%" type="submit" form="loginForm" variant="black">
+        <Button width="100%" type="submit" variant="black" isLoading={isLoading}>
           Восстановить
         </Button>
       </form>

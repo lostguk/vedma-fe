@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react"
 import { Box, Button, Input, PhoneInput } from "src/components"
+import { toast } from "react-toastify"
 import { useForm, Controller } from "react-hook-form"
 import { PAGES } from "src/core/constants"
 import { yupResolver } from "@hookform/resolvers/yup"
@@ -29,9 +30,9 @@ export const UserForm = () => {
       .email("Введите корректный адрес электронной почты")
       .required("Поле email обязательно для заполнения"),
     phone: Yup.string()
-      .required("Поле email обязательно для заполнения")
+      .required("Поле является обязательным")
       .matches(
-        /^\+?[78][-\(]?\d{3}\)?-?\d{3}-?\d{2}-?\d{2}$/,
+        /\+7\s?\(?\d{3}\)?[\s-]?\d{3}[\s-]?\d{2}[\s-]?\d{2}/,
         "Введите корректный телефон",
       ),
     address: Yup.object()
@@ -40,9 +41,11 @@ export const UserForm = () => {
       "is-full-address",
       "Выберите полный адрес",
       (value) => {
-        if (!value || !value.data) return false;
-        const { street, house, city } = value.data;
-        return Boolean(street && house && city);
+        if (!value || !value.data) return false
+        
+        const { street, house, city, settlement } = value.data
+
+        return Boolean(street && house && (city || settlement))
       }
     ),
     last_name: Yup.string().required("Пароль является обязательным"),
@@ -56,17 +59,20 @@ export const UserForm = () => {
     control,
     reset,
     setValue,
+    watch
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
       email: user?.email,
-      phone: user?.phone.replaceAll(" ", "-"),
+      phone: user?.phone,
       address: user?.address,
       last_name: user?.last_name,
       first_name: user?.first_name,
       middle_name: user?.middle_name,
     },
   })
+
+  console.log(watch('phone'))
 
   const onSubmit = async (data) => {
     setIsLoading(true)
@@ -76,6 +82,7 @@ export const UserForm = () => {
         ...data,
         address: data.address.value
       })
+      .then(() => toast("Профиль обновлен!"))
       .finally(() => {
         setIsLoading(false)
         setIsEdit(false)
@@ -91,12 +98,14 @@ export const UserForm = () => {
 
   useEffect(() => {
     if (user) {
-      setValue("email", user?.email)
-      setValue("phone", user?.phone.replaceAll(" ", "-"))
-      setValue("address", user?.address)
-      setValue("last_name", user?.last_name)
-      setValue("first_name", user?.first_name)
-      setValue("middle_name", user?.middle_name)
+      axiosClient.post('/order/address/suggest', { query: user?.address }).then(res => {
+        setValue("email", user?.email)
+        setValue("phone", user?.phone)
+        setValue("address", res.data.data.suggestions[0])
+        setValue("last_name", user?.last_name)
+        setValue("first_name", user?.first_name)
+        setValue("middle_name", user?.middle_name)
+      })
     }
   }, [user])
 
@@ -166,12 +175,13 @@ export const UserForm = () => {
                     mask={[
                       "+",
                       "7",
+                      " ",
                       "(",
                       /[1-9]/,
                       /\d/,
                       /\d/,
                       ")",
-                      "-",
+                      " ",
                       /\d/,
                       /\d/,
                       /\d/,

@@ -15,16 +15,15 @@ export const CatalogPage = () => {
   const {
     items,
     page,
-    per_page,
-    total,
     isLoading,
+    totalPages,
     filter: { search },
   } = useSelector((state) => state.products)
 
   const handlePageClick = ({ selected }) => dispatch(setPage(selected + 1))
 
   useEffect(() => {
-    dispatch(fetchProducts({ page, per_page, category: undefined, search }))
+    dispatch(fetchProducts({ page, per_page: 9, category: undefined, search }))
   }, [page, search])
   
   const toggleCatalog = () => dispatch(toggleCatalogSidePage())
@@ -39,7 +38,7 @@ export const CatalogPage = () => {
         )}
 
         <Box width={table ? "75%" : "100%"} direction="column"  position="relative" paddingTop={table ? '0' : '72px'}>
-          <Box position={table ? 'static' : 'fixed'} top="137px" left='0' right="16px" zIndex="10"background="#0A0D1B">
+          <Box position={table ? 'static' : 'fixed'} top="137px" left='0' right="16px" zIndex="10"background="#0A0D1B" paddingTop={phone ? '5px' : '0'}>
             {(tablet || phone) && (
               <Box position="absolute" top="10px" left="15px">
                 <Button variant="secondary" onClick={toggleCatalog}>
@@ -48,41 +47,49 @@ export const CatalogPage = () => {
               </Box>
             )}
 
-            <Pagination
-              breakLabel="..."
-              nextLabel=">"
-              onPageChange={handlePageClick}
-              pageRangeDisplayed={5}
-              pageCount={Math.ceil(total / per_page)}
-              previousLabel="<"
-              renderOnZeroPageCount={null}
-            />
+            {totalPages > 1 && (
+              <Pagination
+                breakLabel="..."
+                nextLabel=">"
+                forcePage={page - 1}
+                onPageChange={handlePageClick}
+                pageRangeDisplayed={2}
+                marginPagesDisplayed={1}
+                pageCount={totalPages}
+                previousLabel="<"
+                renderOnZeroPageCount={false}
+              />
+            )}
           </Box>
 
-          <Box wrap="wrap" gap="16px">
-
+          <Box wrap="wrap" gap="16px" rowGap="32px">
             {isLoading ? (
               <Box width="100px" height="80vh" margin="0 auto">
                 <Icon name={ICON_NAMES.loader} />
               </Box>
-            ) : (
-              items.map((product) => (
-                <Box width={phone ? "calc(50% - 8px)" : "calc(33.3333% - 12px)"} key={product.id}>
-                  <Card {...product} />
-                </Box>
-              ))
-            )}
+            ) : items?.length
+                ? (
+                    items.map((product) => (
+                      <Box width={phone ? "calc(50% - 8px)" : "calc(33.3333% - 12px)"} key={product.id}>
+                        <Card {...product} />
+                      </Box>
+                    ))
+                  )
+                : <Box>Товары отсуцтвуют</Box>
+            }
           </Box>
 
-          {table && (
+          {table && totalPages > 1 && (
             <Pagination
               breakLabel="..."
               nextLabel=">"
+              forcePage={page - 1}
               onPageChange={handlePageClick}
-              pageRangeDisplayed={5}
-              pageCount={Math.ceil(total / per_page)}
+              pageRangeDisplayed={2}
+              marginPagesDisplayed={1}
+              pageCount={totalPages}
               previousLabel="<"
-              renderOnZeroPageCount={null}
+              renderOnZeroPageCount={false}
             />
           )}
         </Box>

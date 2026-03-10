@@ -4,6 +4,7 @@ import { ICON_NAMES, PAGES, COLORS } from "src/core/constants"
 import { useDispatch } from "react-redux"
 import { NumericFormat } from "react-number-format"
 import { generatePath, useNavigate } from "react-router-dom"
+import { useBreakpoints } from "src/core/hooks"
 import {
   removeCartItem,
   plusCartItem,
@@ -14,6 +15,8 @@ export const Card = (props) => {
   const dispatch = useDispatch()
 
   const navigate = useNavigate()
+
+  const { table, tablet, phone } = useBreakpoints()
 
   const removeProduct = () => dispatch(removeCartItem(props.id))
 
@@ -43,12 +46,11 @@ export const Card = (props) => {
         <Icon name={ICON_NAMES.cross} color="#FF0000" />
       </Box>
 
-      <Box cursor="pointer" borderRadius="20px" overflow="hidden" width="35%" onClick={navigateToProduct} alignSelf="flex-start">
+      <Box cursor="pointer" borderRadius="20px" overflow="hidden" width="35%" onClick={navigateToProduct} alignSelf="flex-start" flexShrink={0}>
         <img width="100%" src={props.thumb_url} />
       </Box>
 
       <Box
-        width="45%"
         padding="0 12px"
         direction="column"
         marginBottom="5px"
@@ -57,7 +59,7 @@ export const Card = (props) => {
       >
         <Box
           cursor="pointer"
-          fontSize="16px"
+          fontSize={phone ? "14px" : "16px"}
           fontWeight="600"
           color="#000000"
           margin="0 0 8px 4px"
@@ -96,7 +98,7 @@ export const Card = (props) => {
         </Box>
       </Box>
 
-      <Box width="20%" maxWidth="105px" marginLeft="auto">
+      <Box width={phone ? "80px" : "100px"} marginLeft="auto" justify="space-between" flexShrink={0}>
         <Box onClick={minusItem}>
           <ActionButton>-</ActionButton>
         </Box>

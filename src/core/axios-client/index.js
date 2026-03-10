@@ -38,7 +38,10 @@ export const initClient = () => {
     (error) => {
       if(error.response.status === 401){
         removeToken()
-      }
+        return Promise.reject(error)
+      } 
+      
+      return Promise.reject(error)
     },
   )
 

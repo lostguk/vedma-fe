@@ -6,15 +6,19 @@ import { yupResolver } from "@hookform/resolvers/yup"
 import * as Yup from "yup"
 import { AddressSuggestions } from "react-dadata"
 import axiosClient from "src/core/axios-client"
+import { useBreakpoints } from "src/core/hooks"
 
 export const RegistrationForm = ({ modalStates, setModalState }) => {
   const [isLoading, setIsLoading] = useState(false)
+  
+  const { table, phone } = useBreakpoints()
 
   const schema = Yup.object().shape({
     email: Yup.string()
       .email("Введите корректный адрес электронной почты")
       .required("Поле является обязательным"),
-    password: Yup.string().required("Поле является обязательным"),
+    password: Yup.string().required("Поле является обязательным")
+             .min(8, "Минимальная длина пароля 8 символов"),
     password_confirmation: Yup.string()
       .oneOf([Yup.ref("password"), null], "Пароли не совпадают")
       .min(8, "Минимальная длина пароля 8 символов")
@@ -22,7 +26,7 @@ export const RegistrationForm = ({ modalStates, setModalState }) => {
     phone: Yup.string()
       .required("Поле является обязательным")
       .matches(
-        /^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$/,
+        /\+7\s?\(?\d{3}\)?[\s-]?\d{3}[\s-]?\d{2}[\s-]?\d{2}/,
         "Введите корректный телефон",
       ),
     last_name: Yup.string().required("Поле является обязательным"),
@@ -34,9 +38,11 @@ export const RegistrationForm = ({ modalStates, setModalState }) => {
         "is-full-address",
         "Выберите полный адрес",
         (value) => {
-          if (!value || !value.data) return false;
-          const { street, house, city } = value.data;
-          return Boolean(street && house && city);
+          if (!value || !value.data) return false
+
+          const { street, house, city, settlement } = value.data
+
+          return Boolean(street && house && (city || settlement))
         }
     ),
   })
@@ -64,14 +70,16 @@ export const RegistrationForm = ({ modalStates, setModalState }) => {
       .finally(() => setIsLoading(false))
   }
 
+  console.log(watch("address"))
+
   return (
-    <Box padding="32px" direction="column" color="black">
-      <Box fontSize="40px" color="#292929" marginBottom="16px">
+    <Box padding={table ? "32px" : '8px'} direction="column" color="black">
+      <Box fontSize={table ? "40px" : "24px"} color="#292929" marginBottom="16px">
         Зарегистрироваться
       </Box>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Box gap="8px" wrap="wrap">
-          <Box width="calc(33.3333% - 6px)">
+          <Box width={phone ? "100%" : "calc(33.3333% - 6px)"}>
             <Controller
               name="last_name"
               control={control}
@@ -85,7 +93,7 @@ export const RegistrationForm = ({ modalStates, setModalState }) => {
             />
           </Box>
 
-          <Box width="calc(33.3333% - 6px)">
+          <Box width={phone ? "100%" : "calc(33.3333% - 6px)"}>
             <Controller
               name="first_name"
               control={control}
@@ -99,7 +107,7 @@ export const RegistrationForm = ({ modalStates, setModalState }) => {
             />
           </Box>
 
-          <Box width="calc(33.3333% - 6px)">
+          <Box width={phone ? "100%" : "calc(33.3333% - 6px)"}>
             <Controller
               name="middle_name"
               control={control}
@@ -113,7 +121,7 @@ export const RegistrationForm = ({ modalStates, setModalState }) => {
             />
           </Box>
 
-          <Box width="calc(33.3333% - 6px)">
+          <Box width={phone ? "100%" : "calc(33.3333% - 6px)"}>
             <Controller
               name="phone"
               error={errors?.email?.phone}
@@ -161,7 +169,7 @@ export const RegistrationForm = ({ modalStates, setModalState }) => {
             />
           </Box>
 
-          <Box width="calc(66.6666% - 6px)">
+          <Box width={phone ? "100%" : "calc(66.6666% - 6px)"} >
             <Controller
               name="email"
               control={control}
@@ -194,7 +202,7 @@ export const RegistrationForm = ({ modalStates, setModalState }) => {
             />
           </Box>
 
-          <Box width="calc(33.3333% - 6px)">
+          <Box width={phone ? "100%" : "calc(33.3333% - 6px)"}>
             <Controller
               name="password"
               control={control}
@@ -209,7 +217,7 @@ export const RegistrationForm = ({ modalStates, setModalState }) => {
             />
           </Box>
 
-          <Box width="calc(33.3333% - 6px)">
+          <Box width={phone ? "100%" : "calc(33.3333% - 6px)"}>
             <Controller
               name="password_confirmation"
               control={control}
