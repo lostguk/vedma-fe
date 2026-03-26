@@ -75,7 +75,7 @@ export const CatalogPage = () => {
                       </Box>
                     ))
                   )
-                : <Box>Товары отсуцтвуют</Box>
+                : <Box>Товары отсутствуют</Box>
             }
           </Box>
 

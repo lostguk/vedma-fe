@@ -86,7 +86,7 @@ export const CategoryPage = () => {
                       </Box>
                     ))
                   )
-                : <Box>Товары отсуцтвуют</Box>
+                : <Box>Товары отсутствуют</Box>
             }
           </Box>
 
