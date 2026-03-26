@@ -18,7 +18,7 @@ export const HistoryItemCard = ({
             <Box fontSize="22px" marginBottom="4px">
                 <NumericFormat
                     displayType="text"
-                    value={price}
+                    value={price * count}
                     suffix=" ₽"
                     thousandSeparator=" "
                 />
@@ -29,7 +29,14 @@ export const HistoryItemCard = ({
             </Box>
 
             <Box marginTop="auto">
-                Количество: {count}
+                {count} шт x&nbsp;
+                            
+                <NumericFormat
+                    displayType="text"
+                    value={price}
+                    suffix=" ₽"
+                    thousandSeparator=" "
+                />
             </Box>
         </Box>
     </Box>

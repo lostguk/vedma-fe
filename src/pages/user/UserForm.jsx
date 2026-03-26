@@ -72,8 +72,6 @@ export const UserForm = () => {
     },
   })
 
-  console.log(watch('phone'))
-
   const onSubmit = async (data) => {
     setIsLoading(true)
 

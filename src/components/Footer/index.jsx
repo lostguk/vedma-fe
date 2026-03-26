@@ -37,7 +37,7 @@ export const Footer = () => {
 
             <FooterItem onClick={() => navigate(PAGES.exchange)}>Обмен и возврат</FooterItem>
 
-            {(!phone ) && (
+            {(!phone) && (
               <FooterItem onClick={() => navigate(PAGES.contacts)}>Контакты</FooterItem>
             )}  
 

@@ -48,7 +48,6 @@ export const ResetPassword = () => {
             token,
         })
         .then((res) => {
-          console.log(res)
           setIsSuccess(true)
         })
         .catch(res => toast.error(res.response.data.message))

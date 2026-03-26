@@ -88,7 +88,7 @@ export const Card = (props) => {
           >
             <NumericFormat
               displayType="text"
-              value={props.price}
+              value={props.price * props.count}
               suffix=" ₽"
               thousandSeparator=" "
             />
@@ -100,7 +100,14 @@ export const Card = (props) => {
               opacity="0.5"
               margin="0 0 3px 5px"
             >
-              цена за штуку
+              {props.count} шт x&nbsp;
+
+              <NumericFormat
+                displayType="text"
+                value={props.price}
+                suffix=" ₽"
+                thousandSeparator=" "
+              />
             </Box>
           </Box>
         </Box>

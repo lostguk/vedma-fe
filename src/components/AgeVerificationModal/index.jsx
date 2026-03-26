@@ -5,7 +5,7 @@ import { COLORS } from "src/core/constants"
 import { Box, Button } from "src/components"
 import { useCookies } from 'react-cookie'
 
-import Logo from "src/assets/dark-cloud.png"
+import Logo from "src/assets/ageBG.jpg"
 
 
 export const AgeVerificationModal = ({ toggleModal, isModalOpen }) => {
@@ -36,20 +36,21 @@ export const AgeVerificationModal = ({ toggleModal, isModalOpen }) => {
       open={isModalOpen}
       onClose={() => toggleModal(false)}
     >
-        <Box direction="column" align="center" background={`url('${Logo}') no-repeat center/contain #0A0D1B`} padding={table ? "40px" : "20px"}>
-            <Box marginBottom="55px" borderRadius="40px" color={COLORS.main} fontSize="65px" border={`2px solid ${COLORS.main}!important`} width="140px" height="190px" align="center" justify="center">
-                18 +
-            </Box>
+        <Box direction="column" position="relative" align="center" background={`url('${Logo}') no-repeat center/cover #0A0D1B`} padding={table ? "100px" : "20px"}>
 
-            <Box color={COLORS.main} fontSize="38px"  textAlign="center">
+            <Box position="absolute" top="0" bottom="0" width="100%" background="rgba(0,0,0,0.4)" />
+
+            <Box position="relative" color={COLORS.main} fontSize="38px"  textAlign="center">
                 Внимание! Сайт содержит материалы, предназначенные только для лиц старше 18 лет.
             </Box>
 
-            <Box color='white' fontSize="20px"  textAlign="center" margin="28px 0 56px">
+            <Box position="relative" color='white' fontSize="20px"  textAlign="center" margin="28px 0 56px">
                 Некоторые магические практики требуют осознанного подхода. Продолжая просмотр, вы подтверждаете свое совершеннолетие.
             </Box>
 
-            <Button onClick={confirmAgeHandler} width="200px" size="large">Мне есть 18</Button>
+            <Box position="relative">
+              <Button onClick={confirmAgeHandler} width="200px" size="large">Мне есть 18</Button>
+            </Box>
         </Box>
     </Modal>
   )

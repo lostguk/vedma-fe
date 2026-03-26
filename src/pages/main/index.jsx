@@ -211,7 +211,7 @@ export const Main = () => {
 
             <Box gap="15px" marginTop="40px" wrap="wrap">
               {products.map((item) => (
-                <Box width={table ? "calc(25% - 11px)" : tablet ? 'calc(33.33333% - 10px)' : 'calc(50% - 8px)'}>
+                <Box width={table ? "calc(25% - 12px)" : tablet ? 'calc(33.33333% - 10px)' : 'calc(50% - 8px)'}>
                   <Card {...item} />
                 </Box>
               ))}

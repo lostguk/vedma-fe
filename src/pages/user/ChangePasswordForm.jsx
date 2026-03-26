@@ -63,6 +63,7 @@ export const ChangePasswordForm = () => {
             control={control}
             render={({ field }) => (
               <Input
+                type="password"
                 placeholder="Текущий пароль"
                 error={errors?.current_password?.message}
                 {...field}
@@ -77,6 +78,7 @@ export const ChangePasswordForm = () => {
             control={control}
             render={({ field }) => (
               <Input
+                type="password"
                 placeholder="Новый пароль"
                 error={errors?.new_password?.message}
                 {...field}
@@ -91,6 +93,7 @@ export const ChangePasswordForm = () => {
             control={control}
             render={({ field }) => (
               <Input
+                type="password"
                 placeholder="Подтвердите новый пароль"
                 error={errors?.new_password_confirmation?.message}
                 {...field}

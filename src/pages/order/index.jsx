@@ -42,6 +42,10 @@ export const OrderPage = () => {
 
   const [isOrderLoading, setIsOrderLoading] = useState(false)
 
+  const [isCostLoading, setIsCostLoading] = useState(false)
+
+  const [isPaymentLoading, setIsPaymentLoading] = useState(false)
+
   const [deliveryCost, setDeliveryCost] = useState(0)
 
   const [isRegNeed, setIsRegNeed] = useState(!Boolean(user))
@@ -71,6 +75,8 @@ export const OrderPage = () => {
     axiosClient
       .post("/order", body)
       .then((res) => {
+        setIsPaymentLoading(true)
+
         axiosClient
           .post("/payments", {
             order_id: res?.data.data?.id,
@@ -81,6 +87,7 @@ export const OrderPage = () => {
             dispatch(resetCart())
             window.location.href = res?.data?.data?.payment_url
           })
+          .finally(() => setIsPaymentLoading(false))
       })
       .finally(() => setIsOrderLoading(false))
   }
@@ -172,6 +179,8 @@ export const OrderPage = () => {
   const calculateDeliveryCost = () => {
     const currentAddressValue = watch("address")
 
+    setIsCostLoading(true)
+
     const isAddressValid =
       Boolean(currentAddressValue?.data?.street) &&
       Boolean(currentAddressValue?.data?.house) &&
@@ -190,7 +199,9 @@ export const OrderPage = () => {
           setDeliveryCost(
             Math.round(res?.data?.data[deliveryType][0].service?.total),
           )
-        })
+        }).finally(() => setIsCostLoading(false))
+    } else {
+      setIsCostLoading(false)
     }
   }
 
@@ -219,13 +230,22 @@ export const OrderPage = () => {
   }
 
   useEffect(() => {
-    console.log(1)
     calculateDeliveryCost()
   }, [watch("address"), watch("delivery"), cart])
 
   return (
-    <Box background="white" padding="48px 0 72px">
+    <Box background="white" padding="48px 0 72px" >
       <Container>
+        {
+          isPaymentLoading && (
+            <Box zIndex="2" position="fixed" top="0" bottom="0" right="0" left="0" justify="center" align="center" background="rgba(0,0,0,0.2)">
+              <Box width="100px">
+                <Icon name={ICON_NAMES.loader} />
+              </Box>
+            </Box>
+          )
+        }
+
         <Box width="100%" gap="40px" wrap="wrap">
           <Box
             width={table ? "calc(65% - 40px)" : "100%"}
@@ -519,7 +539,7 @@ export const OrderPage = () => {
                     </Box>
                   </Box>
 
-                  <Box width="100%" maxWidth="600px">
+                  <Box width="100%" maxWidth="320px">
                     <Controller
                       name="delivery"
                       control={control}
@@ -685,7 +705,8 @@ export const OrderPage = () => {
               <Button
                 type="submit"
                 form="order-form"
-                isLoading={isOrderLoading}
+                disabled={!watch("delivery")}
+                isLoading={isOrderLoading || isCostLoading}
               >
                 Оформить заказ
               </Button>

@@ -70,8 +70,6 @@ export const RegistrationForm = ({ modalStates, setModalState }) => {
       .finally(() => setIsLoading(false))
   }
 
-  console.log(watch("address"))
-
   return (
     <Box padding={table ? "32px" : '8px'} direction="column" color="black">
       <Box fontSize={table ? "40px" : "24px"} color="#292929" marginBottom="16px">

@@ -77,7 +77,6 @@ export const LoginForm = ({ modalStates, setModalState, setModalOpen }) => {
           <Controller
             name="email"
             control={control}
-            defaultValue="user@example.com"
             render={({ field }) => (
               <Input
                 placeholder="Email"
@@ -93,7 +92,6 @@ export const LoginForm = ({ modalStates, setModalState, setModalOpen }) => {
             name="password"
             type="password"
             control={control}
-            defaultValue="password123"
             render={({ field }) => (
               <Input
                 placeholder="Пароль"
@@ -142,7 +140,7 @@ export const LoginForm = ({ modalStates, setModalState, setModalOpen }) => {
         color={COLORS.main}
         fontWeight={600}
         opacity="0.5"
-        fronSize="18px"
+        fontSize="18px"
         justify="center"
         marginTop="12px"
       >
