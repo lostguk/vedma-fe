@@ -1,26 +1,26 @@
+import { yupResolver } from "@hookform/resolvers/yup"
 import { useEffect, useState } from "react"
-import {
-  Button,
-  Container,
-  Box,
-  Input,
-  Icon,
-  Radio,
-  PhoneInput,
-  SelectUI,
-} from "src/components"
-import { toggleModal } from "src/store/slices/modals/slice"
+import { AddressSuggestions } from "react-dadata"
+import { Controller, useForm } from "react-hook-form"
 import { NumericFormat } from "react-number-format"
 import { useDispatch, useSelector } from "react-redux"
-import { useForm, Controller } from "react-hook-form"
+import { toast } from "react-toastify"
+import {
+  Box,
+  Button,
+  Container,
+  Icon,
+  Input,
+  PhoneInput,
+  Radio,
+  SelectUI,
+} from "src/components"
 import axiosClient from "src/core/axios-client"
-import { yupResolver } from "@hookform/resolvers/yup"
-import * as Yup from "yup"
-import { AddressSuggestions } from "react-dadata"
 import { COLORS, ICON_NAMES, MODAL_NAMES, PAGES } from "src/core/constants"
 import { useBreakpoints } from "src/core/hooks"
 import { resetCart } from "src/store/slices/global/slice"
-import { toast } from "react-toastify"
+import { toggleModal } from "src/store/slices/modals/slice"
+import * as Yup from "yup"
 
 import { Card } from "./OrderCard"
 
@@ -37,45 +37,47 @@ export const OrderPage = () => {
   const { cart, user } = useSelector((state) => state.global)
 
   const [orderTotalCost, setOrderTotalCost] = useState(0)
-  
+
   const [orderDiscountedTotalCost, setOrderDiscountedTotalCost] = useState(0)
 
   const [isOrderLoading, setIsOrderLoading] = useState(false)
-  
+
   const [deliveryCost, setDeliveryCost] = useState(0)
 
   const [isRegNeed, setIsRegNeed] = useState(!Boolean(user))
 
-  const [promoCode, setPromoCode] = useState('')
+  const [promoCode, setPromoCode] = useState("")
 
   const [isPromo, setIsPromo] = useState(false)
 
   const onSubmit = async (data) => {
     setIsOrderLoading(true)
-    
+
     const currentUrl = window.location.href
-  
+
     const url = new URL(currentUrl)
 
     const baseUrl = `${url.protocol}//${url.hostname}`
 
     const body = {
-        ...data,
-        items: cart.map(({ id, count }) => ({ id, count })),
-        register: isRegNeed,
-        address: data.address.value,
-        delivery_type: data.delivery?.value
+      ...data,
+      items: cart.map(({ id, count }) => ({ id, count })),
+      register: isRegNeed,
+      address: data.address.value,
+      delivery_type: data.delivery?.value,
+      promo_code: isPromo ? promoCode : undefined,
     }
 
     axiosClient
       .post("/order", body)
-      .then(res => {
-        axiosClient.post('/payments', {
-          order_id: res?.data.data?.id,
-          success_url: `${baseUrl}${PAGES.paymentSuccess}`,
-          fail_url: `${baseUrl}${PAGES.paymentError}`
-        })
-          .then(res => {
+      .then((res) => {
+        axiosClient
+          .post("/payments", {
+            order_id: res?.data.data?.id,
+            success_url: `${baseUrl}${PAGES.paymentSuccess}`,
+            fail_url: `${baseUrl}${PAGES.paymentError}`,
+          })
+          .then((res) => {
             dispatch(resetCart())
             window.location.href = res?.data?.data?.payment_url
           })
@@ -107,18 +109,14 @@ export const OrderPage = () => {
     first_name: Yup.string().required("Поле является обязательным"),
     middle_name: Yup.string().required("Поле является обязательным"),
     address: Yup.object()
-    .required("Введите адрес")
-    .test(
-      "is-full-address",
-      "Выберите полный адрес",
-      (value) => {
+      .required("Введите адрес")
+      .test("is-full-address", "Выберите полный адрес", (value) => {
         if (!value || !value.data) return false
 
         const { street, house, city, settlement } = value.data
 
         return Boolean(street && house && (city || settlement))
-      }
-    ),
+      }),
   })
 
   const {
@@ -127,7 +125,7 @@ export const OrderPage = () => {
     control,
     setValue,
     clearErrors,
-    watch
+    watch,
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
@@ -142,15 +140,17 @@ export const OrderPage = () => {
 
   useEffect(() => {
     if (Boolean(user)) {
-      axiosClient.post('/order/address/suggest', { query: user?.address }).then(res => {
-        setIsRegNeed(false)
-        setValue("email", user?.email)
-        setValue("phone", user?.phone)
-        setValue("address", res.data.data.suggestions[0])
-        setValue("last_name", user?.last_name)
-        setValue("first_name", user?.first_name)
-        setValue("middle_name", user?.middle_name)
-      })
+      axiosClient
+        .post("/order/address/suggest", { query: user?.address })
+        .then((res) => {
+          setIsRegNeed(false)
+          setValue("email", user?.email)
+          setValue("phone", user?.phone)
+          setValue("address", res.data.data.suggestions[0])
+          setValue("last_name", user?.last_name)
+          setValue("first_name", user?.first_name)
+          setValue("middle_name", user?.middle_name)
+        })
     }
     clearErrors()
   }, [user])
@@ -160,7 +160,7 @@ export const OrderPage = () => {
       axiosClient
         .post("/order/calculate", {
           items: cart.map(({ id, count }) => ({ id, count })),
-          promo_code: isPromo ? promoCode : undefined
+          promo_code: isPromo ? promoCode : undefined,
         })
         .then((res) => {
           setOrderDiscountedTotalCost(res?.data?.data.total_with_discount)
@@ -170,36 +170,42 @@ export const OrderPage = () => {
   }, [cart])
 
   const calculateDeliveryCost = () => {
-    const currentAddressValue = watch('address')
+    const currentAddressValue = watch("address")
 
-    const isAddressValid = Boolean(currentAddressValue?.data?.street) && Boolean(currentAddressValue?.data?.house) && (Boolean(currentAddressValue?.data?.city) || Boolean(currentAddressValue?.data?.settlement))
+    const isAddressValid =
+      Boolean(currentAddressValue?.data?.street) &&
+      Boolean(currentAddressValue?.data?.house) &&
+      (Boolean(currentAddressValue?.data?.city) ||
+        Boolean(currentAddressValue?.data?.settlement))
 
-    const deliveryType = watch('delivery')?.value
+    const deliveryType = watch("delivery")?.value
 
-    if(isAddressValid && deliveryType){
+    if (isAddressValid && deliveryType) {
       axiosClient
-        .post("/shipping/calculate", { 
+        .post("/shipping/calculate", {
           products: cart.map(({ id, count }) => ({ id, quantity: count })),
-          address: watch('address')?.unrestricted_value
+          address: watch("address")?.unrestricted_value,
         })
         .then((res) => {
-          setDeliveryCost(Math.round(res?.data?.data[deliveryType][0].service?.total))
+          setDeliveryCost(
+            Math.round(res?.data?.data[deliveryType][0].service?.total),
+          )
         })
     }
   }
-  
+
   const promoHandler = () => {
     axiosClient
       .post("/order/calculate", {
         items: cart.map(({ id, count }) => ({ id, count })),
-        promo_code: promoCode
+        promo_code: promoCode,
       })
       .then((res) => {
         setOrderTotalCost(res?.data?.data.total_without_discount)
 
         setOrderDiscountedTotalCost(res?.data?.data.total_with_discount)
 
-        if(res?.data?.data.promo_code_status === "applied"){
+        if (res?.data?.data.promo_code_status === "applied") {
           setIsPromo(true)
         } else {
           toast.error("Промокод не существует или истек его срок действия")
@@ -209,19 +215,23 @@ export const OrderPage = () => {
 
   const deletePromoHandler = () => {
     setIsPromo(false)
-    setPromoCode('')
+    setPromoCode("")
   }
 
   useEffect(() => {
     console.log(1)
     calculateDeliveryCost()
-  }, [watch('address'), watch('delivery'), cart])
+  }, [watch("address"), watch("delivery"), cart])
 
   return (
     <Box background="white" padding="48px 0 72px">
       <Container>
         <Box width="100%" gap="40px" wrap="wrap">
-          <Box width={table ? "calc(65% - 40px)" : '100%'} direction="column" gap="32px">
+          <Box
+            width={table ? "calc(65% - 40px)" : "100%"}
+            direction="column"
+            gap="32px"
+          >
             <Box fontSize="44px" fontWeight="600" color="#181E39">
               Оформить заказ
             </Box>
@@ -305,7 +315,7 @@ export const OrderPage = () => {
               <form id="order-form" onSubmit={handleSubmit(onSubmit)}>
                 <Box direction="column" gap="40px">
                   <Box gap="8px" wrap="wrap">
-                    <Box width={phone ? '100%' : "calc(33.3333% - 6px)"}>
+                    <Box width={phone ? "100%" : "calc(33.3333% - 6px)"}>
                       <Controller
                         name="last_name"
                         control={control}
@@ -320,7 +330,7 @@ export const OrderPage = () => {
                       />
                     </Box>
 
-                    <Box width={phone ? '100%' : "calc(33.3333% - 6px)"}>
+                    <Box width={phone ? "100%" : "calc(33.3333% - 6px)"}>
                       <Controller
                         name="first_name"
                         control={control}
@@ -334,7 +344,7 @@ export const OrderPage = () => {
                       />
                     </Box>
 
-                    <Box width={phone ? '100%' : "calc(33.3333% - 6px)"}>
+                    <Box width={phone ? "100%" : "calc(33.3333% - 6px)"}>
                       <Controller
                         name="middle_name"
                         control={control}
@@ -348,7 +358,7 @@ export const OrderPage = () => {
                       />
                     </Box>
 
-                    <Box width={phone ? '100%' : "calc(33.3333% - 6px)"}>
+                    <Box width={phone ? "100%" : "calc(33.3333% - 6px)"}>
                       <Controller
                         name="phone"
                         error={errors?.email?.phone}
@@ -396,7 +406,7 @@ export const OrderPage = () => {
                       />
                     </Box>
 
-                    <Box width={phone ? '100%' : "calc(33.3333% - 6px)"}>
+                    <Box width={phone ? "100%" : "calc(33.3333% - 6px)"}>
                       <Controller
                         name="email"
                         control={control}
@@ -530,7 +540,7 @@ export const OrderPage = () => {
           </Box>
 
           <Box
-            width={table ? "35%" : '100%'}
+            width={table ? "35%" : "100%"}
             borderRadius="20px"
             padding="16px"
             direction="column"
@@ -560,7 +570,7 @@ export const OrderPage = () => {
             </Box>
 
             <Box
-              textDecoration={isPromo ? 'line-through' : 'initial'}
+              textDecoration={isPromo ? "line-through" : "initial"}
               fontSize="16px"
               fontWeight="400"
               color="#000000"
@@ -568,20 +578,31 @@ export const OrderPage = () => {
               marginBottom="8px"
               marginTop="16px"
             >
-              Стоимость товара:&nbsp; <NumericFormat displayType="text" value={orderTotalCost} suffix=" ₽" thousandSeparator=" " />
+              Стоимость товара:&nbsp;{" "}
+              <NumericFormat
+                displayType="text"
+                value={orderTotalCost}
+                suffix=" ₽"
+                thousandSeparator=" "
+              />
             </Box>
 
             {isPromo && (
-              
-                <Box
-                  fontSize="16px"
-                  fontWeight="400"
-                  color="#000000"
-                  justify="flex-end"
-                  marginBottom="8px"
-                >
-                  Стоимость товара со скидкой:&nbsp; <NumericFormat displayType="text" value={orderDiscountedTotalCost} suffix=" ₽" thousandSeparator=" " />
-                </Box>
+              <Box
+                fontSize="16px"
+                fontWeight="400"
+                color="#000000"
+                justify="flex-end"
+                marginBottom="8px"
+              >
+                Стоимость товара со скидкой:&nbsp;{" "}
+                <NumericFormat
+                  displayType="text"
+                  value={orderDiscountedTotalCost}
+                  suffix=" ₽"
+                  thousandSeparator=" "
+                />
+              </Box>
             )}
 
             <Box
@@ -591,7 +612,17 @@ export const OrderPage = () => {
               justify="flex-end"
               marginBottom="12px"
             >
-              Доставка:&nbsp; {deliveryCost ? <NumericFormat displayType="text" value={deliveryCost} suffix=" ₽" thousandSeparator=" " /> : 'Не рассчитана'}
+              Доставка:&nbsp; 
+              {deliveryCost ? (
+                <NumericFormat
+                  displayType="text"
+                  value={deliveryCost}
+                  suffix=" ₽"
+                  thousandSeparator=" "
+                />
+              ) : (
+                "Не рассчитана"
+              )}
             </Box>
 
             <Box
@@ -601,13 +632,35 @@ export const OrderPage = () => {
               justify="flex-end"
               marginBottom="24px"
             >
-              Итого:&nbsp;<NumericFormat displayType="text" value={deliveryCost ? Number(isPromo ? orderDiscountedTotalCost : orderTotalCost) + Number(deliveryCost) : isPromo ? orderDiscountedTotalCost : orderTotalCost} suffix=" ₽" thousandSeparator=" " />
+              Итого:&nbsp;
+              <NumericFormat
+                displayType="text"
+                value={
+                  deliveryCost
+                    ? Number(
+                        isPromo ? orderDiscountedTotalCost : orderTotalCost,
+                      ) + Number(deliveryCost)
+                    : isPromo
+                      ? orderDiscountedTotalCost
+                      : orderTotalCost
+                }
+                suffix=" ₽"
+                thousandSeparator=" "
+              />
             </Box>
 
             <Box direction="column" gap="8px">
               <Box position="relative">
                 {isPromo && (
-                  <Box cursor="pointer" position="absolute" top="9px" right="12px" zIndex="2" onClick={deletePromoHandler} padding='8px'>
+                  <Box
+                    cursor="pointer"
+                    position="absolute"
+                    top="9px"
+                    right="12px"
+                    zIndex="2"
+                    onClick={deletePromoHandler}
+                    padding="8px"
+                  >
                     <Icon name={ICON_NAMES.cross} />
                   </Box>
                 )}
@@ -621,7 +674,13 @@ export const OrderPage = () => {
                 />
               </Box>
 
-              <Button disabled={!promoCode?.length} variant="black" onClick={promoHandler}>Применить</Button>
+              <Button
+                disabled={!promoCode?.length}
+                variant="black"
+                onClick={promoHandler}
+              >
+                Применить
+              </Button>
 
               <Button
                 type="submit"
