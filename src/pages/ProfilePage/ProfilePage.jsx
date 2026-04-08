@@ -242,6 +242,12 @@ function OrderCard({ order, onPay, onRepeat }) {
                 <span>{order.address}</span>
               </div>
             )}
+            {order.delivery_type && (
+              <div className={styles.orderInfoItem}>
+                <span className={styles.orderInfoLabel}>Способ доставки</span>
+                <span>{order.delivery_type === 'Cdek' ? 'СДЭК' : 'Почта России'}</span>
+              </div>
+            )}
             {order.phone && (
               <div className={styles.orderInfoItem}>
                 <span className={styles.orderInfoLabel}>Телефон</span>
