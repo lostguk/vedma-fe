@@ -166,7 +166,6 @@ export default function CheckoutPage() {
         promo_code: promo.promoApplied?.code || null,
         register: !isAuthenticated,
         delivery_type: 'PostOffice',
-        delivery_price: deliveryPrice || 0,
         first_name: isAuthenticated ? user.first_name : form.firstName.trim(),
         last_name: isAuthenticated ? user.last_name : form.lastName.trim(),
         middle_name: isAuthenticated ? (user.middle_name || '') : form.middleName.trim(),

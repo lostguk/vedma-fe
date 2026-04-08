@@ -142,8 +142,7 @@ ordersApi.createOrder({
   items: [{ id: 1, count: 2 }],
   promo_code: 'PROMO10',
   register: false,             // true для регистрации при заказе
-  delivery_type: 'PostOffice',
-  delivery_price: 350,
+  delivery_type: 'PostOffice',  // стоимость доставки рассчитывается на сервере через MetaShip
   first_name: 'Анна',
   last_name: 'Иванова',
   middle_name: 'Сергеевна',
