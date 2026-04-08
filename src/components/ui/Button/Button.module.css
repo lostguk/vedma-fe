@@ -1,0 +1,107 @@
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-weight: 600;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition:
+    background var(--transition-fast),
+    color var(--transition-fast),
+    transform var(--transition-fast),
+    box-shadow var(--transition-fast),
+    border-color var(--transition-fast),
+    gap var(--transition-fast);
+}
+
+.btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+/* ── Sizes ── */
+.sm {
+  padding: 8px 20px;
+  font-size: var(--text-sm);
+  border-radius: var(--radius-full);
+}
+
+.md {
+  padding: 12px 28px;
+  font-size: var(--text-sm);
+  border-radius: var(--radius-full);
+}
+
+.lg {
+  padding: 14px 32px;
+  font-size: var(--text-base);
+  border-radius: var(--radius-full);
+}
+
+.xl {
+  padding: 16px 36px;
+  font-size: var(--text-base);
+  border-radius: var(--radius-full);
+}
+
+/* ── Variants ── */
+.primary {
+  color: var(--color-white);
+  background: var(--color-primary);
+  box-shadow: 0 6px 24px rgba(var(--color-primary-rgb), 0.28);
+}
+
+.primary:hover:not(:disabled) {
+  background: var(--color-primary-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 32px rgba(var(--color-primary-rgb), 0.35);
+  gap: 12px;
+}
+
+.ghost {
+  color: var(--color-primary);
+  background: transparent;
+  border: 2px solid rgba(var(--color-primary-rgb), 0.3);
+}
+
+.ghost:hover:not(:disabled) {
+  background: rgba(var(--color-primary-rgb), 0.06);
+  border-color: var(--color-primary);
+}
+
+.outline {
+  color: var(--color-text);
+  background: var(--color-bg-section);
+  border: 1px solid var(--color-border);
+}
+
+.outline:hover:not(:disabled) {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+/* ── Modifiers ── */
+.full {
+  width: 100%;
+}
+
+.loading {
+  pointer-events: none;
+  opacity: 0.82;
+}
+
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: currentColor;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}

@@ -1,6 +1,0 @@
-export * from "./Footer"
-export * from "./Header"
-export * from "./Catalog"
-export * from "./Cart"
-export * from "./AgeVerificationModal"
-export * from "./ui"

@@ -1,42 +1,101 @@
-import { Box, Link, Icon } from "src/components"
-import { COLORS, ICON_NAMES, PAGES, HEADER_LINKS } from "src/core/constants"
-import Logo from "src/assets/logo.png"
+import { useState, useEffect } from 'react'
+import { Link, NavLink } from 'react-router-dom'
+import { getCategories } from '../../api/categories'
+import { IconChevronDown } from '../Icons'
+import styles from './Header.module.css'
 
-export const MobileMenu = ({ toggleMenu }) => {
+function MobileCatalogItem({ item, onClose }) {
+  const [open, setOpen] = useState(false)
+  const hasChildren = item.children && item.children.length > 0
+
+  if (!hasChildren) {
+    return (
+      <Link to={item.href} className={styles.mobileNavLink} onClick={onClose}>
+        {item.label}
+      </Link>
+    )
+  }
 
   return (
-    <Box direction="column" background="#0A0D1B" height="100%" padding="12px 32px">
-      <Box justify="space-between" align="center">
-        <Box>
-          <Link
-            to={PAGES.main}
+    <div className={styles.mobileAccordion}>
+      <button className={styles.mobileAccordionToggle} onClick={() => setOpen(!open)}>
+        {item.label}
+        <IconChevronDown
+          size={14}
+          className={`${styles.mobileAccordionArrow} ${open ? styles.mobileAccordionArrowOpen : ''}`}
+        />
+      </button>
+      {open && (
+        <div className={styles.mobileAccordionContent}>
+          <Link to={item.href} className={styles.mobileAccordionLink} onClick={onClose}>Все {item.label.toLowerCase()}</Link>
+          {item.children.map((child) => (
+            <Link key={child.label} to={child.href} className={styles.mobileAccordionLink} onClick={onClose}>
+              {child.label}
+            </Link>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
+export default function MobileMenu({ open, onClose, navLinks, isNavItemActive, favCount, onLoginOpen }) {
+  const [catalogItems, setCatalogItems] = useState([])
+
+  useEffect(() => {
+    getCategories()
+      .then((res) => {
+        const data = res.data?.data ?? res.data
+        const cats = Array.isArray(data) ? data : []
+        setCatalogItems([
+          { label: 'Все товары', href: '/catalog' },
+          ...cats.map((c) => ({
+            label: c.name,
+            href: `/catalog?category=${c.slug}`,
+            children: c.children?.map((ch) => ({ label: ch.name, href: `/catalog?category=${ch.slug}` })),
+          })),
+        ])
+      })
+      .catch(() => setCatalogItems([{ label: 'Все товары', href: '/catalog' }]))
+  }, [])
+
+  return (
+    <div className={`${styles.mobileNav} ${open ? styles.mobileNavOpen : ''}`}>
+      <div className={styles.mobileNavContent}>
+        <div className={styles.mobileNavSection}>
+          <span className={styles.mobileNavSectionTitle}>Каталог</span>
+          {catalogItems.map((item) => (
+            <MobileCatalogItem key={item.label} item={item} onClose={onClose} />
+          ))}
+        </div>
+        <div className={styles.mobileNavDivider} />
+        <Link to="/favorites" className={styles.mobileNavTopLink} onClick={onClose}>
+          Избранное
+          {favCount > 0 && <span className={styles.mobileFavCount}> {favCount}</span>}
+        </Link>
+        <div className={styles.mobileNavDivider} />
+        {navLinks.map((link) => (
+          <NavLink
+            key={link.label}
+            to={link.to}
+            end={link.end ?? false}
+            className={({ isActive }) =>
+              `${styles.mobileNavTopLink} ${isNavItemActive(link, isActive) ? styles.mobileNavTopLinkActive : ''}`
+            }
+            onClick={onClose}
           >
-            <img width="100%" src={Logo} />
-          </Link>
-        </Box>
-
-        <Box cursor="pointer" onClick={toggleMenu}>
-          <Icon name={ICON_NAMES.cross} color="#fff" />
-        </Box>
-      </Box>
-
-      <Box direction="column" gap="12px" align="flex-start" marginTop="32px">
-        {HEADER_LINKS.map(({ link, title }) => (
-            <Box color="#fff" key={title} fontSize="20px" onClick={toggleMenu}>
-              <Link
-                  to={link}
-                  className={({ isActive }) => (isActive ? "active" : "")}
-                  activeColor={COLORS.main}
-              >
-                  {title}
-              </Link>
-            </Box>
+            {link.label}
+          </NavLink>
         ))}
-      </Box>
-
-      <Box marginTop="auto" justify="center">
-            Ведьмино зелье 2026 ©
-      </Box>
-    </Box>
+        <div className={styles.mobileNavDivider} />
+        <div className={styles.mobileNavInfo}>
+          <a href="tel:+79001234567" className={styles.mobileNavInfoItem}>+7 (900) 123-45-67</a>
+          <span className={styles.mobileNavInfoItem}>Ежедневно 10:00–21:00</span>
+        </div>
+        <button className={styles.mobileNavLoginBtn} onClick={() => { onClose(); onLoginOpen() }}>
+          Войти
+        </button>
+      </div>
+    </div>
   )
 }

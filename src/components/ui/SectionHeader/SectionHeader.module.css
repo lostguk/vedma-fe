@@ -1,0 +1,38 @@
+.header {
+  margin-bottom: var(--space-2xl);
+}
+
+.center {
+  text-align: center;
+}
+
+.left {
+  text-align: left;
+}
+
+.label {
+  display: inline-block;
+  font-size: var(--text-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--color-primary);
+  margin-bottom: var(--space-sm);
+}
+
+.title {
+  font-size: var(--text-3xl);
+  margin-bottom: var(--space-md);
+}
+
+.desc {
+  max-width: 620px;
+  margin: 0 auto;
+  font-size: var(--text-base);
+  line-height: 1.7;
+  color: var(--color-text-light);
+}
+
+.left .desc {
+  margin: 0;
+}

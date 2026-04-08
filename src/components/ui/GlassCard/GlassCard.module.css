@@ -1,0 +1,30 @@
+.card {
+  width: 100%;
+  text-align: center;
+  padding: var(--space-3xl) var(--space-2xl);
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-radius: var(--radius-xl);
+  box-shadow:
+    0 24px 60px rgba(0, 0, 0, 0.08),
+    0 0 80px rgba(var(--color-primary-rgb), 0.08);
+}
+
+.primary {
+  border: 1px solid rgba(var(--color-primary-rgb), 0.12);
+}
+
+.error {
+  border: 1px solid rgba(201, 74, 74, 0.1);
+}
+
+.neutral {
+  border: 1px solid var(--color-border);
+}
+
+@media (max-width: 768px) {
+  .card {
+    padding: var(--space-2xl) var(--space-lg);
+  }
+}

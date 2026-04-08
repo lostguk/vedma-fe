@@ -1,21 +1,25 @@
-import { StrictMode } from "react"
-import { createRoot } from "react-dom/client"
-import { Provider } from "react-redux"
-import { CookiesProvider } from 'react-cookie';
-import { store } from "./store"
+import { StrictMode } from 'react'
+import { createRoot } from 'react-dom/client'
+import { ThemeProvider } from './context/ThemeContext'
+import { CartProvider } from './context/CartContext'
+import { FavoritesProvider } from './context/FavoritesContext'
+import { AuthProvider } from './context/AuthContext'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
+import './styles/global.css'
+import App from './App.jsx'
 
-import "react-dadata/dist/react-dadata.css"
-import "slick-carousel/slick/slick.css"
-import "slick-carousel/slick/slick-theme.css"
-
-import App from "src/app/App"
-
-createRoot(document.getElementById("root")).render(
+createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <CookiesProvider defaultSetOptions={{ path: '/' }}>
-      <Provider store={store}>
-        <App />
-      </Provider>
-    </CookiesProvider>
+    <ThemeProvider>
+      <CartProvider>
+        <FavoritesProvider>
+          <AuthProvider>
+            <App />
+            <ToastContainer position="top-right" autoClose={3000} newestOnTop closeOnClick pauseOnHover theme="colored" />
+          </AuthProvider>
+        </FavoritesProvider>
+      </CartProvider>
+    </ThemeProvider>
   </StrictMode>,
 )

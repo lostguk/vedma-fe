@@ -1,0 +1,94 @@
+/**
+ * Единый мягкий стиль полей: тонкая линия в тон темы, лёгкая тень.
+ * :where() — нулевая специфичность, чтобы в модулях можно было точечно переопределять.
+ */
+
+:where(
+  input:not([type='checkbox']):not([type='radio']):not([type='range']):not([type='file']):not([type='submit']):not([type='button']):not([type='reset']):not([type='hidden']):not([type='image']):not([type='color']),
+  textarea,
+  select
+) {
+  font-family: inherit;
+  font-size: var(--text-base);
+  color: var(--color-text);
+  background-color: var(--color-white);
+  border: 1px solid rgba(var(--color-primary-rgb), 0.12);
+  border-radius: 14px;
+  outline: none;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  transition:
+    border-color 0.22s ease,
+    box-shadow 0.22s ease,
+    background-color 0.22s ease;
+}
+
+:where(
+  input:not([type='checkbox']):not([type='radio']):not([type='range']):not([type='file']):not([type='submit']):not([type='button']):not([type='reset']):not([type='hidden']):not([type='image']):not([type='color']),
+  textarea,
+  select
+):disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+:where(textarea) {
+  display: block;
+  width: 100%;
+  min-height: 120px;
+  padding: 12px 16px;
+  resize: vertical;
+  line-height: 1.5;
+}
+
+:where(
+  input:not([type='checkbox']):not([type='radio']):not([type='range']):not([type='file']):not([type='submit']):not([type='button']):not([type='reset']):not([type='hidden']):not([type='image']):not([type='color'])
+) {
+  width: 100%;
+  max-width: 100%;
+  padding: 12px 16px;
+}
+
+:where(select) {
+  padding: 10px 14px;
+  cursor: pointer;
+}
+
+:where(
+  input:not([type='checkbox']):not([type='radio']):not([type='range']):not([type='file']):not([type='submit']):not([type='button']):not([type='reset']):not([type='hidden']):not([type='image']):not([type='color']),
+  textarea
+)::placeholder {
+  color: var(--color-text-muted);
+  opacity: 0.75;
+}
+
+:where(
+  input:not([type='checkbox']):not([type='radio']):not([type='range']):not([type='file']):not([type='submit']):not([type='button']):not([type='reset']):not([type='hidden']):not([type='image']):not([type='color']),
+  textarea,
+  select
+):hover {
+  border-color: rgba(var(--color-primary-rgb), 0.2);
+  box-shadow: 0 2px 8px rgba(var(--color-primary-rgb), 0.06);
+}
+
+:where(
+  input:not([type='checkbox']):not([type='radio']):not([type='range']):not([type='file']):not([type='submit']):not([type='button']):not([type='reset']):not([type='hidden']):not([type='image']):not([type='color']),
+  textarea,
+  select
+):focus {
+  border-color: rgba(var(--color-primary-rgb), 0.38);
+  background-color: var(--color-white);
+  box-shadow:
+    0 0 0 3px rgba(var(--color-primary-rgb), 0.1),
+    0 2px 10px rgba(var(--color-primary-rgb), 0.08);
+}
+
+:where(
+  input:not([type='checkbox']):not([type='radio']):not([type='range']):not([type='file']):not([type='submit']):not([type='button']):not([type='reset']):not([type='hidden']):not([type='image']):not([type='color']),
+  textarea,
+  select
+):focus-visible {
+  border-color: rgba(var(--color-primary-rgb), 0.38);
+  box-shadow:
+    0 0 0 3px rgba(var(--color-primary-rgb), 0.1),
+    0 2px 10px rgba(var(--color-primary-rgb), 0.08);
+}

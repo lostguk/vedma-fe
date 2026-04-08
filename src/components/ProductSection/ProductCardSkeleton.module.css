@@ -1,0 +1,72 @@
+.card {
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  background: var(--color-bg-alt);
+}
+
+.image {
+  aspect-ratio: 3 / 4;
+  background: linear-gradient(
+    110deg,
+    var(--color-bg-alt) 30%,
+    rgba(255, 255, 255, 0.1) 50%,
+    var(--color-bg-alt) 70%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.4s ease-in-out infinite;
+}
+
+.body {
+  padding: var(--space-md) var(--space-md) var(--space-lg);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.title,
+.titleShort,
+.price,
+.button {
+  border-radius: var(--radius-sm);
+  background: linear-gradient(
+    110deg,
+    var(--color-bg-alt) 30%,
+    rgba(255, 255, 255, 0.1) 50%,
+    var(--color-bg-alt) 70%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.4s ease-in-out infinite;
+}
+
+.title {
+  height: 16px;
+  width: 85%;
+}
+
+.titleShort {
+  height: 16px;
+  width: 55%;
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 8px;
+}
+
+.price {
+  height: 20px;
+  width: 80px;
+}
+
+.button {
+  height: 36px;
+  width: 90px;
+  border-radius: var(--radius-full);
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}

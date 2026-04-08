@@ -1,7 +1,0 @@
-export * from "./global"
-export * from "./categories"
-export * from "./products"
-export * from "./mainPage"
-export * from "./chat"
-export * from "./orderHistory"
-export * from "./modals"
