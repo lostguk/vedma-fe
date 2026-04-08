@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-label="Vedmino Zelie icon">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1f1233" />
+      <stop offset="100%" stop-color="#0b0714" />
+    </linearGradient>
+    <linearGradient id="flask" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffd59c" />
+      <stop offset="100%" stop-color="#ff8f2a" />
+    </linearGradient>
+  </defs>
+  <rect width="256" height="256" rx="56" fill="url(#bg)" />
+  <circle cx="128" cy="128" r="82" fill="#ffffff" fill-opacity="0.06" />
+  <path d="M109 64h38v20l22 36c15 25-2 56-32 56h-18c-30 0-47-31-32-56l22-36V64z" fill="url(#flask)" />
+  <path d="M109 84h38" stroke="#f6ede3" stroke-width="8" stroke-linecap="round" />
+  <path d="M98 137c10 9 18 10 30 6 12-4 22-3 33 6" stroke="#f6ede3" stroke-opacity="0.7" stroke-width="7" stroke-linecap="round" />
+  <circle cx="80" cy="82" r="4" fill="#ffb96a" />
+  <circle cx="67" cy="98" r="3" fill="#ffb96a" />
+  <circle cx="183" cy="77" r="4" fill="#ffb96a" />
+  <circle cx="194" cy="94" r="3" fill="#ffb96a" />
+</svg>

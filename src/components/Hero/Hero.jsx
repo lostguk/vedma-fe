@@ -4,22 +4,17 @@ import { Button } from '../ui'
 import styles from './Hero.module.css'
 
 const AUTO_INTERVAL = 5000
-const PRELOAD_TIMEOUT = 8000
+const PRELOAD_TIMEOUT = 2500
 
-function preloadImages(slides) {
-	const srcs = slides.map(s => s.image).filter(Boolean)
-	if (!srcs.length) return Promise.resolve()
-	return Promise.all(
-		srcs.map(
-			src =>
-				new Promise(resolve => {
-					const img = new Image()
-					img.onload = resolve
-					img.onerror = resolve
-					img.src = src
-				}),
-		),
-	)
+function preloadImage(src) {
+	if (!src) return Promise.resolve()
+
+	return new Promise(resolve => {
+		const img = new Image()
+		img.onload = resolve
+		img.onerror = resolve
+		img.src = src
+	})
 }
 
 export default function Hero({ slides: propSlides }) {
@@ -35,12 +30,14 @@ export default function Hero({ slides: propSlides }) {
 			return
 		}
 		let cancelled = false
+		setReady(false)
+		const firstSlideImage = propSlides?.[0]?.image
 
 		const timeout = setTimeout(() => {
 			if (!cancelled) setReady(true)
 		}, PRELOAD_TIMEOUT)
 
-		preloadImages(propSlides).then(() => {
+		preloadImage(firstSlideImage).then(() => {
 			if (!cancelled) setReady(true)
 		})
 
@@ -93,6 +90,9 @@ export default function Hero({ slides: propSlides }) {
 										src={s.image}
 										alt={s.title}
 										className={styles.slideImg}
+										loading={i === 0 ? 'eager' : 'lazy'}
+										fetchPriority={i === 0 ? 'high' : 'auto'}
+										decoding='async'
 										draggable={false}
 									/>
 								)}

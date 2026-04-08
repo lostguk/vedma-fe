@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="Vedmino Zelie OG image">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1a0f2d" />
+      <stop offset="55%" stop-color="#120a22" />
+      <stop offset="100%" stop-color="#080510" />
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#ff9f3f" />
+      <stop offset="100%" stop-color="#ffd08e" />
+    </linearGradient>
+    <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="8" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg)" />
+  <circle cx="900" cy="80" r="180" fill="#ffffff" fill-opacity="0.03" />
+  <circle cx="1080" cy="550" r="240" fill="#ffffff" fill-opacity="0.02" />
+
+  <g opacity="0.35" stroke="#ffc27b" stroke-width="2" fill="none">
+    <path d="M944 150c30 44 30 86 0 130" />
+    <path d="M988 138c36 55 36 111 0 166" />
+    <path d="M1035 126c44 67 44 135 0 202" />
+  </g>
+
+  <g transform="translate(120 145)">
+    <rect x="0" y="0" width="90" height="340" rx="30" fill="#ffffff" fill-opacity="0.08" />
+    <rect x="134" y="45" width="90" height="295" rx="30" fill="#ffffff" fill-opacity="0.08" />
+    <rect x="268" y="105" width="90" height="235" rx="30" fill="#ffffff" fill-opacity="0.08" />
+  </g>
+
+  <g transform="translate(695 195)">
+    <path d="M73 0h90v38l52 84c30 49-4 111-70 111h-54c-66 0-100-62-70-111l52-84V0z" fill="url(#accent)" filter="url(#glow)" />
+    <path d="M73 38h90" stroke="#fff3e2" stroke-width="10" stroke-linecap="round" />
+    <path d="M50 124c26 18 50 20 79 11 30-9 54-7 82 11" stroke="#fff3e2" stroke-opacity="0.72" stroke-width="10" stroke-linecap="round" />
+  </g>
+
+  <text x="120" y="240" fill="#fff3e2" font-size="72" font-weight="700" font-family="Cormorant Garamond, Georgia, serif">
+    54L<8=> 5;L5
+  </text>
+  <text x="120" y="304" fill="#f5dfc4" font-size="34" font-weight="500" font-family="Inter, Arial, sans-serif">
+    2B>@A:85 A25G8, 75;LO 8 0@B5D0:BK
+  </text>
+  <text x="120" y="350" fill="#d7c6ae" font-size="28" font-family="Inter, Arial, sans-serif">
+    038O 6825B 2 :064>< 87 =0A
+  </text>
+
+  <rect x="120" y="390" width="420" height="5" rx="2.5" fill="url(#accent)" />
+</svg>
