@@ -158,7 +158,12 @@ export default function ProductPage() {
 						)}
 					</div>
 
-					<p className={styles.desc}>{product.description}</p>
+					{product.description ? (
+						<div
+							className={styles.desc}
+							dangerouslySetInnerHTML={{ __html: product.description }}
+						/>
+					) : null}
 
 					<div className={styles.features}>
 						<div className={styles.feature}>
@@ -253,11 +258,9 @@ export default function ProductPage() {
 					</button>
 				</div>
 				<div className={styles.tabContent}>
-					{activeTab === 'description' && (
-						<div>
-							<p>{product.description}</p>
-						</div>
-					)}
+					{activeTab === 'description' && product.description ? (
+						<div dangerouslySetInnerHTML={{ __html: product.description }} />
+					) : null}
 					{activeTab === 'delivery' && (
 						<div>
 							<p>

@@ -146,7 +146,8 @@ productsApi.getProducts({
 productsApi.getProduct('svecha-ritualnaya')
 ```
 
-**Ответ:** `{ data: { id, name, slug, price, old_price, stock, in_stock, images_urls, categories, related, breadcrumbs, ... } }`
+**Ответ:** `{ data: { id, name, slug, price, old_price, stock, in_stock, images_urls, categories, related, breadcrumbs, description, ... } }` — поле `description` приходит как HTML из админки и на `ProductPage` рендерится через `dangerouslySetInnerHTML` (аналогично полю `text` у CMS-страниц в `StaticPage`).
+
 **Использование:** `ProductPage`
 
 ---
