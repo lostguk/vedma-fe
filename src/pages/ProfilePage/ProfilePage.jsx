@@ -29,6 +29,7 @@ import {
 	Breadcrumbs,
 	Button,
 	PageShell,
+	PasswordInput,
 } from '../../components/ui'
 import { useAuth } from '../../context/AuthContext'
 import { useCart } from '../../context/CartContext'
@@ -990,8 +991,7 @@ function TabPassword() {
 			{error && <p className={styles.formError}>{error}</p>}
 			<div className={styles.field}>
 				<label className={styles.fieldLabel}>Текущий пароль</label>
-				<input
-					type='password'
+				<PasswordInput
 					value={form.current}
 					onChange={e => {
 						setForm(p => ({ ...p, current: e.target.value }))
@@ -1004,8 +1004,7 @@ function TabPassword() {
 			<div className={styles.fieldRow2}>
 				<div className={styles.field}>
 					<label className={styles.fieldLabel}>Новый пароль</label>
-					<input
-						type='password'
+					<PasswordInput
 						value={form.newPass}
 						onChange={e => setForm(p => ({ ...p, newPass: e.target.value }))}
 						placeholder='Минимум 8 символов'
@@ -1014,8 +1013,7 @@ function TabPassword() {
 				</div>
 				<div className={styles.field}>
 					<label className={styles.fieldLabel}>Подтвердите пароль</label>
-					<input
-						type='password'
+					<PasswordInput
 						value={form.confirm}
 						onChange={e => setForm(p => ({ ...p, confirm: e.target.value }))}
 						placeholder='Ещё раз'
