@@ -233,18 +233,23 @@ paymentsApi.createPayment({
 })
 ```
 
-**Ответ:** `{ data: { payment_url: "https://alfa-bank.ru/pay/..." } }`
+**Ответ:** `{ data: { payment_url: "https://alfa-bank.ru/pay/...", id: "uuid-public-id", ... } }`
+
+При регистрации платежа в шлюзе бэкенд **дописывает** в `success_url` и `fail_url` query-параметр `payment=<public_id>`, чтобы на страницах возврата можно было вызвать проверку статуса.
+
 **Использование:** `CheckoutPage`, `ProfilePage → TabOrders` (повторная оплата)
 
 ### GET /payments/:publicId/status
 
-Проверка статуса платежа.
+Проверка статуса платежа (запрос в банк и обновление записи в БД).
 
 ```javascript
 paymentsApi.getPaymentStatus('uuid-public-id')
 ```
 
 **Ответ:** `{ data: { id, order_id, status, amount, currency, payment_url, paid_at } }`
+
+**Использование:** `OrderSuccessPage`, `OrderErrorPage` при наличии `?payment=...` в URL после редиректа с банка (короткий poll при статусах `pending` / `registered` / `created`).
 
 ### POST /payments/:publicId/refund
 

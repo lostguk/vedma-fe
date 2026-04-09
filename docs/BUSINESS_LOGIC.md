@@ -36,8 +36,9 @@ Bootstrap (при загрузке приложения):
 ### Защита страниц
 
 Только `ProfilePage` защищён авторизацией:
+
 ```jsx
-if (!isAuthenticated) return <Navigate to="/catalog" replace />
+if (!isAuthenticated) return <Navigate to='/catalog' replace />
 ```
 
 Остальные страницы доступны без авторизации.
@@ -86,10 +87,10 @@ addToCart(product, qty)
    a. POST /order → создаёт заказ
    b. POST /payments → получает payment_url
    c. Redirect на payment_url (Альфа-Банк)
-7. После оплаты:
-   - Успех: redirect на /payment-success → clearCart()
-   - Ошибка: redirect на /payment-error
-8. При ошибке создания платежа:
+7. После оплаты банк редиректит на `/payment-success` или `/payment-error`. В URL бэкенд добавляет `payment=<public_id>` (и при передаче с фронта остаётся `order_id`, если был в `success_url` / `fail_url`).
+8. Страницы `OrderSuccessPage` / `OrderErrorPage` при наличии `payment` вызывают `GET /payments/:publicId/status` (несколько попыток при «висящем» статусе). Только после подтверждения `paid` на успехе очищается корзина; при расхождении URL и факта (успех vs ошибка) выполняется редирект на правильную страницу.
+9. Прямой заход на `/order-success` без `payment` — прежнее поведение: сразу `clearCart()` и праздничный экран без запроса статуса.
+10. При ошибке создания платежа:
    - Баннер с текстом ошибки
    - Кнопка «Повторить оплату»
    - Кнопка «Оплатить позже» → clearCart() + navigate('/profile/orders')
@@ -114,6 +115,7 @@ addToCart(product, qty)
 ### Регистрация при заказе
 
 Для неавторизованных:
+
 - Дополнительные поля: ФИО, email, пароль, подтверждение пароля
 - В `POST /order` передаётся `register: true` + `password`
 - Бэкенд создаёт пользователя + заказ одновременно
@@ -124,10 +126,10 @@ addToCart(product, qty)
 
 ### Поля товара
 
-| Поле | Тип | Описание |
-|------|-----|----------|
-| `stock` | int \| null | Количество на складе. `null` = неограниченно |
-| `in_stock` | boolean | Есть ли товар в наличии |
+| Поле       | Тип         | Описание                                     |
+| ---------- | ----------- | -------------------------------------------- |
+| `stock`    | int \| null | Количество на складе. `null` = неограниченно |
+| `in_stock` | boolean     | Есть ли товар в наличии                      |
 
 ### Логика отображения
 
@@ -163,12 +165,12 @@ addToCart(product, qty)
 
 ### Табы
 
-| Таб | Путь | Описание |
-|-----|------|----------|
-| TabInfo | `/profile` | Редактирование ФИО, телефон (маска), email, адрес (DaData) |
-| TabOrders | `/profile/orders` | История заказов + оплата + повтор заказа |
-| TabChat | `/profile/chat` | Список тем → создание → сообщения с вложениями |
-| TabPassword | `/profile/password` | Смена пароля (текущий + новый) |
+| Таб         | Путь                | Описание                                                   |
+| ----------- | ------------------- | ---------------------------------------------------------- |
+| TabInfo     | `/profile`          | Редактирование ФИО, телефон (маска), email, адрес (DaData) |
+| TabOrders   | `/profile/orders`   | История заказов + оплата + повтор заказа                   |
+| TabChat     | `/profile/chat`     | Список тем → создание → сообщения с вложениями             |
+| TabPassword | `/profile/password` | Смена пароля (текущий + новый)                             |
 
 ### История заказов (TabOrders)
 
@@ -203,11 +205,11 @@ addToCart(product, qty)
 
 3 цветовые палитры:
 
-| ID | Название | Основной цвет |
-|----|----------|--------------|
-| `botanical` | Ботаника | Зелёный #6B7F5E |
-| `amber` | Янтарь | Оранжевый #C2703E |
-| `mystical` | Мистика | Фиолетовый #7B5EA7 |
+| ID          | Название | Основной цвет      |
+| ----------- | -------- | ------------------ |
+| `botanical` | Ботаника | Зелёный #6B7F5E    |
+| `amber`     | Янтарь   | Оранжевый #C2703E  |
+| `mystical`  | Мистика  | Фиолетовый #7B5EA7 |
 
 Переключение: `ThemeSwitcher` в `FloatingPanel` (плавающая кнопка).
 Хранение: `localStorage` ключ `vedmino-theme`.
@@ -218,11 +220,20 @@ addToCart(product, qty)
 ## Уведомления (Toast)
 
 Используется `react-toastify`. Конфигурация в `main.jsx`:
+
 ```jsx
-<ToastContainer position="top-right" autoClose={3000} newestOnTop closeOnClick pauseOnHover theme="colored" />
+<ToastContainer
+	position='top-right'
+	autoClose={3000}
+	newestOnTop
+	closeOnClick
+	pauseOnHover
+	theme='colored'
+/>
 ```
 
 Паттерны использования:
+
 - `toast.success('С возвращением, Анна!')` — при успешном логине (персонализированное)
 - `toast.info('Вы вышли из аккаунта')` — при выходе
 - `toast.error(getApiErrors(err))` — при ошибках API
@@ -232,12 +243,12 @@ addToCart(product, qty)
 
 ## Статические страницы
 
-| Путь | API | Описание |
-|------|-----|----------|
-| `/delivery` | `GET /pages/3` | Доставка и оплата |
-| `/returns` | `GET /pages/4` | Обмен и возврат |
-| `/contacts` | `GET /pages/5` | Контакты |
-| `/privacy` | статичный HTML | Политика конфиденциальности |
-| `/offer` | статичный HTML | Публичная оферта |
+| Путь        | API            | Описание                    |
+| ----------- | -------------- | --------------------------- |
+| `/delivery` | `GET /pages/3` | Доставка и оплата           |
+| `/returns`  | `GET /pages/4` | Обмен и возврат             |
+| `/contacts` | `GET /pages/5` | Контакты                    |
+| `/privacy`  | статичный HTML | Политика конфиденциальности |
+| `/offer`    | статичный HTML | Публичная оферта            |
 
 Контент из API рендерится через `dangerouslySetInnerHTML`.
