@@ -201,6 +201,10 @@
 	box-shadow: 0 4px 16px rgba(var(--color-primary-rgb), 0.25);
 }
 
+.addToCart svg {
+	flex-shrink: 0;
+}
+
 .addToCart:hover:not(:disabled) {
 	background: var(--color-primary-dark);
 	transform: translateY(-1px);
@@ -387,6 +391,18 @@
 
 	.addToCart {
 		width: 100%;
+		max-width: 100%;
+		height: 44px;
+		min-height: 44px;
+		padding: 0 14px;
+		gap: 6px;
+		border-radius: var(--radius-full);
+		font-size: 13px;
+		font-weight: 600;
+		line-height: 1;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
 	}
 
 	.relatedGrid {
@@ -397,5 +413,11 @@
 	.tab {
 		padding: 10px 16px;
 		font-size: var(--text-xs);
+	}
+}
+
+@media (max-width: 390px) {
+	.addToCart {
+		font-size: 12px;
 	}
 }
