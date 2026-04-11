@@ -40,7 +40,7 @@ export default function Footer() {
 						</p>
 						<div className={styles.socials}>
 							<a
-								href='https://t.me/vedminozelie'
+								href='https://t.me/vedmino_zelie'
 								className={styles.social}
 								target='_blank'
 								rel='noopener noreferrer'
@@ -56,7 +56,7 @@ export default function Footer() {
 								</svg>
 							</a>
 							<a
-								href='https://vk.com/vedminozelie'
+								href='https://vk.ru/club234168450'
 								className={styles.social}
 								target='_blank'
 								rel='noopener noreferrer'
@@ -121,7 +121,7 @@ export default function Footer() {
 							info@vedminozelie.ru
 						</a>
 						<a
-							href='https://t.me/vedminozelie'
+							href='https://t.me/vedmino_zelie'
 							className={styles.navLink}
 							target='_blank'
 							rel='noopener noreferrer'
