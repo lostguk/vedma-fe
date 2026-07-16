@@ -333,9 +333,14 @@
 	user-select: none;
 }
 
-.qtyBtn:hover {
+.qtyBtn:hover:not(:disabled) {
 	background: var(--color-primary);
 	color: var(--color-white);
+}
+
+.qtyBtn:disabled {
+	opacity: 0.4;
+	cursor: default;
 }
 
 .qtyVal {

@@ -25,7 +25,7 @@ function formatPrice(n) {
 
 export default function ProductPage() {
 	const { slug } = useParams()
-	const { addToCart } = useCart()
+	const { addToCart, getItemQty } = useCart()
 
 	const [product, setProduct] = useState(null)
 	const [loading, setLoading] = useState(true)
@@ -95,6 +95,13 @@ export default function ProductPage() {
 		: [product.image_url].filter(Boolean)
 	const related = product.related || []
 	const inStock = product.in_stock !== false
+	const stock = typeof product.stock === 'number' ? product.stock : null
+	const inCartQty = getItemQty(productId)
+	// Сколько ещё можно добавить с учётом уже лежащего в корзине (null = без лимита)
+	const maxAddable = stock !== null ? Math.max(0, stock - inCartQty) : null
+	const canAdd = maxAddable === null || maxAddable > 0
+	const effectiveQty =
+		maxAddable !== null ? Math.min(qty, Math.max(1, maxAddable)) : qty
 	const tag = product.is_bestseller
 		? 'Хит продаж'
 		: product.is_new
@@ -191,11 +198,18 @@ export default function ProductPage() {
 									>
 										−
 									</button>
-									<span className={styles.qtyVal}>{qty}</span>
+									<span className={styles.qtyVal}>{effectiveQty}</span>
 									<button
 										type='button'
 										className={styles.qtyBtn}
-										onClick={() => setQty(q => q + 1)}
+										disabled={maxAddable !== null && effectiveQty >= maxAddable}
+										onClick={() =>
+											setQty(q =>
+												maxAddable !== null
+													? Math.min(q + 1, maxAddable)
+													: q + 1,
+											)
+										}
 									>
 										+
 									</button>
@@ -203,9 +217,9 @@ export default function ProductPage() {
 								<button
 									type='button'
 									className={`${styles.addToCart} ${justAdded ? styles.addToCartAdded : ''}`}
-									disabled={justAdded}
+									disabled={justAdded || !canAdd}
 									onClick={() => {
-										addToCart(product, qty)
+										addToCart(product, effectiveQty)
 										setJustAdded(true)
 										if (addedTimerRef.current)
 											window.clearTimeout(addedTimerRef.current)
@@ -221,10 +235,12 @@ export default function ProductPage() {
 											<IconCheck size={18} />
 											Добавлено
 										</>
+									) : !canAdd ? (
+										'Всё в корзине'
 									) : (
 										<>
 											<IconBag size={18} />В корзину —{' '}
-											{formatPrice(product.price * qty)} ₽
+											{formatPrice(product.price * effectiveQty)} ₽
 										</>
 									)}
 								</button>
@@ -233,6 +249,13 @@ export default function ProductPage() {
 							<div className={styles.outOfStock}>Нет в наличии</div>
 						)}
 					</div>
+					{inStock && stock !== null && (
+						<p className={styles.stockHint}>
+							{maxAddable > 0
+								? `На складе: ${stock} шт.${inCartQty > 0 ? ` (в корзине: ${inCartQty})` : ''}`
+								: 'Вы добавили всё доступное количество в корзину'}
+						</p>
+					)}
 				</div>
 			</div>
 

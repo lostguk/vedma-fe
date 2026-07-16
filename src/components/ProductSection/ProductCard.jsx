@@ -40,6 +40,8 @@ export default function ProductCard({ product }) {
 	const qty = getItemQty(productId)
 	const inCart = qty > 0
 	const inStock = product.in_stock !== false
+	const stock = typeof product.stock === 'number' ? product.stock : null
+	const atStockLimit = stock !== null && qty >= stock
 	const oldPrice = getOldPrice(product)
 	const discount = oldPrice
 		? Math.round((1 - product.price / oldPrice) * 100)
@@ -110,7 +112,13 @@ export default function ProductCard({ product }) {
 								−
 							</button>
 							<span className={styles.qtyVal}>{qty}</span>
-							<button type='button' className={styles.qtyBtn} onClick={inc}>
+							<button
+								type='button'
+								className={styles.qtyBtn}
+								onClick={inc}
+								disabled={atStockLimit}
+								title={atStockLimit ? 'Больше нет в наличии' : undefined}
+							>
 								+
 							</button>
 						</div>
