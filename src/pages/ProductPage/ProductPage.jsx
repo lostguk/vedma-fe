@@ -273,12 +273,12 @@ export default function ProductPage() {
 					>
 						Доставка
 					</button>
-					<button
-						className={`${styles.tab} ${activeTab === 'reviews' ? styles.tabActive : ''}`}
-						onClick={() => setActiveTab('reviews')}
-					>
-						Отзывы
-					</button>
+					{/*<button*/}
+					{/*	className={`${styles.tab} ${activeTab === 'reviews' ? styles.tabActive : ''}`}*/}
+					{/*	onClick={() => setActiveTab('reviews')}*/}
+					{/*>*/}
+					{/*	Отзывы*/}
+					{/*</button>*/}
 				</div>
 				<div className={styles.tabContent}>
 					{activeTab === 'description' && product.description ? (
