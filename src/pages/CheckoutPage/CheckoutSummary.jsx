@@ -99,7 +99,7 @@ export default function CheckoutSummary({
 									? deliveryPrice === 0
 										? 'Бесплатно'
 										: `${Number(deliveryPrice).toLocaleString('ru-RU')} ₽`
-									: 'Укажите адрес'}
+									: 'Укажите полный адрес'}
 						</span>
 					</div>
 					{discountAmount > 0 && (

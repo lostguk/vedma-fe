@@ -213,8 +213,11 @@ export default function CheckoutContactSection({
 				</div>
 			)}
 
-			<label className={styles.consent}>
+			<label
+				className={`${styles.consent} ${errors.consent ? styles.consentError : ''}`}
+			>
 				<input
+					id='co-consent'
 					type='checkbox'
 					checked={consent}
 					onChange={e => onConsentChange(e.target.checked)}

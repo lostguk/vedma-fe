@@ -33,6 +33,11 @@ import {
 } from '../../components/ui'
 import { useAuth } from '../../context/AuthContext'
 import { useCart } from '../../context/CartContext'
+import {
+	ADDRESS_INCOMPLETE_MESSAGE,
+	getAddressValidationError,
+	isDeliverableAddress,
+} from '../../utils/address'
 import styles from './ProfilePage.module.css'
 
 const TABS = [
@@ -60,12 +65,6 @@ function getApiErrors(error) {
 }
 
 /* ── TabInfo ── */
-function isFullAddress(dadataItem) {
-	if (!dadataItem?.data) return false
-	const { street, house, city, settlement } = dadataItem.data
-	return Boolean(street && house && (city || settlement))
-}
-
 function TabInfo({ user, updateProfile }) {
 	const [form, setForm] = useState({
 		lastName: user.last_name || '',
@@ -103,7 +102,10 @@ function TabInfo({ user, updateProfile }) {
 		setSaved(false)
 		if (dadataItem) {
 			setAddressData(dadataItem)
-			setAddressConfirmed(true)
+			setAddressConfirmed(isDeliverableAddress(dadataItem))
+			if (!isDeliverableAddress(dadataItem)) {
+				setAddressError(ADDRESS_INCOMPLETE_MESSAGE)
+			}
 		} else {
 			setAddressConfirmed(false)
 			setAddressData(null)
@@ -112,8 +114,13 @@ function TabInfo({ user, updateProfile }) {
 
 	const handleAddressSelect = dadataItem => {
 		setAddressData(dadataItem)
-		setAddressConfirmed(true)
-		setAddressError('')
+		if (isDeliverableAddress(dadataItem)) {
+			setAddressConfirmed(true)
+			setAddressError('')
+		} else {
+			setAddressConfirmed(false)
+			setAddressError(ADDRESS_INCOMPLETE_MESSAGE)
+		}
 	}
 
 	const handleSave = async e => {
@@ -130,12 +137,13 @@ function TabInfo({ user, updateProfile }) {
 			setAddressError('Укажите адрес доставки')
 			return
 		}
-		if (!addressConfirmed) {
-			setAddressError('Выберите адрес из подсказок')
-			return
-		}
-		if (addressData && !isFullAddress(addressData)) {
-			setAddressError('Укажите полный адрес: город, улица и дом')
+		const addressErr = getAddressValidationError({
+			address: form.address,
+			addressConfirmed,
+			addressData,
+		})
+		if (addressErr) {
+			setAddressError(addressErr)
 			return
 		}
 

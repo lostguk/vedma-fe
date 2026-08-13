@@ -28,15 +28,14 @@ import { PageShell, Breadcrumbs } from '../../components/ui'
 import styles from './NewPage.module.css'
 
 export default function NewPage() {
-  return (
-    <PageShell>
-      <Breadcrumbs items={[
-        { label: 'Главная', to: '/' },
-        { label: 'Новая страница' }
-      ]} />
-      <h1 className={styles.title}>Новая страница</h1>
-    </PageShell>
-  )
+	return (
+		<PageShell>
+			<Breadcrumbs
+				items={[{ label: 'Главная', to: '/' }, { label: 'Новая страница' }]}
+			/>
+			<h1 className={styles.title}>Новая страница</h1>
+		</PageShell>
+	)
 }
 ```
 
@@ -46,12 +45,13 @@ export default function NewPage() {
 import NewPage from './pages/NewPage/NewPage'
 
 // Внутри <Routes>:
-<Route path="/new-page" element={<NewPage />} />
+;<Route path='/new-page' element={<NewPage />} />
 ```
 
 ### 3. (Опционально) Добавить в навигацию
 
 В `Header.jsx` → массив `navLinks`:
+
 ```javascript
 { label: 'Новая', to: '/new-page' }
 ```
@@ -67,7 +67,7 @@ import NewPage from './pages/NewPage/NewPage'
 import apiClient from './client'
 
 export function getProductReviews(slug) {
-  return apiClient.get(`/products/${slug}/reviews`)
+	return apiClient.get(`/products/${slug}/reviews`)
 }
 ```
 
@@ -84,12 +84,12 @@ export * as reviewsApi from './reviews'
 import { getProductReviews } from '../../api/products'
 
 useEffect(() => {
-  getProductReviews(slug)
-    .then(res => {
-      const reviews = res.data?.data ?? res.data
-      setReviews(Array.isArray(reviews) ? reviews : [])
-    })
-    .catch(() => setReviews([]))
+	getProductReviews(slug)
+		.then(res => {
+			const reviews = res.data?.data ?? res.data
+			setReviews(Array.isArray(reviews) ? reviews : [])
+		})
+		.catch(() => setReviews([]))
 }, [slug])
 ```
 
@@ -129,27 +129,27 @@ const [form, setForm] = useState({ name: '', email: '' })
 const [errors, setErrors] = useState({})
 
 const setField = (key, value) => {
-  setForm(prev => ({ ...prev, [key]: value }))
-  if (errors[key]) setErrors(prev => ({ ...prev, [key]: '' }))
+	setForm(prev => ({ ...prev, [key]: value }))
+	if (errors[key]) setErrors(prev => ({ ...prev, [key]: '' }))
 }
 
 const validate = () => {
-  const e = {}
-  if (!form.name.trim()) e.name = 'Обязательное поле'
-  if (!form.email.trim()) e.email = 'Введите email'
-  setErrors(e)
-  return Object.keys(e).length === 0
+	const e = {}
+	if (!form.name.trim()) e.name = 'Обязательное поле'
+	if (!form.email.trim()) e.email = 'Введите email'
+	setErrors(e)
+	return Object.keys(e).length === 0
 }
 
-const handleSubmit = async (ev) => {
-  ev.preventDefault()
-  if (!validate()) return
-  try {
-    await apiCall(form)
-    toast.success('Сохранено')
-  } catch (err) {
-    toast.error(getApiErrors(err))
-  }
+const handleSubmit = async ev => {
+	ev.preventDefault()
+	if (!validate()) return
+	try {
+		await apiCall(form)
+		toast.success('Сохранено')
+	} catch (err) {
+		toast.error(getApiErrors(err))
+	}
 }
 ```
 
@@ -159,10 +159,10 @@ const handleSubmit = async (ev) => {
 
 ```javascript
 function getApiErrors(error) {
-  if (error.response?.data?.errors) {
-    return Object.values(error.response.data.errors).flat().join('. ')
-  }
-  return error.response?.data?.message || 'Произошла ошибка'
+	if (error.response?.data?.errors) {
+		return Object.values(error.response.data.errors).flat().join('. ')
+	}
+	return error.response?.data?.message || 'Произошла ошибка'
 }
 ```
 
@@ -174,22 +174,22 @@ function getApiErrors(error) {
 
 ```javascript
 function formatPhone(raw) {
-  let v = raw.replace(/[^\d+() -]/g, '')
-  if (v && !v.startsWith('+7')) {
-    const digits = v.replace(/\D/g, '')
-    if (digits.startsWith('8')) v = '+7' + digits.slice(1)
-    else if (digits.startsWith('7')) v = '+' + digits
-    else v = '+7' + digits
-  }
-  const digits = v.replace(/\D/g, '').slice(0, 11)
-  if (digits.length <= 1) return digits.length ? '+7' : ''
-  let f = '+7'
-  if (digits.length > 1) f += ' (' + digits.slice(1, 4)
-  if (digits.length >= 4) f += ') '
-  if (digits.length > 4) f += digits.slice(4, 7)
-  if (digits.length > 7) f += '-' + digits.slice(7, 9)
-  if (digits.length > 9) f += '-' + digits.slice(9, 11)
-  return f
+	let v = raw.replace(/[^\d+() -]/g, '')
+	if (v && !v.startsWith('+7')) {
+		const digits = v.replace(/\D/g, '')
+		if (digits.startsWith('8')) v = '+7' + digits.slice(1)
+		else if (digits.startsWith('7')) v = '+' + digits
+		else v = '+7' + digits
+	}
+	const digits = v.replace(/\D/g, '').slice(0, 11)
+	if (digits.length <= 1) return digits.length ? '+7' : ''
+	let f = '+7'
+	if (digits.length > 1) f += ' (' + digits.slice(1, 4)
+	if (digits.length >= 4) f += ') '
+	if (digits.length > 4) f += digits.slice(4, 7)
+	if (digits.length > 7) f += '-' + digits.slice(7, 9)
+	if (digits.length > 9) f += '-' + digits.slice(9, 11)
+	return f
 }
 ```
 
@@ -202,6 +202,12 @@ function formatPhone(raw) {
 ```jsx
 import { AddressInput } from '../../components/ui'
 
+import {
+  getAddressValidationError,
+  isDeliverableAddress,
+  ADDRESS_INCOMPLETE_MESSAGE,
+} from '../../utils/address'
+
 const [address, setAddress] = useState('')
 const [addressData, setAddressData] = useState(null)
 const [addressConfirmed, setAddressConfirmed] = useState(false)
@@ -212,7 +218,10 @@ const handleAddressChange = (text, dadataItem) => {
   setAddressError('')
   if (dadataItem) {
     setAddressData(dadataItem)
-    setAddressConfirmed(true)
+    setAddressConfirmed(isDeliverableAddress(dadataItem))
+    if (!isDeliverableAddress(dadataItem)) {
+      setAddressError(ADDRESS_INCOMPLETE_MESSAGE)
+    }
   } else {
     setAddressConfirmed(false)
     setAddressData(null)
@@ -221,13 +230,20 @@ const handleAddressChange = (text, dadataItem) => {
 
 const handleAddressSelect = (dadataItem) => {
   setAddressData(dadataItem)
-  setAddressConfirmed(true)
-  setAddressError('')
+  if (isDeliverableAddress(dadataItem)) {
+    setAddressConfirmed(true)
+    setAddressError('')
+  } else {
+    setAddressConfirmed(false)
+    setAddressError(ADDRESS_INCOMPLETE_MESSAGE)
+  }
 }
 
-// Валидация:
-if (!address.trim()) setAddressError('Укажите адрес')
-else if (!addressConfirmed) setAddressError('Выберите адрес из подсказок')
+const addressErrorText = getAddressValidationError({
+  address,
+  addressConfirmed,
+  addressData,
+})
 
 // JSX:
 <AddressInput
@@ -235,7 +251,7 @@ else if (!addressConfirmed) setAddressError('Выберите адрес из п
   onChange={handleAddressChange}
   onSelect={handleAddressSelect}
   placeholder="Начните вводить адрес..."
-  error={addressError}
+  error={addressErrorText}
 />
 ```
 
@@ -246,25 +262,28 @@ else if (!addressConfirmed) setAddressError('Выберите адрес из п
 ### Пример: добавить метод в AuthContext
 
 1. Создать API-функцию в `api/auth.js`:
+
 ```javascript
 export function newAction(data) {
-  return apiClient.post('/new-action', data)
+	return apiClient.post('/new-action', data)
 }
 ```
 
 2. Добавить метод в `AuthContext.jsx`:
+
 ```javascript
-const newAction = useCallback(async (data) => {
-  const res = await authApi.newAction(data)
-  return res.data
+const newAction = useCallback(async data => {
+	const res = await authApi.newAction(data)
+	return res.data
 }, [])
 ```
 
 3. Добавить в `value` useMemo и deps:
+
 ```javascript
 const value = useMemo(
-  () => ({ ...existing, newAction }),
-  [...existingDeps, newAction]
+	() => ({ ...existing, newAction }),
+	[...existingDeps, newAction],
 )
 ```
 
@@ -311,11 +330,13 @@ addToCart(product, 1)
 ```jsx
 const inStock = product.in_stock !== false
 
-{inStock ? (
-  <button onClick={() => addToCart(product)}>Купить</button>
-) : (
-  <span>Нет в наличии</span>
-)}
+{
+	inStock ? (
+		<button onClick={() => addToCart(product)}>Купить</button>
+	) : (
+		<span>Нет в наличии</span>
+	)
+}
 ```
 
 ---
@@ -325,17 +346,17 @@ const inStock = product.in_stock !== false
 Хук `usePromoCode` в `CheckoutPage/usePromoCode.js`:
 
 ```jsx
-const promo = usePromoCode(items)  // items из CartContext
+const promo = usePromoCode(items) // items из CartContext
 
 // Свойства:
-promo.promoInput        // строка ввода
-promo.setPromoInput     // сеттер
-promo.promoApplied      // { code, description } | null
-promo.promoApplying     // boolean (загрузка)
-promo.promoError        // строка ошибки
-promo.applyPromo()      // применить промокод
-promo.removePromo()     // убрать промокод
-promo.calcResult        // результат POST /order/calculate
+promo.promoInput // строка ввода
+promo.setPromoInput // сеттер
+promo.promoApplied // { code, description } | null
+promo.promoApplying // boolean (загрузка)
+promo.promoError // строка ошибки
+promo.applyPromo() // применить промокод
+promo.removePromo() // убрать промокод
+promo.calcResult // результат POST /order/calculate
 ```
 
 Статусы от бэкенда: `applied`, `not_exists`, `not_applied`.
@@ -346,12 +367,12 @@ promo.calcResult        // результат POST /order/calculate
 
 ```javascript
 const STATUS_MAP = {
-  new:             { label: 'Новый' },
-  payment_pending: { label: 'Ожидает оплату' },
-  paid:            { label: 'Оплачен' },
-  payment_failed:  { label: 'Ошибка оплаты' },
-  refunded:        { label: 'Возврат' },
-  cancelled:       { label: 'Отменён' },
+	new: { label: 'Новый' },
+	payment_pending: { label: 'Ожидает оплату' },
+	paid: { label: 'Оплачен' },
+	payment_failed: { label: 'Ошибка оплаты' },
+	refunded: { label: 'Возврат' },
+	cancelled: { label: 'Отменён' },
 }
 
 const PAYABLE_STATUSES = ['new', 'payment_pending', 'payment_failed']
