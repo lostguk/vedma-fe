@@ -117,18 +117,6 @@ export default function CatalogPage() {
 				setCategories(Array.isArray(data) ? data : [])
 			})
 			.catch(() => setCategories([]))
-
-		getProducts({ per_page: 100, sort: 'price_asc' })
-			.then(res => {
-				const items = res.data?.data || []
-				if (items.length) {
-					const prices = items.map(p => p.price).filter(Boolean)
-					setMinPrice(Math.floor(Math.min(...prices) / 100) * 100)
-					setMaxPrice(Math.ceil(Math.max(...prices) / 100) * 100)
-					setPriceRangeReady(true)
-				}
-			})
-			.catch(() => {})
 	}, [])
 
 	useEffect(() => {
@@ -146,15 +134,17 @@ export default function CatalogPage() {
 				setProducts(items)
 				setTotal(raw.meta?.total ?? items.length ?? 0)
 				setTotalPages(raw.meta?.last_page ?? 1)
-				if (!priceRangeReady && items.length) {
-					const prices = items.map(p => p.price).filter(Boolean)
-					if (prices.length) {
-						const min = Math.floor(Math.min(...prices) / 100) * 100
-						const max = Math.ceil(Math.max(...prices) / 100) * 100
-						setMinPrice(min)
-						setMaxPrice(max)
-						setPriceRangeReady(true)
-					}
+
+				const priceMin = raw.meta?.price_min
+				const priceMax = raw.meta?.price_max
+				if (priceMin != null) {
+					setMinPrice(Math.floor(Number(priceMin) / 100) * 100)
+				}
+				if (priceMax != null) {
+					setMaxPrice(Math.ceil(Number(priceMax) / 100) * 100)
+				}
+				if (priceMin != null || priceMax != null) {
+					setPriceRangeReady(true)
 				}
 			})
 			.catch(() => {

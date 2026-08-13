@@ -132,7 +132,7 @@ productsApi.getProducts({
 ```json
 {
   "data": [{ product... }],
-  "meta": { "total": 42, "last_page": 2, "current_page": 1, "per_page": 30 }
+  "meta": { "total": 42, "last_page": 2, "current_page": 1, "per_page": 30, "price_min": 80, "price_max": 8000 }
 }
 ```
 
