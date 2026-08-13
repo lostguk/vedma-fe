@@ -115,7 +115,7 @@ authApi.resendVerification(email)
 ```javascript
 productsApi.getProducts({
 	page: 1,
-	per_page: 9,
+	per_page: 30,
 	sort: 'created_at_desc', // price_asc, price_desc, name_asc
 	category: 'slug',
 	search: 'query',
@@ -132,7 +132,7 @@ productsApi.getProducts({
 ```json
 {
   "data": [{ product... }],
-  "meta": { "total": 42, "last_page": 5, "current_page": 1, "per_page": 9 }
+  "meta": { "total": 42, "last_page": 2, "current_page": 1, "per_page": 30 }
 }
 ```
 
