@@ -1,626 +1,721 @@
 .header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 100;
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	z-index: 100;
 }
 
 /* ===== Row 1: Top bar ===== */
 .topBar {
-  background: var(--color-footer-bg);
-  height: 36px;
-  display: flex;
-  align-items: center;
+	background: var(--color-footer-bg);
+	height: 36px;
+	display: flex;
+	align-items: center;
 }
 
 .topBarInner {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: var(--space-lg);
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	gap: var(--space-lg);
 }
 
 .topBarLink,
 .topBarText {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  font-size: 0.75rem;
-  color: rgba(255, 255, 255, 0.55);
-  transition: color var(--transition-fast);
+	display: inline-flex;
+	align-items: center;
+	gap: 5px;
+	font-size: 0.75rem;
+	color: rgba(255, 255, 255, 0.55);
+	transition: color var(--transition-fast);
 }
 
 a.topBarLink:hover {
-  color: var(--color-primary-light);
+	color: var(--color-primary-light);
 }
 
 .topBarDot {
-  color: rgba(255, 255, 255, 0.15);
+	color: rgba(255, 255, 255, 0.15);
 }
 
 /* ===== Row 2: Logo + Navigation ===== */
 .midBar {
-  background: var(--color-bg);
-  height: 64px;
-  display: flex;
-  align-items: center;
-  border-bottom: 1px solid var(--color-border);
-  transition: box-shadow var(--transition-base), background var(--transition-base);
+	background: var(--color-bg);
+	height: 64px;
+	display: flex;
+	align-items: center;
+	border-bottom: 1px solid var(--color-border);
+	transition:
+		box-shadow var(--transition-base),
+		background var(--transition-base);
 }
 
 .midBarSticky {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 101;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  box-shadow: 0 2px 20px rgba(var(--color-primary-rgb), 0.08);
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	z-index: 101;
+	background: rgba(255, 255, 255, 0.95);
+	backdrop-filter: blur(14px);
+	-webkit-backdrop-filter: blur(14px);
+	box-shadow: 0 2px 20px rgba(var(--color-primary-rgb), 0.08);
 }
 
 .midBarInner {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
 }
 
 .logo {
-  display: flex;
-  align-items: baseline;
-  gap: 7px;
-  flex-shrink: 0;
+	display: flex;
+	align-items: baseline;
+	gap: 7px;
+	flex-shrink: 0;
 }
 
 .logoMain {
-  font-family: var(--font-heading);
-  font-size: 1.55rem;
-  font-weight: 600;
-  color: var(--color-text);
-  line-height: 1;
+	font-family: var(--font-heading);
+	font-size: 1.55rem;
+	font-weight: 600;
+	color: var(--color-text);
+	line-height: 1;
 }
 
 .logoAccent {
-  font-family: var(--font-heading);
-  font-size: 1.55rem;
-  font-weight: 500;
-  font-style: italic;
-  color: var(--color-primary);
-  line-height: 1;
+	font-family: var(--font-heading);
+	font-size: 1.55rem;
+	font-weight: 500;
+	font-style: italic;
+	color: var(--color-primary);
+	line-height: 1;
 }
 
 .midNav {
-  display: flex;
-  align-items: center;
-  gap: 0;
+	display: flex;
+	align-items: center;
+	gap: 0;
 }
 
 .midNavLink {
-  padding: 8px 16px;
-  font-size: var(--text-sm);
-  font-weight: 500;
-  color: var(--color-text-light);
-  white-space: nowrap;
-  text-decoration: none;
-  transition: color var(--transition-fast);
-  letter-spacing: 0.01em;
+	padding: 8px 16px;
+	font-size: var(--text-sm);
+	font-weight: 500;
+	color: var(--color-text-light);
+	white-space: nowrap;
+	text-decoration: none;
+	transition: color var(--transition-fast);
+	letter-spacing: 0.01em;
 }
 
 .midNavLink:hover {
-  color: var(--color-primary);
+	color: var(--color-primary);
 }
 
 .midNavLinkActive {
-  color: var(--color-primary);
-  font-weight: 600;
-  background: rgba(var(--color-primary-rgb), 0.1);
-  border-radius: var(--radius-full);
+	color: var(--color-primary);
+	font-weight: 600;
+	background: rgba(var(--color-primary-rgb), 0.1);
+	border-radius: var(--radius-full);
 }
 
 /* Burger */
 .burger {
-  display: none;
-  flex-direction: column;
-  gap: 5px;
-  width: 26px;
-  padding: 4px 0;
-  z-index: 120;
-  cursor: pointer;
+	display: none;
+	flex-direction: column;
+	gap: 5px;
+	width: 26px;
+	padding: 4px 0;
+	z-index: 120;
+	cursor: pointer;
 }
 
 .burger span {
-  display: block;
-  width: 100%;
-  height: 2px;
-  background: var(--color-text);
-  border-radius: 2px;
-  transition: transform var(--transition-base), opacity var(--transition-fast);
-  transform-origin: center;
+	display: block;
+	width: 100%;
+	height: 2px;
+	background: var(--color-text);
+	border-radius: 2px;
+	transition:
+		transform var(--transition-base),
+		opacity var(--transition-fast);
+	transform-origin: center;
 }
 
-.burgerOpen span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-.burgerOpen span:nth-child(2) { opacity: 0; }
-.burgerOpen span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+.burgerOpen span:nth-child(1) {
+	transform: translateY(7px) rotate(45deg);
+}
+.burgerOpen span:nth-child(2) {
+	opacity: 0;
+}
+.burgerOpen span:nth-child(3) {
+	transform: translateY(-7px) rotate(-45deg);
+}
 
 /* ===== Row 3: Catalog + Login/Cart ===== */
 .catBar {
-  background: var(--color-bg);
-  border-bottom: 1px solid var(--color-border);
-  transition: transform var(--transition-base), opacity var(--transition-base);
+	background: var(--color-bg);
+	border-bottom: 1px solid var(--color-border);
+	transition:
+		transform var(--transition-base),
+		opacity var(--transition-base);
 }
 
 .catBarSticky {
-  position: fixed;
-  top: 64px;
-  left: 0;
-  right: 0;
-  z-index: 100;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+	position: fixed;
+	top: 64px;
+	left: 0;
+	right: 0;
+	z-index: 100;
+	background: rgba(255, 255, 255, 0.95);
+	backdrop-filter: blur(14px);
+	-webkit-backdrop-filter: blur(14px);
 }
 
 .catBarInner {
-  position: relative;
-  display: flex;
-  align-items: center;
-  gap: var(--space-md);
-  height: 48px;
+	position: relative;
+	display: flex;
+	align-items: center;
+	gap: var(--space-md);
+	height: 48px;
 }
 
 .catToggle {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 7px 18px;
-  background: var(--color-primary);
-  color: var(--color-white);
-  font-size: var(--text-sm);
-  font-weight: 600;
-  letter-spacing: 0.02em;
-  border-radius: var(--radius-full);
-  cursor: pointer;
-  transition: background var(--transition-fast);
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	padding: 7px 18px;
+	background: var(--color-primary);
+	color: var(--color-white);
+	font-size: var(--text-sm);
+	font-weight: 600;
+	letter-spacing: 0.02em;
+	border-radius: var(--radius-full);
+	cursor: pointer;
+	transition: background var(--transition-fast);
 }
 
 .catToggle:hover {
-  background: var(--color-primary-dark);
+	background: var(--color-primary-dark);
 }
 
 .catToggleOpen {
-  background: var(--color-primary-dark);
+	background: var(--color-primary-dark);
 }
 
 .catArrow {
-  transition: transform var(--transition-fast);
+	transition: transform var(--transition-fast);
 }
 
 .catArrowOpen {
-  transform: rotate(180deg);
+	transform: rotate(180deg);
 }
 
 /* Search in row 3 */
 .catBarCenter {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+	flex: 1;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
 .searchWrap {
-  position: relative;
-  width: 100%;
-  max-width: 400px;
+	position: relative;
+	width: 100%;
+	max-width: 400px;
 }
 
 .searchInput {
-  width: 100%;
-  padding: 7px 40px 7px 16px;
-  border-radius: var(--radius-full);
-  font-size: var(--text-sm);
-  background-color: var(--color-bg-alt);
+	width: 100%;
+	padding: 7px 40px 7px 16px;
+	border-radius: var(--radius-full);
+	font-size: var(--text-sm);
+	background-color: var(--color-bg-alt);
+	appearance: none;
+	-webkit-appearance: none;
+}
+
+.searchInput::-webkit-search-decoration,
+.searchInput::-webkit-search-cancel-button,
+.searchInput::-webkit-search-results-button,
+.searchInput::-webkit-search-results-decoration {
+	-webkit-appearance: none;
+	appearance: none;
 }
 
 .searchInput:hover {
-  background-color: var(--color-bg-alt);
+	background-color: var(--color-bg-alt);
 }
 
 .searchInput:focus {
-  background-color: var(--color-white);
+	background-color: var(--color-white);
 }
 
 .searchSubmit {
-  position: absolute;
-  right: 4px;
-  top: 50%;
-  transform: translateY(-50%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  background: var(--color-primary);
-  border: none;
-  color: var(--color-white);
-  cursor: pointer;
-  transition: background var(--transition-fast), transform var(--transition-fast);
+	position: absolute;
+	right: 4px;
+	top: 50%;
+	transform: translateY(-50%);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 28px;
+	height: 28px;
+	border-radius: 50%;
+	background: var(--color-primary);
+	border: none;
+	color: var(--color-white);
+	cursor: pointer;
+	transition:
+		background var(--transition-fast),
+		transform var(--transition-fast);
 }
 
 .searchSubmit:hover {
-  background: var(--color-primary-dark);
-  transform: translateY(-50%) scale(1.08);
+	background: var(--color-primary-dark);
+	transform: translateY(-50%) scale(1.08);
 }
 
 .searchClear {
-  flex-shrink: 0;
-  margin-left: 6px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  color: var(--color-text-muted);
-  cursor: pointer;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity var(--transition-fast), background var(--transition-fast), color var(--transition-fast);
+	flex-shrink: 0;
+	margin-left: 6px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 22px;
+	height: 22px;
+	border-radius: 50%;
+	color: var(--color-text-muted);
+	cursor: pointer;
+	opacity: 0;
+	pointer-events: none;
+	transition:
+		opacity var(--transition-fast),
+		background var(--transition-fast),
+		color var(--transition-fast);
 }
 
 .searchClearVisible {
-  opacity: 1;
-  pointer-events: auto;
+	opacity: 1;
+	pointer-events: auto;
 }
 
 .searchClear:hover {
-  background: var(--color-bg-section);
-  color: var(--color-text);
+	background: var(--color-bg-section);
+	color: var(--color-text);
 }
 
 /* Actions in row 3 */
 .catBarActions {
-  display: flex;
-  align-items: center;
-  gap: 4px;
+	display: flex;
+	align-items: center;
+	gap: 4px;
 }
 
 .actionBtn {
-  position: relative;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 8px 16px;
-  border-radius: var(--radius-full);
-  color: var(--color-text-light);
-  cursor: pointer;
-  transition: color var(--transition-fast), background var(--transition-fast);
-  font-size: var(--text-sm);
-  text-decoration: none;
-  border: none;
-  background: transparent;
-  font-family: inherit;
+	position: relative;
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	padding: 8px 16px;
+	border-radius: var(--radius-full);
+	color: var(--color-text-light);
+	cursor: pointer;
+	transition:
+		color var(--transition-fast),
+		background var(--transition-fast);
+	font-size: var(--text-sm);
+	text-decoration: none;
+	border: none;
+	background: transparent;
+	font-family: inherit;
 }
 
 .actionBtn:hover {
-  color: var(--color-primary);
-  background: rgba(var(--color-primary-rgb), 0.06);
+	color: var(--color-primary);
+	background: rgba(var(--color-primary-rgb), 0.06);
 }
 
 .actionLabel {
-  font-weight: 500;
+	font-weight: 500;
 }
 
 .actionBadge {
-  position: absolute;
-  top: 0;
-  right: 6px;
-  min-width: 17px;
-  height: 17px;
-  padding: 0 4px;
-  border-radius: 9px;
-  background: var(--color-primary);
-  color: var(--color-white);
-  font-size: 0.6rem;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 2px 6px rgba(var(--color-primary-rgb), 0.3);
-  transition: transform 0.2s ease;
+	position: absolute;
+	top: 0;
+	right: 6px;
+	min-width: 17px;
+	height: 17px;
+	padding: 0 4px;
+	border-radius: 9px;
+	background: var(--color-primary);
+	color: var(--color-white);
+	font-size: 0.6rem;
+	font-weight: 700;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	box-shadow: 0 2px 6px rgba(var(--color-primary-rgb), 0.3);
+	transition: transform 0.2s ease;
 }
 
 .actionBadgeBump {
-  animation: cartBadgeBump 0.45s ease;
+	animation: cartBadgeBump 0.45s ease;
 }
 
 @keyframes cartBadgeBump {
-  0% {
-    transform: scale(1);
-  }
-  35% {
-    transform: scale(1.25);
-  }
-  70% {
-    transform: scale(0.92);
-  }
-  100% {
-    transform: scale(1);
-  }
+	0% {
+		transform: scale(1);
+	}
+	35% {
+		transform: scale(1.25);
+	}
+	70% {
+		transform: scale(0.92);
+	}
+	100% {
+		transform: scale(1);
+	}
 }
 
 /* Catalog dropdown */
 .catDropdown {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  min-width: 280px;
-  padding: 8px 0;
-  background: var(--color-white);
-  border: 1px solid var(--color-border);
-  border-top: 2px solid var(--color-primary);
-  border-radius: 0 var(--radius-md) var(--radius-md) var(--radius-md);
-  box-shadow: var(--shadow-lg);
-  z-index: 200;
-  animation: dropIn 0.2s ease;
+	position: absolute;
+	top: 100%;
+	left: 0;
+	min-width: 280px;
+	padding: 8px 0;
+	background: var(--color-white);
+	border: 1px solid var(--color-border);
+	border-top: 2px solid var(--color-primary);
+	border-radius: 0 var(--radius-md) var(--radius-md) var(--radius-md);
+	box-shadow: var(--shadow-lg);
+	z-index: 200;
+	animation: dropIn 0.2s ease;
 }
 
 .catItem {
-  position: relative;
+	position: relative;
 }
 
 .catDropdownLink {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px 20px;
-  font-size: var(--text-sm);
-  color: var(--color-text);
-  transition: background var(--transition-fast), color var(--transition-fast),
-    padding-left var(--transition-fast);
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 10px 20px;
+	font-size: var(--text-sm);
+	color: var(--color-text);
+	transition:
+		background var(--transition-fast),
+		color var(--transition-fast),
+		padding-left var(--transition-fast);
 }
 
 .catDropdownLink:hover {
-  background: rgba(var(--color-primary-rgb), 0.05);
-  color: var(--color-primary);
-  padding-left: 24px;
+	background: rgba(var(--color-primary-rgb), 0.05);
+	color: var(--color-primary);
+	padding-left: 24px;
 }
 
 .catSubArrow {
-  opacity: 0.35;
-  transition: opacity var(--transition-fast), transform var(--transition-fast);
+	opacity: 0.35;
+	transition:
+		opacity var(--transition-fast),
+		transform var(--transition-fast);
 }
 
 .catDropdownLink:hover .catSubArrow {
-  opacity: 0.7;
-  transform: translateX(2px);
+	opacity: 0.7;
+	transform: translateX(2px);
 }
 
 .catSubmenu {
-  position: absolute;
-  left: 100%;
-  top: 0;
-  min-width: 240px;
-  padding: 8px 0;
-  background: var(--color-white);
-  border: 1px solid var(--color-border);
-  border-left: 2px solid var(--color-primary);
-  border-radius: 0 var(--radius-md) var(--radius-md) 0;
-  box-shadow: var(--shadow-lg);
-  z-index: 201;
-  animation: dropIn 0.15s ease;
+	position: absolute;
+	left: 100%;
+	top: 0;
+	min-width: 240px;
+	padding: 8px 0;
+	background: var(--color-white);
+	border: 1px solid var(--color-border);
+	border-left: 2px solid var(--color-primary);
+	border-radius: 0 var(--radius-md) var(--radius-md) 0;
+	box-shadow: var(--shadow-lg);
+	z-index: 201;
+	animation: dropIn 0.15s ease;
 }
 
 .catSubmenuLink {
-  display: block;
-  padding: 9px 20px;
-  font-size: var(--text-sm);
-  color: var(--color-text);
-  transition: background var(--transition-fast), color var(--transition-fast),
-    padding-left var(--transition-fast);
+	display: block;
+	padding: 9px 20px;
+	font-size: var(--text-sm);
+	color: var(--color-text);
+	transition:
+		background var(--transition-fast),
+		color var(--transition-fast),
+		padding-left var(--transition-fast);
 }
 
 .catSubmenuLink:hover {
-  background: rgba(var(--color-primary-rgb), 0.05);
-  color: var(--color-primary);
-  padding-left: 24px;
+	background: rgba(var(--color-primary-rgb), 0.05);
+	color: var(--color-primary);
+	padding-left: 24px;
 }
 
 @keyframes dropIn {
-  from { opacity: 0; transform: translateY(-6px); }
-  to { opacity: 1; transform: translateY(0); }
+	from {
+		opacity: 0;
+		transform: translateY(-6px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
 }
 
 /* ===== Mobile overlay ===== */
 .mobileNav {
-  position: fixed;
-  inset: 0;
-  z-index: 110;
-  background: var(--color-bg);
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity var(--transition-base), visibility var(--transition-base);
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
+	position: fixed;
+	inset: 0;
+	z-index: 110;
+	background: var(--color-bg);
+	opacity: 0;
+	visibility: hidden;
+	transition:
+		opacity var(--transition-base),
+		visibility var(--transition-base);
+	overflow-y: auto;
+	-webkit-overflow-scrolling: touch;
 }
 
 .mobileNavOpen {
-  opacity: 1;
-  visibility: visible;
+	opacity: 1;
+	visibility: visible;
 }
 
 .mobileNavContent {
-  display: flex;
-  flex-direction: column;
-  padding: calc(64px + var(--space-lg)) var(--space-lg) calc(var(--space-3xl) + env(safe-area-inset-bottom, 0px));
-  gap: var(--space-sm);
-  min-height: calc(100vh - 64px);
+	display: flex;
+	flex-direction: column;
+	padding: calc(64px + var(--space-lg)) var(--space-lg)
+		calc(var(--space-3xl) + env(safe-area-inset-bottom, 0px));
+	gap: var(--space-sm);
+	min-height: calc(100vh - 64px);
 }
 
 .mobileNavSection {
-  display: flex;
-  flex-direction: column;
+	display: flex;
+	flex-direction: column;
 }
 
 .mobileNavSectionTitle {
-  font-family: var(--font-heading);
-  font-size: var(--text-lg);
-  font-weight: 600;
-  color: var(--color-text);
-  padding: var(--space-sm) 0;
-  margin-bottom: var(--space-xs);
+	font-family: var(--font-heading);
+	font-size: var(--text-lg);
+	font-weight: 600;
+	color: var(--color-text);
+	padding: var(--space-sm) 0;
+	margin-bottom: var(--space-xs);
 }
 
 .mobileNavLink {
-  padding: 10px 0 10px var(--space-md);
-  font-size: var(--text-base);
-  color: var(--color-text-light);
-  border-left: 2px solid var(--color-border);
-  transition: color var(--transition-fast), border-color var(--transition-fast);
+	padding: 10px 0 10px var(--space-md);
+	font-size: var(--text-base);
+	color: var(--color-text-light);
+	border-left: 2px solid var(--color-border);
+	transition:
+		color var(--transition-fast),
+		border-color var(--transition-fast);
 }
 
 .mobileNavLink:hover {
-  color: var(--color-primary);
-  border-color: var(--color-primary);
+	color: var(--color-primary);
+	border-color: var(--color-primary);
 }
 
 .mobileNavDivider {
-  height: 1px;
-  background: var(--color-border);
-  margin: var(--space-sm) 0;
+	height: 1px;
+	background: var(--color-border);
+	margin: var(--space-sm) 0;
 }
 
 .mobileFavCount {
-  font-weight: 600;
-  color: var(--color-primary);
+	font-weight: 600;
+	color: var(--color-primary);
 }
 
 .mobileNavTopLink {
-  display: block;
-  padding: 10px 0;
-  font-size: var(--text-base);
-  font-weight: 500;
-  color: var(--color-text);
-  text-decoration: none;
-  transition: color var(--transition-fast);
+	display: block;
+	padding: 10px 0;
+	font-size: var(--text-base);
+	font-weight: 500;
+	color: var(--color-text);
+	text-decoration: none;
+	transition: color var(--transition-fast);
 }
 
 .mobileNavTopLink:hover {
-  color: var(--color-primary);
+	color: var(--color-primary);
 }
 
 .mobileNavTopLinkActive {
-  color: var(--color-primary);
-  font-weight: 600;
-  padding-left: 10px;
-  border-left: 3px solid var(--color-primary);
-  margin-left: -10px;
+	color: var(--color-primary);
+	font-weight: 600;
+	padding-left: 10px;
+	border-left: 3px solid var(--color-primary);
+	margin-left: -10px;
 }
 
 /* Mobile accordion */
 .mobileAccordion {
-  display: flex;
-  flex-direction: column;
+	display: flex;
+	flex-direction: column;
 }
 
 .mobileAccordionToggle {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px 0 10px var(--space-md);
-  font-size: var(--text-base);
-  color: var(--color-text-light);
-  border-left: 2px solid var(--color-border);
-  cursor: pointer;
-  transition: color var(--transition-fast), border-color var(--transition-fast);
-  text-align: left;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 10px 0 10px var(--space-md);
+	font-size: var(--text-base);
+	color: var(--color-text-light);
+	border-left: 2px solid var(--color-border);
+	cursor: pointer;
+	transition:
+		color var(--transition-fast),
+		border-color var(--transition-fast);
+	text-align: left;
 }
 
 .mobileAccordionToggle:hover {
-  color: var(--color-primary);
-  border-color: var(--color-primary);
+	color: var(--color-primary);
+	border-color: var(--color-primary);
 }
 
 .mobileAccordionArrow {
-  transition: transform var(--transition-fast);
-  opacity: 0.4;
+	transition: transform var(--transition-fast);
+	opacity: 0.4;
 }
 
 .mobileAccordionArrowOpen {
-  transform: rotate(180deg);
-  opacity: 0.8;
+	transform: rotate(180deg);
+	opacity: 0.8;
 }
 
 .mobileAccordionContent {
-  display: flex;
-  flex-direction: column;
-  padding-left: var(--space-lg);
-  animation: dropIn 0.2s ease;
+	display: flex;
+	flex-direction: column;
+	padding-left: var(--space-lg);
+	animation: dropIn 0.2s ease;
 }
 
 .mobileAccordionLink {
-  padding: 8px 0 8px var(--space-md);
-  font-size: var(--text-sm);
-  color: var(--color-text-muted);
-  border-left: 1px solid var(--color-border);
-  transition: color var(--transition-fast), border-color var(--transition-fast);
+	padding: 8px 0 8px var(--space-md);
+	font-size: var(--text-sm);
+	color: var(--color-text-muted);
+	border-left: 1px solid var(--color-border);
+	transition:
+		color var(--transition-fast),
+		border-color var(--transition-fast);
 }
 
 .mobileAccordionLink:hover {
-  color: var(--color-primary);
-  border-color: var(--color-primary);
+	color: var(--color-primary);
+	border-color: var(--color-primary);
 }
 
 .mobileNavInfo {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-xs);
-  padding-top: var(--space-sm);
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-xs);
+	padding-top: var(--space-sm);
 }
 
 .mobileNavInfoItem {
-  font-size: var(--text-sm);
-  color: var(--color-text-muted);
+	font-size: var(--text-sm);
+	color: var(--color-text-muted);
 }
 
 .mobileNavLoginBtn {
-  margin-top: var(--space-md);
-  padding: 12px 32px;
-  border: 1.5px solid var(--color-primary);
-  border-radius: var(--radius-full);
-  font-size: var(--text-sm);
-  font-weight: 500;
-  color: var(--color-primary);
-  cursor: pointer;
-  transition: background var(--transition-fast), color var(--transition-fast);
-  align-self: flex-start;
+	margin-top: var(--space-md);
+	padding: 12px 32px;
+	border: 1.5px solid var(--color-primary);
+	border-radius: var(--radius-full);
+	font-size: var(--text-sm);
+	font-weight: 500;
+	color: var(--color-primary);
+	cursor: pointer;
+	transition:
+		background var(--transition-fast),
+		color var(--transition-fast);
+	align-self: flex-start;
 }
 
 .mobileNavLoginBtn:hover {
-  background: var(--color-primary);
-  color: var(--color-white);
+	background: var(--color-primary);
+	color: var(--color-white);
 }
 
 /* ===== Responsive ===== */
 @media (max-width: 768px) {
-  .topBar { display: none; }
-  .catBar { display: none; }
-  .midNav { display: none; }
-  .burger { display: flex; }
-  .midBar { border-bottom: none; }
-  .catBarCenter { display: none; }
-  .actionLabel { display: none; }
-  .actionBtn { padding: 8px; }
+	.topBar {
+		display: none;
+	}
+	.midNav {
+		display: none;
+	}
+	.burger {
+		display: flex;
+	}
+	.midBar {
+		border-bottom: none;
+	}
+	.actionLabel {
+		display: none;
+	}
+	.actionBtn {
+		padding: 8px;
+	}
+
+	.catToggle,
+	.catBarActions {
+		display: none;
+	}
+
+	.catBarInner {
+		gap: 0;
+	}
+
+	.searchWrap {
+		max-width: none;
+	}
+
+	.searchInput {
+		font-size: 16px;
+		padding: 8px 40px 8px 16px;
+	}
+
+	.searchClear:not(.searchClearVisible) {
+		width: 0;
+		margin: 0;
+		overflow: hidden;
+	}
 }
 
 @media (min-width: 769px) {
-  .mobileNav { display: none; }
+	.mobileNav {
+		display: none;
+	}
 }
 
 @media (max-width: 1024px) and (min-width: 769px) {
-  .midNavLink { padding: 8px 10px; font-size: var(--text-xs); }
-  .actionLabel { display: none; }
-  .actionBtn { padding: 8px; }
+	.midNavLink {
+		padding: 8px 10px;
+		font-size: var(--text-xs);
+	}
+	.actionLabel {
+		display: none;
+	}
+	.actionBtn {
+		padding: 8px;
+	}
 }
