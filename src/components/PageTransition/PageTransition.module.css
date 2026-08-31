@@ -1,19 +1,19 @@
 .wrapper {
-  animation: pageIn 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+	animation: pageIn 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 @keyframes pageIn {
-  0% {
-    opacity: 0;
-    transform: translateY(32px) scale(0.98);
-    filter: blur(6px);
-  }
-  40% {
-    filter: blur(0);
-  }
-  100% {
-    opacity: 1;
-    transform: none;
-    filter: blur(0);
-  }
+	0% {
+		opacity: 0;
+		transform: translateY(32px) scale(0.98);
+		filter: blur(6px);
+	}
+	40% {
+		filter: blur(0);
+	}
+	100% {
+		opacity: 1;
+		transform: none;
+		filter: none;
+	}
 }
