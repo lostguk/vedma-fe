@@ -21,12 +21,14 @@
 
 .label {
 	display: inline-block;
+	font-family: var(--font-body);
 	font-size: var(--text-xs);
 	font-weight: 600;
 	text-transform: uppercase;
 	letter-spacing: 0.12em;
 	color: var(--color-accent);
 	margin-bottom: var(--space-md);
+	line-height: 1.4;
 }
 
 .title {
@@ -38,6 +40,18 @@
 	font-size: var(--text-lg);
 	color: var(--color-text-light);
 	line-height: 1.7;
+}
+
+.desc > *:first-child {
+	margin-top: 0;
+}
+
+.desc > *:last-child {
+	margin-bottom: 0;
+}
+
+.desc p {
+	margin: 0 0 0.5em;
 }
 
 .grid {

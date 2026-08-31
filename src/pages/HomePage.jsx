@@ -44,7 +44,8 @@ export default function HomePage() {
             <ProductSection
               id={i === 0 ? 'products' : undefined}
               label={cat.name}
-              title={cat.description || cat.name}
+              title={cat.description ? undefined : cat.name}
+              description={cat.description}
               products={cat.products}
               reversed={i % 2 !== 0}
               linkTo={`/catalog?category=${cat.slug}`}
