@@ -7,21 +7,21 @@ const features = [
 		title: 'Авторские изделия',
 		description:
 			'Каждое изделие создаётся вручную и заряжается особой энергией. Мы вкладываем намерение в каждую деталь.',
-		image: '/images/features/feature-handmade.jpg',
+		image: '/images/features/feature-handmade-fortuna.jpg',
 	},
 	{
 		Icon: MoonIcon,
 		title: 'Традиционные рецепты',
 		description:
 			'Следуем древним знаниям и проверенным временем рецептурам. Каждое зелье — результат многовековой мудрости.',
-		image: '/images/features/feature-traditions.jpg',
+		image: '/images/features/feature-traditions-uspeshnitsa.jpg',
 	},
 	{
 		Icon: LeafIcon,
 		title: 'Натуральные материалы',
 		description:
 			'Только природные компоненты: травы, воск, эфирные масла. Никакой синтетики — только сила природы.',
-		image: '/images/features/feature-natural.jpg',
+		image: '/images/features/feature-natural-sage.jpg',
 	},
 ]
 
