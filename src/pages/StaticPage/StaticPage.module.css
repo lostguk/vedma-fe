@@ -14,55 +14,6 @@
   color: var(--color-text-light);
 }
 
-/* Legal pages (Privacy, Offer) */
-.legalContent {
-  max-width: 780px;
-  font-size: var(--text-base);
-  line-height: 1.75;
-  color: var(--color-text-light);
-}
-
-.legalContent h2 {
-  font-size: var(--text-lg);
-  font-weight: 600;
-  color: var(--color-text);
-  margin: var(--space-2xl) 0 var(--space-md);
-}
-
-.legalContent h2:first-of-type {
-  margin-top: var(--space-lg);
-}
-
-.legalContent p {
-  margin: 0 0 var(--space-md);
-}
-
-.legalContent ul {
-  margin: 0 0 var(--space-md);
-  padding-left: var(--space-xl);
-}
-
-.legalContent li {
-  margin-bottom: var(--space-sm);
-}
-
-.legalContent a {
-  color: var(--color-primary);
-  text-decoration: underline;
-  text-underline-offset: 2px;
-}
-
-.legalContent a:hover {
-  color: var(--color-primary-dark);
-}
-
-.legalUpdated {
-  font-size: var(--text-sm);
-  color: var(--color-text-muted);
-  font-style: italic;
-  margin-bottom: var(--space-lg);
-}
-
 .loading {
   color: var(--color-text-muted);
   padding: var(--space-xl) 0;
@@ -71,16 +22,26 @@
 .richText {
   max-width: 780px;
   font-size: var(--text-base);
-  line-height: 1.7;
+  line-height: 1.75;
   color: var(--color-text-light);
 }
 
 .richText h1,
 .richText h2,
-.richText h3 {
+.richText h3,
+.richText h4 {
   font-family: var(--font-heading);
+  font-weight: 600;
   color: var(--color-text);
-  margin: var(--space-xl) 0 var(--space-md);
+  margin: var(--space-2xl) 0 var(--space-md);
+}
+
+.richText h2 {
+  font-size: var(--text-lg);
+}
+
+.richText h2:first-of-type {
+  margin-top: var(--space-lg);
 }
 
 .richText p {
@@ -89,18 +50,28 @@
 
 .richText ul,
 .richText ol {
-  padding-left: var(--space-lg);
+  padding-left: var(--space-xl);
   margin: 0 0 var(--space-md);
 }
 
 .richText li {
-  margin-bottom: var(--space-xs);
+  margin-bottom: var(--space-sm);
 }
 
 .richText a {
   color: var(--color-primary);
   text-decoration: underline;
   text-underline-offset: 2px;
+}
+
+.richText a:hover {
+  color: var(--color-primary-dark);
+}
+
+.richText em {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  font-style: italic;
 }
 
 .richText img {
