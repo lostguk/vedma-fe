@@ -1144,24 +1144,26 @@ export default function ProfilePage() {
 							to={tab.path}
 							className={`${styles.tabBtn} ${activeTab === tab.id ? styles.tabBtnActive : ''}`}
 						>
-							{tab.icon ? (
-								<tab.icon size={18} />
-							) : (
-								<svg
-									width='18'
-									height='18'
-									viewBox='0 0 24 24'
-									fill='none'
-									stroke='currentColor'
-									strokeWidth='1.8'
-									strokeLinecap='round'
-									strokeLinejoin='round'
-								>
-									<rect x='3' y='11' width='18' height='11' rx='2' />
-									<path d='M7 11V7a5 5 0 0110 0v4' />
-								</svg>
-							)}
-							<span>{tab.label}</span>
+							<span className={styles.tabIcon} aria-hidden='true'>
+								{tab.icon ? (
+									<tab.icon size={18} />
+								) : (
+									<svg
+										width='18'
+										height='18'
+										viewBox='0 0 24 24'
+										fill='none'
+										stroke='currentColor'
+										strokeWidth='1.8'
+										strokeLinecap='round'
+										strokeLinejoin='round'
+									>
+										<rect x='3' y='11' width='18' height='11' rx='2' />
+										<path d='M7 11V7a5 5 0 0110 0v4' />
+									</svg>
+								)}
+							</span>
+							<span className={styles.tabLabel}>{tab.label}</span>
 							{tab.id === 'chat' && unreadCount > 0 && activeTab !== 'chat' && (
 								<span className={styles.tabBadge}>{unreadCount}</span>
 							)}

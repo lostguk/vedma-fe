@@ -197,7 +197,7 @@ export default function Header() {
 							{isAuthenticated ? (
 								<Link
 									to='/profile'
-									className={styles.actionBtn}
+									className={`${styles.actionBtn} ${styles.actionAccount}`}
 									aria-label='Личный кабинет'
 								>
 									<IconUser size={18} />
@@ -205,7 +205,8 @@ export default function Header() {
 								</Link>
 							) : (
 								<button
-									className={styles.actionBtn}
+									type='button'
+									className={`${styles.actionBtn} ${styles.actionAccount}`}
 									onClick={() => setLoginOpen(true)}
 									aria-label='Войти'
 								>
@@ -215,7 +216,7 @@ export default function Header() {
 							)}
 							<Link
 								to='/favorites'
-								className={styles.actionBtn}
+								className={`${styles.actionBtn} ${styles.actionDesktopOnly}`}
 								aria-label='Избранное'
 								title='Избранное'
 							>
@@ -228,7 +229,8 @@ export default function Header() {
 								)}
 							</Link>
 							<button
-								className={styles.actionBtn}
+								type='button'
+								className={`${styles.actionBtn} ${styles.actionDesktopOnly}`}
 								onClick={openDrawer}
 								aria-label='Корзина'
 							>
@@ -252,6 +254,7 @@ export default function Header() {
 				onClose={() => setMenuOpen(false)}
 				navLinks={navLinks}
 				isNavItemActive={isNavItemActive}
+				isAuthenticated={isAuthenticated}
 				favCount={favCount}
 				totalItems={totalItems}
 				onLoginOpen={() => setLoginOpen(true)}

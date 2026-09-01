@@ -642,6 +642,8 @@ a.topBarLink:hover {
 }
 
 .mobileNavLoginBtn {
+	display: inline-flex;
+	align-items: center;
 	margin-top: var(--space-md);
 	padding: 12px 32px;
 	border: 1.5px solid var(--color-primary);
@@ -650,6 +652,9 @@ a.topBarLink:hover {
 	font-weight: 500;
 	color: var(--color-primary);
 	cursor: pointer;
+	text-decoration: none;
+	background: transparent;
+	font-family: inherit;
 	transition:
 		background var(--transition-fast),
 		color var(--transition-fast);
@@ -683,12 +688,35 @@ a.topBarLink:hover {
 	}
 
 	.catToggle,
-	.catBarActions {
+	.actionDesktopOnly {
 		display: none;
 	}
 
 	.catBarInner {
-		gap: 0;
+		gap: 8px;
+	}
+
+	.catBarCenter {
+		min-width: 0;
+		justify-content: flex-start;
+	}
+
+	.catBarActions {
+		flex-shrink: 0;
+	}
+
+	.actionAccount {
+		padding: 6px 10px 6px 8px;
+		gap: 4px;
+		background: rgba(var(--color-primary-rgb), 0.1);
+		color: var(--color-primary);
+		white-space: nowrap;
+	}
+
+	.actionAccount .actionLabel {
+		display: inline;
+		font-size: 0.75rem;
+		font-weight: 600;
 	}
 
 	.searchWrap {

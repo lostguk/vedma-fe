@@ -58,6 +58,7 @@ export default function MobileMenu({
 	onClose,
 	navLinks,
 	isNavItemActive,
+	isAuthenticated,
 	favCount,
 	totalItems,
 	onLoginOpen,
@@ -141,15 +142,26 @@ export default function MobileMenu({
 						Ежедневно 10:00–21:00
 					</span>
 				</div>
-				<button
-					className={styles.mobileNavLoginBtn}
-					onClick={() => {
-						onClose()
-						onLoginOpen()
-					}}
-				>
-					Войти
-				</button>
+				{isAuthenticated ? (
+					<Link
+						to='/profile'
+						className={styles.mobileNavLoginBtn}
+						onClick={onClose}
+					>
+						Личный кабинет
+					</Link>
+				) : (
+					<button
+						type='button'
+						className={styles.mobileNavLoginBtn}
+						onClick={() => {
+							onClose()
+							onLoginOpen()
+						}}
+					>
+						Войти
+					</button>
+				)}
 			</div>
 		</div>
 	)
