@@ -3,7 +3,6 @@ import AgeGate from './components/AgeGate/AgeGate'
 import CartToast from './components/CartToast/CartToast'
 import CookieBanner from './components/CookieBanner/CookieBanner'
 import FavoritesToast from './components/FavoritesToast/FavoritesToast'
-import FloatingPanel from './components/FloatingPanel/FloatingPanel'
 import Footer from './components/Footer/Footer'
 import Header from './components/Header/Header'
 import MobileCartFab from './components/MobileCartFab/MobileCartFab'
@@ -55,7 +54,6 @@ function AppContent() {
 				</PageTransition>
 			</main>
 			<Footer />
-			<FloatingPanel />
 			<MobileCartFab />
 			<CartToast />
 			<FavoritesToast />
