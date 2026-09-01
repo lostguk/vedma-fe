@@ -6,6 +6,7 @@ import FavoritesToast from './components/FavoritesToast/FavoritesToast'
 import FloatingPanel from './components/FloatingPanel/FloatingPanel'
 import Footer from './components/Footer/Footer'
 import Header from './components/Header/Header'
+import MobileCartFab from './components/MobileCartFab/MobileCartFab'
 import PageTransition from './components/PageTransition/PageTransition'
 import useScrollToTop from './hooks/useScrollToTop'
 import CatalogPage from './pages/CatalogPage/CatalogPage'
@@ -55,6 +56,7 @@ function AppContent() {
 			</main>
 			<Footer />
 			<FloatingPanel />
+			<MobileCartFab />
 			<CartToast />
 			<FavoritesToast />
 			<CookieBanner />

@@ -545,11 +545,17 @@ a.topBarLink:hover {
 
 .mobileNavTopLink {
 	display: block;
+	width: 100%;
 	padding: 10px 0;
 	font-size: var(--text-base);
 	font-weight: 500;
 	color: var(--color-text);
+	text-align: left;
 	text-decoration: none;
+	background: none;
+	border: none;
+	font-family: inherit;
+	cursor: pointer;
 	transition: color var(--transition-fast);
 }
 

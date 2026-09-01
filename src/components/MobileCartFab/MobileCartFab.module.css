@@ -1,0 +1,65 @@
+.fab {
+	display: none;
+}
+
+@media (max-width: 768px) {
+	.fab {
+		position: fixed;
+		right: 16px;
+		bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+		z-index: 95;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 56px;
+		height: 56px;
+		border-radius: 50%;
+		background: var(--color-primary);
+		color: var(--color-white);
+		box-shadow:
+			0 8px 28px rgba(var(--color-primary-rgb), 0.4),
+			0 0 0 1px rgba(255, 255, 255, 0.08);
+		cursor: pointer;
+	}
+
+	.fab:active {
+		transform: scale(0.94);
+	}
+}
+
+.badge {
+	position: absolute;
+	top: -2px;
+	right: -2px;
+	min-width: 20px;
+	height: 20px;
+	padding: 0 5px;
+	border-radius: 10px;
+	background: var(--color-white);
+	color: var(--color-primary);
+	font-size: 0.68rem;
+	font-weight: 700;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.16);
+}
+
+.badgeBump {
+	animation: fabBadgeBump 0.45s ease;
+}
+
+@keyframes fabBadgeBump {
+	0% {
+		transform: scale(1);
+	}
+	35% {
+		transform: scale(1.28);
+	}
+	70% {
+		transform: scale(0.92);
+	}
+	100% {
+		transform: scale(1);
+	}
+}

@@ -253,7 +253,9 @@ export default function Header() {
 				navLinks={navLinks}
 				isNavItemActive={isNavItemActive}
 				favCount={favCount}
+				totalItems={totalItems}
 				onLoginOpen={() => setLoginOpen(true)}
+				onCartOpen={openDrawer}
 			/>
 
 			<LoginModal open={loginOpen} onClose={() => setLoginOpen(false)} />
