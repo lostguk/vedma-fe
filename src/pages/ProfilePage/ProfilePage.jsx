@@ -296,6 +296,53 @@ const STATUS_MAP = {
 const PAYABLE_STATUSES = ['new', 'payment_pending', 'payment_failed']
 const REPEATABLE_STATUSES = ['paid', 'refunded', 'cancelled']
 
+function formatMoney(value) {
+	return `${Number(value).toLocaleString('ru-RU')} ₽`
+}
+
+function getOrderItemDisplay(item) {
+	const count = Number(item.count) || 0
+	const unit = Number(
+		item.price_without_discount ?? item.product?.price ?? item.price ?? 0,
+	)
+	const lineTotal = Number(item.total_without_discount ?? unit * count)
+
+	return { count, unit, lineTotal }
+}
+
+function getOrderTotals(order) {
+	const items = order.items || []
+	const delivery = Number(order.delivery_price) || 0
+	const fromApiWithout = Number(
+		order.total_without_discount ?? order.total_price_without_discount,
+	)
+	const fromApiWith = Number(
+		order.total_with_discount ??
+			order.total_price_with_discount ??
+			order.total_price,
+	)
+	const itemsWithout = items.reduce((sum, item) => {
+		return sum + getOrderItemDisplay(item).lineTotal
+	}, 0)
+	const itemsWith = items.reduce((sum, item) => {
+		return sum + Number(item.total ?? (item.price || 0) * (item.count || 0))
+	}, 0)
+
+	const subtotal = fromApiWithout || itemsWithout
+	const discountedSubtotal = Number.isFinite(fromApiWith)
+		? fromApiWith
+		: itemsWith || subtotal
+	const discount = Math.max(
+		0,
+		Number(order.discount_amount) || subtotal - discountedSubtotal,
+	)
+	const total =
+		Number(order.payable_total) ||
+		discountedSubtotal + delivery
+
+	return { subtotal, discount, delivery, total }
+}
+
 function OrderCard({ order, onPay, onRepeat }) {
 	const [open, setOpen] = useState(false)
 	const [paying, setPaying] = useState(false)
@@ -307,11 +354,7 @@ function OrderCard({ order, onPay, onRepeat }) {
 	const canPay = PAYABLE_STATUSES.includes(order.status_code)
 	const canRepeat = REPEATABLE_STATUSES.includes(order.status_code)
 	const items = order.items || []
-	const subtotal =
-		order.total_price_without_discount ||
-		items.reduce((s, i) => s + (i.total || i.price * i.count), 0)
-	const total = order.total_price_with_discount || order.total_price || subtotal
-	const discount = subtotal - total + (order.delivery_price || 0)
+	const { subtotal, discount, total } = getOrderTotals(order)
 	const date = order.created_at
 		? new Date(order.created_at).toLocaleDateString('ru-RU')
 		: ''
@@ -331,9 +374,7 @@ function OrderCard({ order, onPay, onRepeat }) {
 					<span className={`${styles.orderStatus} ${styles[st.cls]}`}>
 						{order.status || st.label}
 					</span>
-					<span className={styles.orderTotal}>
-						{Number(total).toLocaleString('ru-RU')} ₽
-					</span>
+					<span className={styles.orderTotal}>{formatMoney(total)}</span>
 					<IconChevronDown
 						size={16}
 						className={`${styles.orderChevron} ${open ? styles.orderChevronOpen : ''}`}
@@ -373,35 +414,34 @@ function OrderCard({ order, onPay, onRepeat }) {
 						)}
 					</div>
 					<div className={styles.orderItems}>
-						{items.map(item => (
-							<div key={item.id} className={styles.orderItem}>
-								{item.product?.thumb_url && (
-									<img
-										src={item.product.thumb_url}
-										alt={item.name}
-										className={styles.orderItemImg}
-									/>
-								)}
-								<div className={styles.orderItemInfo}>
-									<span className={styles.orderItemName}>{item.name}</span>
-									<span className={styles.orderItemMeta}>
-										{item.count} шт &times;{' '}
-										{Number(item.price).toLocaleString('ru-RU')} ₽
+						{items.map(item => {
+							const { count, unit, lineTotal } = getOrderItemDisplay(item)
+							return (
+								<div key={item.id} className={styles.orderItem}>
+									{item.product?.thumb_url && (
+										<img
+											src={item.product.thumb_url}
+											alt={item.name}
+											className={styles.orderItemImg}
+										/>
+									)}
+									<div className={styles.orderItemInfo}>
+										<span className={styles.orderItemName}>{item.name}</span>
+										<span className={styles.orderItemMeta}>
+											{count} шт &times; {formatMoney(unit)}
+										</span>
+									</div>
+									<span className={styles.orderItemTotal}>
+										{formatMoney(lineTotal)}
 									</span>
 								</div>
-								<span className={styles.orderItemTotal}>
-									{Number(item.total || item.price * item.count).toLocaleString(
-										'ru-RU',
-									)}{' '}
-									₽
-								</span>
-							</div>
-						))}
+							)
+						})}
 					</div>
 					<div className={styles.orderSummary}>
 						<div className={styles.orderSummaryRow}>
 							<span>Товары</span>
-							<span>{Number(subtotal).toLocaleString('ru-RU')} ₽</span>
+							<span>{formatMoney(subtotal)}</span>
 						</div>
 						{order.delivery_price != null && (
 							<div className={styles.orderSummaryRow}>
@@ -415,7 +455,7 @@ function OrderCard({ order, onPay, onRepeat }) {
 								<span>
 									{order.delivery_price === 0
 										? 'Бесплатно'
-										: `${Number(order.delivery_price).toLocaleString('ru-RU')} ₽`}
+										: formatMoney(order.delivery_price)}
 								</span>
 							</div>
 						)}
@@ -426,12 +466,12 @@ function OrderCard({ order, onPay, onRepeat }) {
 								<span>
 									Промокод <strong>{order.promo_code}</strong>
 								</span>
-								<span>−{Number(discount).toLocaleString('ru-RU')} ₽</span>
+								<span>−{formatMoney(discount)}</span>
 							</div>
 						)}
 						<div className={`${styles.orderSummaryRow} ${styles.orderGrand}`}>
 							<span>Итого</span>
-							<span>{Number(total).toLocaleString('ru-RU')} ₽</span>
+							<span>{formatMoney(total)}</span>
 						</div>
 					</div>
 					<div className={styles.orderActions}>
@@ -502,11 +542,12 @@ function TabOrders() {
 		clearCart()
 		const items = order.items || []
 		items.forEach(item => {
+			const { unit } = getOrderItemDisplay(item)
 			addToCart(
 				{
 					id: item.product_id || item.id,
 					name: item.name,
-					price: item.price,
+					price: unit,
 					slug: item.product?.slug || '',
 					image: item.product?.thumb_url || '',
 				},
