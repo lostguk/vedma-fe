@@ -392,18 +392,59 @@
 @media (max-width: 520px) {
 	.grid {
 		grid-template-columns: repeat(2, 1fr);
-		gap: var(--space-md);
+		gap: 10px;
 	}
 
 	.section {
-		padding: var(--space-4xl) 0;
+		padding: var(--space-4xl) 0 calc(var(--space-4xl) + 72px);
+	}
+
+	.card {
+		min-width: 0;
 	}
 
 	.cardBody {
-		padding: var(--space-sm) var(--space-md) var(--space-md);
+		padding: 10px 10px 12px;
 	}
 
 	.cardTitle {
 		font-size: var(--text-sm);
+		display: -webkit-box;
+		-webkit-line-clamp: 2;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+		min-height: 2.6em;
+	}
+
+	.cardFooter {
+		flex-direction: column;
+		align-items: stretch;
+		gap: 8px;
+		margin-top: 10px;
+	}
+
+	.buyBtn,
+	.qtyWrap,
+	.outOfStockBtn {
+		width: 100%;
+		justify-content: center;
+	}
+
+	.buyBtn {
+		padding: 8px 12px;
+	}
+
+	.qtyBtn {
+		width: 32px;
+		height: 32px;
+	}
+
+	.outOfStockBtn {
+		text-align: center;
+		padding: 8px 10px;
+	}
+
+	.cardPrice {
+		font-size: var(--text-lg);
 	}
 }

@@ -3,110 +3,119 @@
 @import './forms.css';
 
 body {
-  font-family: var(--font-body);
-  font-size: var(--text-base);
-  color: var(--color-text);
-  background-color: var(--color-bg);
-  transition: background-color 0.4s ease, color 0.4s ease;
+	font-family: var(--font-body);
+	font-size: var(--text-base);
+	color: var(--color-text);
+	background-color: var(--color-bg);
+	transition:
+		background-color 0.4s ease,
+		color 0.4s ease;
 }
 
-h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-heading);
-  font-weight: 600;
-  line-height: 1.2;
-  color: var(--color-text);
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	font-family: var(--font-heading);
+	font-weight: 600;
+	line-height: 1.2;
+	color: var(--color-text);
 }
 
 .container {
-  width: 100%;
-  max-width: var(--max-width);
-  margin: 0 auto;
-  padding: 0 var(--space-lg);
+	width: 100%;
+	max-width: var(--max-width);
+	margin: 0 auto;
+	padding: 0 var(--space-lg);
 }
 
 @media (max-width: 768px) {
-  .container {
-    padding: 0 var(--space-md);
-  }
+	.container {
+		padding: 0 12px;
+	}
 }
 
 /* Scroll reveal animation */
 .reveal {
-  opacity: 0;
-  transform: translateY(30px);
-  transition: opacity 0.8s ease, transform 0.8s ease;
+	opacity: 0;
+	transform: translateY(30px);
+	transition:
+		opacity 0.8s ease,
+		transform 0.8s ease;
 }
 
 .reveal.visible {
-  opacity: 1;
-  transform: translateY(0);
+	opacity: 1;
+	transform: translateY(0);
 }
 
 /* Botanical SVG divider */
 .botanical-divider-wrap {
-  display: flex;
-  justify-content: center;
-  padding: var(--space-md) var(--space-lg);
+	display: flex;
+	justify-content: center;
+	padding: var(--space-md) var(--space-lg);
 }
 
 .botanical-divider {
-  width: 100%;
-  max-width: 400px;
-  height: auto;
-  color: var(--color-primary);
+	width: 100%;
+	max-width: 400px;
+	height: auto;
+	color: var(--color-primary);
 }
 
 /* Selection color */
 ::selection {
-  background: rgba(var(--color-primary-rgb), 0.15);
-  color: var(--color-text);
+	background: rgba(var(--color-primary-rgb), 0.15);
+	color: var(--color-text);
 }
 
 /* Smooth image loading */
 img {
-  opacity: 1;
-  transition: opacity 0.3s ease;
+	opacity: 1;
+	transition: opacity 0.3s ease;
 }
 
 /* Toast overrides */
 :root .Toastify__toast {
-  font-family: var(--font-body);
-  font-size: var(--text-sm);
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-lg);
-  backdrop-filter: blur(12px);
-  padding: 12px 16px;
-  min-height: auto;
+	font-family: var(--font-body);
+	font-size: var(--text-sm);
+	border-radius: var(--radius-md);
+	box-shadow: var(--shadow-lg);
+	backdrop-filter: blur(12px);
+	padding: 12px 16px;
+	min-height: auto;
 }
 
 :root .Toastify__toast--success {
-  background: var(--color-primary);
-  color: var(--color-white);
+	background: var(--color-primary);
+	color: var(--color-white);
 }
 
 :root .Toastify__toast--error {
-  background: #b42318;
-  color: var(--color-white);
+	background: #b42318;
+	color: var(--color-white);
 }
 
 :root .Toastify__toast--info {
-  background: var(--color-text);
-  color: var(--color-bg);
+	background: var(--color-text);
+	color: var(--color-bg);
 }
 
 :root .Toastify__toast-icon svg {
-  fill: currentColor;
+	fill: currentColor;
 }
 
 :root .Toastify__close-button {
-  color: currentColor;
-  opacity: 0.7;
+	color: currentColor;
+	opacity: 0.7;
 }
 
 :root .Toastify__close-button:hover {
-  opacity: 1;
+	opacity: 1;
 }
 
 :root .Toastify__progress-bar {
-  background: rgba(255, 255, 255, 0.3);
+	background: rgba(255, 255, 255, 0.3);
 }
