@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { useAuth } from '../../context/AuthContext'
 import Modal from '../Modal/Modal'
+import ResendVerification from '../ResendVerification/ResendVerification'
 import { Button, PasswordInput } from '../ui'
 import styles from './LoginModal.module.css'
 
@@ -41,6 +42,7 @@ export default function LoginModal({ open, onClose, onAuthSuccess }) {
 	const [resetSent, setResetSent] = useState(false)
 	const [submitting, setSubmitting] = useState(false)
 	const [registerSuccess, setRegisterSuccess] = useState(false)
+	const [needsVerification, setNeedsVerification] = useState(false)
 
 	useEffect(() => {
 		if (!open) {
@@ -50,6 +52,7 @@ export default function LoginModal({ open, onClose, onAuthSuccess }) {
 			setResetSent(false)
 			setSubmitting(false)
 			setRegisterSuccess(false)
+			setNeedsVerification(false)
 		}
 	}, [open])
 
@@ -58,11 +61,16 @@ export default function LoginModal({ open, onClose, onAuthSuccess }) {
 		setFormError('')
 		setResetSent(false)
 		setRegisterSuccess(false)
+		setNeedsVerification(false)
 	}
 
 	const handleSubmit = async e => {
 		e.preventDefault()
+		if (registerSuccess || resetSent) {
+			return
+		}
 		setFormError('')
+		setNeedsVerification(false)
 		const em = email.trim().toLowerCase()
 
 		if (view === VIEW_FORGOT) {
@@ -140,7 +148,10 @@ export default function LoginModal({ open, onClose, onAuthSuccess }) {
 				onClose()
 			} catch (err) {
 				if (err.response?.status === 403) {
-					setFormError('Email не подтверждён. Проверьте почту.')
+					setNeedsVerification(true)
+					setFormError(
+						'Email не подтверждён. Проверьте почту или запросите новое письмо.',
+					)
 				} else if (err.response?.status === 422) {
 					setFormError('Неверный email или пароль')
 				} else {
@@ -184,6 +195,10 @@ export default function LoginModal({ open, onClose, onAuthSuccess }) {
 							На <strong>{email.trim().toLowerCase()}</strong> отправлено письмо
 							для подтверждения. Проверьте почту и папку «Спам».
 						</p>
+						<ResendVerification
+							email={email.trim().toLowerCase()}
+							initialCooldownSeconds={60}
+						/>
 						<Button
 							type='button'
 							variant='primary'
@@ -415,6 +430,13 @@ export default function LoginModal({ open, onClose, onAuthSuccess }) {
 								>
 									Забыли пароль?
 								</button>
+							)}
+
+							{view === VIEW_LOGIN && needsVerification && (
+								<ResendVerification
+									email={email.trim().toLowerCase()}
+									hint='Не пришло письмо? Отправим ссылку подтверждения ещё раз.'
+								/>
 							)}
 
 							<div className={styles.divider}>

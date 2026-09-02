@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useLocation } from 'react-router-dom'
 import { Button } from '../ui'
 import styles from './AgeGate.module.css'
 
@@ -13,10 +14,18 @@ function setAgeConfirmation() {
 }
 
 export default function AgeGate() {
+	const { pathname } = useLocation()
 	const [visible, setVisible] = useState(false)
 	const [leaving, setLeaving] = useState(false)
 
 	useEffect(() => {
+		if (pathname.startsWith('/verify-registration')) {
+			setVisible(false)
+			setLeaving(false)
+			document.body.style.overflow = ''
+			return
+		}
+
 		try {
 			if (!hasAgeConfirmation()) {
 				setVisible(true)
@@ -26,7 +35,7 @@ export default function AgeGate() {
 			setVisible(true)
 			document.body.style.overflow = 'hidden'
 		}
-	}, [])
+	}, [pathname])
 
 	const confirm = () => {
 		setLeaving(true)

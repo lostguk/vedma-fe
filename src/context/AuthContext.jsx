@@ -29,13 +29,17 @@ export function AuthProvider({ children }) {
       .finally(() => setLoading(false))
   }, [])
 
+  const applySession = useCallback((token, userData) => {
+    setToken(token)
+    setUser(userData)
+  }, [])
+
   const signIn = useCallback(async (email, password) => {
     const res = await authApi.login(email, password)
     const { token, user: userData } = res.data.data
-    setToken(token)
-    setUser(userData)
+    applySession(token, userData)
     return res.data
-  }, [])
+  }, [applySession])
 
   const register = useCallback(async (data) => {
     const res = await authApi.register(data)
@@ -82,6 +86,7 @@ export function AuthProvider({ children }) {
     () => ({
       user,
       loading,
+      applySession,
       signIn,
       register,
       signOut,
@@ -95,6 +100,7 @@ export function AuthProvider({ children }) {
     [
       user,
       loading,
+      applySession,
       signIn,
       register,
       signOut,
