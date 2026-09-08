@@ -7,6 +7,7 @@ import {
 	isPendingStatus,
 	usePaymentReturnVerification,
 } from '../../hooks/usePaymentReturnVerification'
+import { clearCreatedCheckoutOrderId } from '../../utils/checkoutOrder'
 import styles from './OrderSuccessPage.module.css'
 
 function Particle({ delay, left, size, duration }) {
@@ -46,12 +47,14 @@ export default function OrderSuccessPage() {
 	useEffect(() => {
 		if (paymentId) return
 		clearCart()
+		clearCreatedCheckoutOrderId()
 	}, [clearCart, paymentId])
 
 	useEffect(() => {
 		if (!paymentId) return
 		if (phase === 'ready' && payment?.status === 'paid') {
 			clearCart()
+			clearCreatedCheckoutOrderId()
 		}
 	}, [clearCart, paymentId, phase, payment])
 

@@ -19,6 +19,7 @@ export default function CheckoutSummary({
 	updateQty,
 	removeFromCart,
 	submitting,
+	orderLocked = false,
 }) {
 	return (
 		<aside className={styles.sidebar} aria-label='Корзина и итого'>
@@ -38,6 +39,7 @@ export default function CheckoutSummary({
 										className={styles.sideRemove}
 										onClick={() => removeFromCart(line.id)}
 										aria-label='Удалить'
+										disabled={orderLocked}
 									>
 										×
 									</button>
@@ -48,6 +50,7 @@ export default function CheckoutSummary({
 											type='button'
 											onClick={() => updateQty(line.id, line.qty - 1)}
 											aria-label='Меньше'
+											disabled={orderLocked}
 										>
 											−
 										</button>
@@ -56,7 +59,9 @@ export default function CheckoutSummary({
 											type='button'
 											onClick={() => updateQty(line.id, line.qty + 1)}
 											disabled={
-												typeof line.stock === 'number' && line.qty >= line.stock
+												orderLocked ||
+												(typeof line.stock === 'number' &&
+													line.qty >= line.stock)
 											}
 											title={
 												typeof line.stock === 'number' && line.qty >= line.stock
@@ -135,6 +140,7 @@ export default function CheckoutSummary({
 							type='button'
 							className={styles.promoRemoveBtn}
 							onClick={removePromo}
+							disabled={orderLocked}
 						>
 							Убрать
 						</button>
@@ -146,7 +152,7 @@ export default function CheckoutSummary({
 							className={styles.promoInput}
 							placeholder='Введите промокод'
 							value={promoInput}
-							disabled={promoApplying}
+							disabled={promoApplying || orderLocked}
 							autoComplete='off'
 							spellCheck={false}
 							onChange={e => {
@@ -164,7 +170,7 @@ export default function CheckoutSummary({
 							type='button'
 							className={`${styles.promoBtn} ${promoApplying ? styles.promoBtnLoading : ''}`}
 							onClick={applyPromo}
-							disabled={promoApplying}
+							disabled={promoApplying || orderLocked}
 						>
 							{promoApplying ? 'Проверяем…' : 'Применить'}
 						</button>
@@ -178,7 +184,13 @@ export default function CheckoutSummary({
 					className={styles.sideSubmit}
 					disabled={submitting}
 				>
-					{submitting ? 'Оформляем...' : 'Оформить заказ'}
+					{submitting
+						? orderLocked
+							? 'Перенаправляем...'
+							: 'Оформляем...'
+						: orderLocked
+							? 'Перейти к оплате'
+							: 'Оформить заказ'}
 				</button>
 			</div>
 		</aside>

@@ -14,6 +14,11 @@ import {
 	getAddressValidationError,
 	isDeliverableAddress,
 } from '../../utils/address'
+import {
+	clearCreatedCheckoutOrderId,
+	getCreatedCheckoutOrderId,
+	setCreatedCheckoutOrderId,
+} from '../../utils/checkoutOrder'
 import CheckoutContactSection from './CheckoutContactSection'
 import CheckoutDeliverySection from './CheckoutDeliverySection'
 import styles from './CheckoutPage.module.css'
@@ -96,7 +101,9 @@ export default function CheckoutPage() {
 	const [addressConfirmed, setAddressConfirmed] = useState(false)
 	const [consent, setConsent] = useState(false)
 	const [submitting, setSubmitting] = useState(false)
-	const [createdOrderId, setCreatedOrderId] = useState(null)
+	const [createdOrderId, setCreatedOrderId] = useState(() =>
+		getCreatedCheckoutOrderId(),
+	)
 	const [paymentError, setPaymentError] = useState('')
 	const [deliveryPrice, setDeliveryPrice] = useState(null)
 	const [deliveryLoading, setDeliveryLoading] = useState(false)
@@ -141,8 +148,10 @@ export default function CheckoutPage() {
 	}, [])
 
 	useEffect(() => {
-		if (items.length === 0 && !submitting)
+		if (items.length === 0 && !submitting) {
+			clearCreatedCheckoutOrderId()
 			navigate('/catalog', { replace: true })
+		}
 	}, [items.length, submitting, navigate])
 
 	useEffect(() => {
@@ -283,8 +292,38 @@ export default function CheckoutPage() {
 		return { ok, fieldErrors: e, addressErr }
 	}
 
+	const attemptPayment = async orderId => {
+		setSubmitting(true)
+		setPaymentError('')
+		try {
+			const payRes = await createPayment({
+				orderId,
+				successUrl: `${window.location.origin}/payment-success?order_id=${orderId}`,
+				failUrl: `${window.location.origin}/payment-error?order_id=${orderId}`,
+			})
+			const payment = payRes.data?.data ?? payRes.data
+			if (payment.payment_url) {
+				window.location.href = payment.payment_url
+				return
+			}
+			setPaymentError(
+				'Не удалось получить ссылку на оплату. Попробуйте ещё раз.',
+			)
+		} catch (err) {
+			const msg = err.response?.data?.message || 'Не удалось создать платёж'
+			setPaymentError(msg)
+		} finally {
+			setSubmitting(false)
+		}
+	}
+
 	const handleSubmit = async ev => {
 		ev.preventDefault()
+		if (createdOrderId) {
+			await attemptPayment(createdOrderId)
+			return
+		}
+
 		setSubmitAttempted(true)
 		const result = validate()
 		if (!result.ok) {
@@ -319,35 +358,11 @@ export default function CheckoutPage() {
 			const orderRes = await createOrder(orderData)
 			const order = orderRes.data?.data ?? orderRes.data
 			setCreatedOrderId(order.id)
+			setCreatedCheckoutOrderId(order.id)
 
 			await attemptPayment(order.id)
 		} catch (err) {
 			toast.error(getApiErrors(err))
-		} finally {
-			setSubmitting(false)
-		}
-	}
-
-	const attemptPayment = async orderId => {
-		setSubmitting(true)
-		setPaymentError('')
-		try {
-			const payRes = await createPayment({
-				orderId,
-				successUrl: `${window.location.origin}/payment-success?order_id=${orderId}`,
-				failUrl: `${window.location.origin}/payment-error?order_id=${orderId}`,
-			})
-			const payment = payRes.data?.data ?? payRes.data
-			if (payment.payment_url) {
-				window.location.href = payment.payment_url
-				return
-			}
-			setPaymentError(
-				'Не удалось получить ссылку на оплату. Попробуйте ещё раз.',
-			)
-		} catch (err) {
-			const msg = err.response?.data?.message || 'Не удалось создать платёж'
-			setPaymentError(msg)
 		} finally {
 			setSubmitting(false)
 		}
@@ -367,16 +382,23 @@ export default function CheckoutPage() {
 
 					<h1 className={styles.title}>Оформить заказ</h1>
 
-					{createdOrderId && paymentError && (
+					{createdOrderId && (
 						<div className={styles.paymentErrorBanner}>
-							<p className={styles.paymentErrorText}>{paymentError}</p>
+							{paymentError ? (
+								<p className={styles.paymentErrorText}>{paymentError}</p>
+							) : (
+								<p className={styles.paymentErrorText}>
+									Заказ #{createdOrderId} уже создан
+								</p>
+							)}
 							<p className={styles.paymentErrorHint}>
-								Заказ #{createdOrderId} создан. Вы можете повторить оплату,
-								оплатить позже в личном кабинете или{' '}
+								Не оформляйте заказ заново — товар уже списан со склада.
+								Повторите оплату этого заказа, оплатите позже в личном кабинете
+								или{' '}
 								<Link to='/profile/chat' className={styles.paymentErrorLink}>
-									написать нам в чат поддержки
-								</Link>{' '}
-								— мы поможем решить проблему.
+									напишите нам в чат поддержки
+								</Link>
+								.
 							</p>
 							<div className={styles.paymentErrorActions}>
 								<button
@@ -391,6 +413,7 @@ export default function CheckoutPage() {
 									type='button'
 									className={styles.paymentLaterBtn}
 									onClick={() => {
+										clearCreatedCheckoutOrderId()
 										clearCart()
 										navigate('/profile/orders')
 									}}
@@ -407,29 +430,34 @@ export default function CheckoutPage() {
 						onSubmit={handleSubmit}
 						noValidate
 					>
-						<CheckoutContactSection
-							form={form}
-							errors={errors}
-							setField={setField}
-							isAuthenticated={isAuthenticated}
-							user={user}
-							signOut={signOut}
-							onLoginOpen={() => setLoginOpen(true)}
-							consent={consent}
-							onConsentChange={checked => {
-								setConsent(checked)
-								if (errors.consent)
-									setErrors(prev => ({ ...prev, consent: '' }))
-							}}
-						/>
+						<fieldset
+							disabled={Boolean(createdOrderId)}
+							className={styles.formFieldset}
+						>
+							<CheckoutContactSection
+								form={form}
+								errors={errors}
+								setField={setField}
+								isAuthenticated={isAuthenticated}
+								user={user}
+								signOut={signOut}
+								onLoginOpen={() => setLoginOpen(true)}
+								consent={consent}
+								onConsentChange={checked => {
+									setConsent(checked)
+									if (errors.consent)
+										setErrors(prev => ({ ...prev, consent: '' }))
+								}}
+							/>
 
-						<CheckoutDeliverySection
-							form={form}
-							errors={errors}
-							addressError={visibleAddressError}
-							onAddressChange={handleAddressChange}
-							onAddressSelect={handleAddressSelect}
-						/>
+							<CheckoutDeliverySection
+								form={form}
+								errors={errors}
+								addressError={visibleAddressError}
+								onAddressChange={handleAddressChange}
+								onAddressSelect={handleAddressSelect}
+							/>
+						</fieldset>
 
 						<button
 							type='submit'
@@ -437,8 +465,12 @@ export default function CheckoutPage() {
 							disabled={submitting}
 						>
 							{submitting
-								? 'Оформляем...'
-								: `Оформить заказ — ${total.toLocaleString('ru-RU')} ₽`}
+								? createdOrderId
+									? 'Перенаправляем...'
+									: 'Оформляем...'
+								: createdOrderId
+									? 'Перейти к оплате'
+									: `Оформить заказ — ${total.toLocaleString('ru-RU')} ₽`}
 						</button>
 					</form>
 				</div>
@@ -461,6 +493,7 @@ export default function CheckoutPage() {
 					updateQty={updateQty}
 					removeFromCart={removeFromCart}
 					submitting={submitting}
+					orderLocked={Boolean(createdOrderId)}
 				/>
 			</div>
 

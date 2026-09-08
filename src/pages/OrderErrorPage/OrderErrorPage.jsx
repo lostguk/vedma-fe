@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
+import { createPayment } from '../../api/payments'
 import { IconMail, IconPhone } from '../../components/Icons'
 import { Button, GlassCard } from '../../components/ui'
 import {
 	isPendingStatus,
 	usePaymentReturnVerification,
 } from '../../hooks/usePaymentReturnVerification'
+import { setCreatedCheckoutOrderId } from '../../utils/checkoutOrder'
 import styles from './OrderErrorPage.module.css'
 
 export default function OrderErrorPage() {
@@ -16,6 +18,8 @@ export default function OrderErrorPage() {
 
 	const { phase, payment } = usePaymentReturnVerification(paymentId)
 	const [show, setShow] = useState(false)
+	const [retrying, setRetrying] = useState(false)
+	const [retryError, setRetryError] = useState('')
 
 	useEffect(() => {
 		if (phase !== 'ready' || !paymentId || !payment) return
@@ -30,6 +34,36 @@ export default function OrderErrorPage() {
 	useEffect(() => {
 		requestAnimationFrame(() => setShow(true))
 	}, [])
+
+	const retrySameOrderPayment = async () => {
+		if (!orderId) {
+			navigate('/checkout')
+			return
+		}
+
+		setRetrying(true)
+		setRetryError('')
+		setCreatedCheckoutOrderId(Number(orderId))
+		try {
+			const payRes = await createPayment({
+				orderId: Number(orderId),
+				successUrl: `${window.location.origin}/payment-success?order_id=${orderId}`,
+				failUrl: `${window.location.origin}/payment-error?order_id=${orderId}`,
+			})
+			const nextPayment = payRes.data?.data ?? payRes.data
+			if (nextPayment.payment_url) {
+				window.location.href = nextPayment.payment_url
+				return
+			}
+			setRetryError('Не удалось получить ссылку на оплату. Попробуйте ещё раз.')
+		} catch (err) {
+			setRetryError(
+				err.response?.data?.message || 'Не удалось создать платёж. Попробуйте ещё раз.',
+			)
+		} finally {
+			setRetrying(false)
+		}
+	}
 
 	const showLoading = paymentId && phase === 'loading'
 	const showPending =
@@ -110,9 +144,6 @@ export default function OrderErrorPage() {
 								>
 									Мои заказы
 								</Button>
-								<Button as={Link} to='/checkout' variant='ghost' size='lg'>
-									К оформлению
-								</Button>
 							</div>
 						</>
 					)}
@@ -157,6 +188,9 @@ export default function OrderErrorPage() {
 								сверим статус по заказу
 								{orderId ? ` №${orderId}` : ''} и поможем.
 							</p>
+							{retryError && (
+								<p className={styles.retryError}>{retryError}</p>
+							)}
 
 							<div className={styles.help}>
 								<div className={styles.helpItem}>
@@ -174,11 +208,28 @@ export default function OrderErrorPage() {
 							</div>
 
 							<div className={styles.actions}>
-								<Button as={Link} to='/checkout' variant='primary' size='lg'>
-									Попробовать снова
-								</Button>
-								<Button as={Link} to='/' variant='ghost' size='lg'>
-									На главную
+								{orderId ? (
+									<Button
+										type='button'
+										variant='primary'
+										size='lg'
+										disabled={retrying}
+										onClick={retrySameOrderPayment}
+									>
+										{retrying ? 'Перенаправляем...' : 'Повторить оплату'}
+									</Button>
+								) : (
+									<Button as={Link} to='/checkout' variant='primary' size='lg'>
+										Попробовать снова
+									</Button>
+								)}
+								<Button
+									as={Link}
+									to='/profile/orders'
+									variant='ghost'
+									size='lg'
+								>
+									Мои заказы
 								</Button>
 							</div>
 						</>

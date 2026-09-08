@@ -118,6 +118,14 @@
 	margin-inline: auto;
 }
 
+.retryError {
+	margin: var(--space-md) auto 0;
+	max-width: 420px;
+	font-size: var(--text-sm);
+	font-weight: 600;
+	color: #b42318;
+}
+
 /* ── Help ── */
 .help {
 	display: flex;
