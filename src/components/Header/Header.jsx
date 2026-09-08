@@ -223,9 +223,7 @@ export default function Header() {
 								<IconHeart size={18} />
 								<span className={styles.actionLabel}>Избранное</span>
 								{favCount > 0 && (
-									<span className={styles.actionBadge}>
-										{favCount > 99 ? '99+' : favCount}
-									</span>
+									<span className={styles.actionBadge}>{favCount}</span>
 								)}
 							</Link>
 							<button
