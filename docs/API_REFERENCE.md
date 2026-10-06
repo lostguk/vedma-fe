@@ -224,7 +224,7 @@ ordersApi.getOrders()
 
 ### POST /payments
 
-Создание платежа (Альфа-Банк).
+Создание платежа (Т-Банк).
 
 ```javascript
 paymentsApi.createPayment({
@@ -234,7 +234,7 @@ paymentsApi.createPayment({
 })
 ```
 
-**Ответ:** `{ data: { payment_url: "https://alfa-bank.ru/pay/...", id: "uuid-public-id", ... } }`
+**Ответ:** `{ data: { payment_url: "https://pay.tbank.ru/...", id: "uuid-public-id", ... } }`
 
 При регистрации платежа в шлюзе бэкенд **дописывает** в `success_url` и `fail_url` query-параметр `payment=<public_id>`, чтобы на страницах возврата можно было вызвать проверку статуса.
 

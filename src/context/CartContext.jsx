@@ -4,12 +4,23 @@ import {
 	useContext,
 	useEffect,
 	useMemo,
+	useRef,
 	useState,
 } from 'react'
+import { getCart, mergeCart, replaceCart } from '../api/cart'
+import { useAuth } from './AuthContext'
 
 const STORAGE_KEY = 'vedmino-cart-v2'
+const SYNC_FLAG_PREFIX = 'vedmino-cart-synced:'
+const PUSH_DELAY_MS = 400
 
 const CartContext = createContext(null)
+
+const bootTasks = new Map()
+
+function syncedKey(userId) {
+	return `${SYNC_FLAG_PREFIX}${userId}`
+}
 
 function loadItems() {
 	try {
@@ -29,6 +40,71 @@ function loadItems() {
 	}
 }
 
+function quantitySignature(items) {
+	return items
+		.map(item => `${String(item.id)}:${item.qty}`)
+		.sort()
+		.join('|')
+}
+
+function sameLines(left, right) {
+	if (left.length !== right.length) return false
+	const byId = new Map(right.map(item => [String(item.id), item]))
+	return left.every(item => {
+		const other = byId.get(String(item.id))
+		if (!other) return false
+		return (
+			item.qty === other.qty &&
+			item.price === other.price &&
+			(item.old_price ?? null) === (other.old_price ?? null) &&
+			(item.stock ?? null) === (other.stock ?? null) &&
+			item.name === other.name &&
+			item.image === other.image &&
+			item.slug === other.slug
+		)
+	})
+}
+
+function mapServerItems(data) {
+	const source = Array.isArray(data?.items) ? data.items : []
+	return source
+		.map(item => {
+			const qty = Math.floor(Number(item?.qty)) || 0
+			if (!item || qty < 1 || item.id == null) return null
+			return {
+				id: String(item.id),
+				qty,
+				name: item.name || '',
+				price: Number(item.price) || 0,
+				old_price: item.old_price == null ? null : Number(item.old_price),
+				image: item.image || '',
+				slug: item.slug || String(item.id),
+				stock: typeof item.stock === 'number' ? item.stock : null,
+			}
+		})
+		.filter(Boolean)
+}
+
+function bootUserCart(userId, localItems) {
+	const key = String(userId)
+	const existing = bootTasks.get(key)
+	if (existing) return existing
+
+	const task = (async () => {
+		const alreadySynced = localStorage.getItem(syncedKey(userId)) === '1'
+		if (!alreadySynced && localItems.length > 0) {
+			return mergeCart(localItems)
+		}
+		return getCart()
+	})()
+
+	bootTasks.set(key, task)
+	task.catch(() => {
+		bootTasks.delete(key)
+	})
+	return task
+}
+
 function getImage(product) {
 	return (
 		product.thumb_url ||
@@ -45,13 +121,143 @@ function getStock(product) {
 }
 
 export function CartProvider({ children }) {
+	const { user, loading } = useAuth()
 	const [items, setItems] = useState(loadItems)
 	const [drawerOpen, setDrawerOpen] = useState(false)
 	const [toast, setToast] = useState(null)
+	const [cartReady, setCartReady] = useState(false)
+	const [syncTick, setSyncTick] = useState(0)
+
+	const itemsRef = useRef(items)
+	itemsRef.current = items
+	const userRef = useRef(user)
+	userRef.current = user
+	const prevUserIdRef = useRef(undefined)
+	const opRef = useRef(0)
+	const canPushRef = useRef(false)
+	const heldRef = useRef(false)
+	const lastSyncedRef = useRef(quantitySignature(loadItems()))
+	const syncGenRef = useRef(0)
+	const pushTimerRef = useRef(null)
+	const writeChainRef = useRef(Promise.resolve())
+
+	const applyServerCart = useCallback(data => {
+		const mapped = mapServerItems(data)
+		lastSyncedRef.current = quantitySignature(mapped)
+		setItems(prev => (sameLines(prev, mapped) ? prev : mapped))
+		if (Array.isArray(data?.removed) && data.removed.length > 0) {
+			setToast({
+				key: Date.now(),
+				message: 'Некоторые товары недоступны и убраны из корзины',
+			})
+		}
+	}, [])
 
 	useEffect(() => {
 		localStorage.setItem(STORAGE_KEY, JSON.stringify(items))
 	}, [items])
+
+	useEffect(() => {
+		if (loading) return undefined
+
+		const nextUserId = user?.id ?? null
+		const prevUserId = prevUserIdRef.current
+		if (prevUserId === nextUserId) return undefined
+		prevUserIdRef.current = nextUserId
+
+		if (nextUserId == null) {
+			const loggingOut = typeof prevUserId === 'number'
+			opRef.current += 1
+			canPushRef.current = false
+			heldRef.current = false
+			clearTimeout(pushTimerRef.current)
+			if (loggingOut) {
+				lastSyncedRef.current = quantitySignature([])
+				setItems([])
+			}
+			setCartReady(true)
+			return undefined
+		}
+
+		const op = ++opRef.current
+		const localItems = itemsRef.current.slice()
+		const loggingIn = prevUserId === null
+		canPushRef.current = false
+		setCartReady(false)
+
+		const request = loggingIn
+			? mergeCart(localItems)
+			: bootUserCart(nextUserId, localItems)
+
+		request
+			.then(res => {
+				if (op !== opRef.current) return
+				localStorage.setItem(syncedKey(nextUserId), '1')
+				canPushRef.current = true
+				applyServerCart(res.data?.data)
+				setCartReady(true)
+			})
+			.catch(() => {
+				if (op !== opRef.current) return
+				canPushRef.current = false
+				setCartReady(true)
+			})
+
+		return undefined
+	}, [loading, user, applyServerCart])
+
+	useEffect(() => {
+		if (!user || !cartReady || !canPushRef.current || heldRef.current) {
+			return undefined
+		}
+
+		const signature = quantitySignature(items)
+		if (signature === lastSyncedRef.current) return undefined
+
+		const snapshot = items
+		const gen = ++syncGenRef.current
+		clearTimeout(pushTimerRef.current)
+		pushTimerRef.current = setTimeout(() => {
+			const job = writeChainRef.current
+				.catch(() => {})
+				.then(async () => {
+					if (gen !== syncGenRef.current || heldRef.current) return
+					const res = await replaceCart(snapshot)
+					if (gen !== syncGenRef.current || heldRef.current) return
+					applyServerCart(res.data?.data)
+				})
+			writeChainRef.current = job.then(
+				() => {},
+				() => {},
+			)
+		}, PUSH_DELAY_MS)
+
+		return () => clearTimeout(pushTimerRef.current)
+	}, [items, user, cartReady, syncTick, applyServerCart])
+
+	useEffect(() => {
+		if (!user || !cartReady) return undefined
+
+		const refresh = () => {
+			if (document.visibilityState !== 'visible') return
+			if (!canPushRef.current || heldRef.current) return
+			if (quantitySignature(itemsRef.current) !== lastSyncedRef.current) return
+
+			const op = opRef.current
+			getCart()
+				.then(res => {
+					if (op !== opRef.current || heldRef.current) return
+					if (quantitySignature(itemsRef.current) !== lastSyncedRef.current) {
+						return
+					}
+					applyServerCart(res.data?.data)
+				})
+				.catch(() => {})
+		}
+
+		document.addEventListener('visibilitychange', refresh)
+		return () => document.removeEventListener('visibilitychange', refresh)
+	}, [user, cartReady, applyServerCart])
 
 	const getItemQty = useCallback(
 		id => items.find(i => String(i.id) === String(id))?.qty ?? 0,
@@ -85,7 +291,6 @@ export function CartProvider({ children }) {
 				return [...prev, entry]
 			}
 			const next = [...prev]
-			// Prefer fresh stock from the product, fall back to the value stored earlier.
 			const effectiveStock = stock !== null ? stock : (next[idx].stock ?? null)
 			const max = effectiveStock !== null ? effectiveStock : Infinity
 			const newQty = Math.min(next[idx].qty + n, max)
@@ -122,7 +327,23 @@ export function CartProvider({ children }) {
 	}, [])
 
 	const clearCart = useCallback(() => {
+		clearTimeout(pushTimerRef.current)
+		syncGenRef.current += 1
+		heldRef.current = false
+		lastSyncedRef.current = quantitySignature([])
 		setItems([])
+	}, [])
+
+	const holdCartSync = useCallback(async () => {
+		heldRef.current = true
+		clearTimeout(pushTimerRef.current)
+		syncGenRef.current += 1
+		await writeChainRef.current
+	}, [])
+
+	const releaseCartSync = useCallback(() => {
+		heldRef.current = false
+		setSyncTick(tick => tick + 1)
 	}, [])
 
 	const totalItems = useMemo(
@@ -142,12 +363,15 @@ export function CartProvider({ children }) {
 	const value = useMemo(
 		() => ({
 			items,
+			cartReady,
 			drawerOpen,
 			toast,
 			addToCart,
 			updateQty,
 			removeFromCart,
 			clearCart,
+			holdCartSync,
+			releaseCartSync,
 			getItemQty,
 			totalItems,
 			totalPrice,
@@ -157,12 +381,15 @@ export function CartProvider({ children }) {
 		}),
 		[
 			items,
+			cartReady,
 			drawerOpen,
 			toast,
 			addToCart,
 			updateQty,
 			removeFromCart,
 			clearCart,
+			holdCartSync,
+			releaseCartSync,
 			getItemQty,
 			totalItems,
 			totalPrice,

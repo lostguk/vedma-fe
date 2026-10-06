@@ -12,14 +12,14 @@ import App from './App.jsx'
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <ThemeProvider>
-      <CartProvider>
-        <FavoritesProvider>
-          <AuthProvider>
+      <AuthProvider>
+        <CartProvider>
+          <FavoritesProvider>
             <App />
             <ToastContainer position="top-right" autoClose={3000} newestOnTop closeOnClick pauseOnHover theme="colored" />
-          </AuthProvider>
-        </FavoritesProvider>
-      </CartProvider>
+          </FavoritesProvider>
+        </CartProvider>
+      </AuthProvider>
     </ThemeProvider>
   </StrictMode>,
 )

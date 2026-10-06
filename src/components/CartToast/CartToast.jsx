@@ -19,7 +19,7 @@ export default function CartToast() {
     <div className={styles.wrap} role="status">
       <div className={styles.toast}>
         <span className={styles.text}>
-          «{toast.name}» добавлен в корзину
+          {toast.message || `«${toast.name}» добавлен в корзину`}
         </span>
         <button
           type="button"

@@ -91,8 +91,22 @@ function scrollToCheckoutError(fieldErrors, addressMessage) {
 
 export default function CheckoutPage() {
 	const navigate = useNavigate()
-	const { items, updateQty, removeFromCart, clearCart, totalPrice } = useCart()
+	const {
+		items,
+		cartReady,
+		updateQty,
+		removeFromCart,
+		clearCart,
+		holdCartSync,
+		releaseCartSync,
+	} = useCart()
 	const { user, isAuthenticated, signOut } = useAuth()
+	const [placedItems, setPlacedItems] = useState(null)
+	const displayItems = placedItems ?? items
+	const displayTotal = displayItems.reduce(
+		(sum, line) => sum + (line.price || 0) * line.qty,
+		0,
+	)
 	const [loginOpen, setLoginOpen] = useState(false)
 	const [form, setForm] = useState(initialForm)
 	const [errors, setErrors] = useState({})
@@ -110,7 +124,7 @@ export default function CheckoutPage() {
 	const [submitAttempted, setSubmitAttempted] = useState(false)
 	const shippingTimerRef = useRef(null)
 
-	const promo = usePromoCode(items)
+	const promo = usePromoCode(displayItems)
 
 	const recalcShipping = useCallback((address, cartItems) => {
 		clearTimeout(shippingTimerRef.current)
@@ -148,24 +162,33 @@ export default function CheckoutPage() {
 	}, [])
 
 	useEffect(() => {
+		if (!cartReady || createdOrderId) return
 		if (items.length === 0 && !submitting) {
 			clearCreatedCheckoutOrderId()
 			navigate('/catalog', { replace: true })
 		}
-	}, [items.length, submitting, navigate])
+	}, [cartReady, createdOrderId, items.length, submitting, navigate])
 
 	useEffect(() => {
+		if (createdOrderId) return
 		if (
 			form.address &&
 			addressConfirmed &&
 			isDeliverableAddress(addressData) &&
-			items.length
+			displayItems.length
 		) {
-			recalcShipping(form.address, items)
+			recalcShipping(form.address, displayItems)
 			return
 		}
 		setDeliveryPrice(null)
-	}, [form.address, addressConfirmed, addressData, items, recalcShipping])
+	}, [
+		form.address,
+		addressConfirmed,
+		addressData,
+		displayItems,
+		recalcShipping,
+		createdOrderId,
+	])
 
 	useEffect(() => {
 		if (!user) return
@@ -207,7 +230,7 @@ export default function CheckoutPage() {
 	}, [user])
 
 	const calcResult = promo.calcResult
-	const subtotal = calcResult?.total_without_discount ?? totalPrice
+	const subtotal = calcResult?.total_without_discount ?? displayTotal
 	const discountAmount = calcResult
 		? calcResult.total_without_discount - calcResult.total_with_discount
 		: 0
@@ -336,7 +359,9 @@ export default function CheckoutPage() {
 
 		setSubmitting(true)
 		setPaymentError('')
+		let orderCreated = false
 		try {
+			await holdCartSync()
 			const orderData = {
 				items: items.map(i => ({ id: Number(i.id), count: i.qty })),
 				promo_code: promo.promoApplied?.code || null,
@@ -357,11 +382,18 @@ export default function CheckoutPage() {
 
 			const orderRes = await createOrder(orderData)
 			const order = orderRes.data?.data ?? orderRes.data
+			if (!order?.id) {
+				throw new Error('Не удалось создать заказ')
+			}
+			orderCreated = true
 			setCreatedOrderId(order.id)
 			setCreatedCheckoutOrderId(order.id)
+			setPlacedItems(items)
+			clearCart()
 
 			await attemptPayment(order.id)
 		} catch (err) {
+			if (!orderCreated) releaseCartSync()
 			toast.error(getApiErrors(err))
 		} finally {
 			setSubmitting(false)
@@ -476,7 +508,7 @@ export default function CheckoutPage() {
 				</div>
 
 				<CheckoutSummary
-					items={items}
+					items={displayItems}
 					subtotal={subtotal}
 					discountAmount={Math.abs(discountAmount)}
 					deliveryPrice={deliveryPrice}
