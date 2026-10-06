@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { suggestAddress } from '../../api/dadata'
@@ -19,6 +19,7 @@ import {
 	getCreatedCheckoutOrderId,
 	setCreatedCheckoutOrderId,
 } from '../../utils/checkoutOrder'
+import { lineCharge } from '../../utils/pricing'
 import CheckoutContactSection from './CheckoutContactSection'
 import CheckoutDeliverySection from './CheckoutDeliverySection'
 import styles from './CheckoutPage.module.css'
@@ -104,7 +105,7 @@ export default function CheckoutPage() {
 	const [placedItems, setPlacedItems] = useState(null)
 	const displayItems = placedItems ?? items
 	const displayTotal = displayItems.reduce(
-		(sum, line) => sum + (line.price || 0) * line.qty,
+		(sum, line) => sum + lineCharge(line).chargeTotal,
 		0,
 	)
 	const [loginOpen, setLoginOpen] = useState(false)
@@ -230,6 +231,27 @@ export default function CheckoutPage() {
 	}, [user])
 
 	const calcResult = promo.calcResult
+	const pricedItems = useMemo(() => {
+		const byId = new Map(
+			(calcResult?.items || []).map(item => [String(item.id), item]),
+		)
+		return displayItems.map(line => {
+			const local = lineCharge(line)
+			const calc = byId.get(String(line.id))
+			if (!calc || Number(calc.count) !== line.qty) return { ...line, ...local }
+			const chargeUnit = Number(calc.price_without_discount ?? calc.price) || 0
+			const chargeTotal =
+				Number(calc.summery_without_discount ?? chargeUnit * line.qty) || 0
+			return {
+				...line,
+				...local,
+				chargeUnit,
+				chargeTotal,
+				wholesaleActive: Boolean(calc.wholesale),
+				unitsUntilWholesale: calc.wholesale ? 0 : local.unitsUntilWholesale,
+			}
+		})
+	}, [displayItems, calcResult])
 	const subtotal = calcResult?.total_without_discount ?? displayTotal
 	const discountAmount = calcResult
 		? calcResult.total_without_discount - calcResult.total_with_discount
@@ -508,7 +530,7 @@ export default function CheckoutPage() {
 				</div>
 
 				<CheckoutSummary
-					items={displayItems}
+					items={pricedItems}
 					subtotal={subtotal}
 					discountAmount={Math.abs(discountAmount)}
 					deliveryPrice={deliveryPrice}

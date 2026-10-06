@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { createPortal } from 'react-dom'
 import { Link } from 'react-router-dom'
 import { useCart } from '../../context/CartContext'
+import { lineCharge } from '../../utils/pricing'
 import { IconArrowRight, IconBag, IconX } from '../Icons'
 import { Button, EmptyState } from '../ui'
 import styles from './CartModal.module.css'
@@ -70,7 +71,9 @@ export default function CartModal() {
 				) : (
 					<>
 						<div className={styles.items}>
-							{items.map(line => (
+							{items.map(line => {
+								const priced = lineCharge(line)
+								return (
 								<div key={line.id} className={styles.item}>
 									<img
 										src={line.image}
@@ -89,6 +92,15 @@ export default function CartModal() {
 												<IconX size={14} />
 											</button>
 										</div>
+										{priced.wholesaleActive && (
+											<span className={styles.wholesaleBadge}>Опт</span>
+										)}
+										{priced.unitsUntilWholesale > 0 && (
+											<p className={styles.wholesaleHint}>
+												Ещё {priced.unitsUntilWholesale} шт. до опта —{' '}
+												{priced.wholesaleOffer.price.toLocaleString('ru-RU')} ₽/шт
+											</p>
+										)}
 										<div className={styles.itemBottom}>
 											<div className={styles.qtyControl}>
 												<button
@@ -118,13 +130,13 @@ export default function CartModal() {
 												</button>
 											</div>
 											<span className={styles.itemPrice}>
-												{((line.price || 0) * line.qty).toLocaleString('ru-RU')}{' '}
-												₽
+												{priced.chargeTotal.toLocaleString('ru-RU')} ₽
 											</span>
 										</div>
 									</div>
 								</div>
-							))}
+								)
+							})}
 						</div>
 
 						<div className={styles.footer}>

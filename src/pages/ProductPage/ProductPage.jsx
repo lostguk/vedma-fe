@@ -17,6 +17,7 @@ import {
 	PageShell,
 } from '../../components/ui'
 import { useCart } from '../../context/CartContext'
+import { unitForQuantity } from '../../utils/pricing'
 import styles from './ProductPage.module.css'
 
 function formatPrice(n) {
@@ -102,6 +103,10 @@ export default function ProductPage() {
 	const canAdd = maxAddable === null || maxAddable > 0
 	const effectiveQty =
 		maxAddable !== null ? Math.min(qty, Math.max(1, maxAddable)) : qty
+	const addedQty = canAdd ? effectiveQty : 0
+	const pricing = unitForQuantity(product, inCartQty + addedQty)
+	const shownPrice = pricing.wholesaleActive ? pricing.chargeUnit : product.price
+	const struckPrice = pricing.wholesaleActive ? product.price : oldPrice
 	const tag = product.is_bestseller
 		? 'Хит продаж'
 		: product.is_new
@@ -149,21 +154,31 @@ export default function ProductPage() {
 
 					<div className={styles.priceRow}>
 						<div className={styles.priceBlock}>
-							{oldPrice && (
+							{struckPrice ? (
 								<span className={styles.oldPrice}>
-									{formatPrice(oldPrice)} ₽
+									{formatPrice(struckPrice)} ₽
 								</span>
-							)}
-							<span className={styles.price}>
-								{formatPrice(product.price)} ₽
-							</span>
+							) : null}
+							<span className={styles.price}>{formatPrice(shownPrice)} ₽</span>
 						</div>
-						{discount && oldPrice && (
-							<span className={styles.saveBadge}>
-								Выгода {formatPrice(oldPrice - product.price)} ₽
-							</span>
+						{pricing.wholesaleActive ? (
+							<span className={styles.wholesaleBadge}>Опт</span>
+						) : (
+							discount &&
+							oldPrice && (
+								<span className={styles.saveBadge}>
+									Выгода {formatPrice(oldPrice - product.price)} ₽
+								</span>
+							)
 						)}
 					</div>
+					{pricing.wholesaleOffer && (
+						<p className={styles.wholesaleNote}>
+							<span className={styles.wholesaleMark}>Опт</span>
+							от {pricing.wholesaleOffer.minQty} шт. —{' '}
+							{formatPrice(pricing.wholesaleOffer.price)} ₽ за штуку
+						</p>
+					)}
 
 					{product.description ? (
 						<div
@@ -240,7 +255,7 @@ export default function ProductPage() {
 									) : (
 										<>
 											<IconBag size={18} />В корзину —{' '}
-											{formatPrice(product.price * effectiveQty)} ₽
+											{formatPrice(pricing.chargeUnit * effectiveQty)} ₽
 										</>
 									)}
 								</button>

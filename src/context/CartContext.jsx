@@ -8,6 +8,7 @@ import {
 	useState,
 } from 'react'
 import { getCart, mergeCart, replaceCart } from '../api/cart'
+import { lineCharge } from '../utils/pricing'
 import { useAuth } from './AuthContext'
 
 const STORAGE_KEY = 'vedmino-cart-v2'
@@ -57,6 +58,8 @@ function sameLines(left, right) {
 			item.qty === other.qty &&
 			item.price === other.price &&
 			(item.old_price ?? null) === (other.old_price ?? null) &&
+			(item.wholesale_min_qty ?? null) === (other.wholesale_min_qty ?? null) &&
+			(item.wholesale_price ?? null) === (other.wholesale_price ?? null) &&
 			(item.stock ?? null) === (other.stock ?? null) &&
 			item.name === other.name &&
 			item.image === other.image &&
@@ -77,6 +80,10 @@ function mapServerItems(data) {
 				name: item.name || '',
 				price: Number(item.price) || 0,
 				old_price: item.old_price == null ? null : Number(item.old_price),
+				wholesale_min_qty:
+					item.wholesale_min_qty == null ? null : Number(item.wholesale_min_qty),
+				wholesale_price:
+					item.wholesale_price == null ? null : Number(item.wholesale_price),
 				image: item.image || '',
 				slug: item.slug || String(item.id),
 				stock: typeof item.stock === 'number' ? item.stock : null,
@@ -113,6 +120,19 @@ function getImage(product) {
 		product.image ||
 		''
 	)
+}
+
+function readWholesale(product) {
+	if (!product || typeof product !== 'object') return {}
+	if (!('wholesale_min_qty' in product) && !('wholesale_price' in product)) {
+		return {}
+	}
+	return {
+		wholesale_min_qty:
+			product.wholesale_min_qty == null ? null : Number(product.wholesale_min_qty),
+		wholesale_price:
+			product.wholesale_price == null ? null : Number(product.wholesale_price),
+	}
 }
 
 function getStock(product) {
@@ -284,6 +304,7 @@ export function CartProvider({ children }) {
 					name: product.name || '',
 					price: product.price || 0,
 					old_price: product.old_price ?? product.oldPrice ?? null,
+					...readWholesale(product),
 					image: typeof product === 'object' ? getImage(product) : '',
 					slug: product.slug || productId,
 					stock,
@@ -295,7 +316,14 @@ export function CartProvider({ children }) {
 			const max = effectiveStock !== null ? effectiveStock : Infinity
 			const newQty = Math.min(next[idx].qty + n, max)
 			added = newQty > next[idx].qty
-			next[idx] = { ...next[idx], qty: newQty, stock: effectiveStock }
+			next[idx] = {
+				...next[idx],
+				qty: newQty,
+				stock: effectiveStock,
+				price: product.price ?? next[idx].price,
+				old_price: product.old_price ?? product.oldPrice ?? next[idx].old_price,
+				...readWholesale(product),
+			}
 			return next
 		})
 
@@ -352,7 +380,7 @@ export function CartProvider({ children }) {
 	)
 
 	const totalPrice = useMemo(
-		() => items.reduce((sum, line) => sum + (line.price || 0) * line.qty, 0),
+		() => items.reduce((sum, line) => sum + lineCharge(line).chargeTotal, 0),
 		[items],
 	)
 

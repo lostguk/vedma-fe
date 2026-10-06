@@ -216,6 +216,25 @@
 	color: var(--color-text);
 }
 
+.wholesaleBadge {
+	align-self: flex-start;
+	padding: 2px 8px;
+	border-radius: var(--radius-full);
+	background: rgba(var(--color-primary-rgb), 0.1);
+	color: var(--color-primary);
+	font-size: 0.65rem;
+	font-weight: 700;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+}
+
+.wholesaleHint {
+	margin: 0;
+	font-size: var(--text-xs);
+	line-height: 1.4;
+	color: var(--color-primary);
+}
+
 /* Footer */
 .footer {
 	padding: var(--space-lg) var(--space-xl);

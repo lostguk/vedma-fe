@@ -615,6 +615,21 @@
 	color: var(--color-text);
 }
 
+.wholesaleBadge {
+	display: inline-flex;
+	align-items: center;
+	margin-left: 6px;
+	padding: 1px 7px;
+	border-radius: var(--radius-full);
+	background: rgba(var(--color-primary-rgb), 0.1);
+	color: var(--color-primary);
+	font-size: 0.65rem;
+	font-weight: 700;
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+	vertical-align: 1px;
+}
+
 .orderItemMeta {
 	font-size: var(--text-xs);
 	color: var(--color-text-muted);

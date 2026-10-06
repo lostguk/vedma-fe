@@ -426,7 +426,12 @@ function OrderCard({ order, onPay, onRepeat }) {
 										/>
 									)}
 									<div className={styles.orderItemInfo}>
-										<span className={styles.orderItemName}>{item.name}</span>
+										<span className={styles.orderItemName}>
+											{item.name}
+											{item.is_wholesale && (
+												<span className={styles.wholesaleBadge}>Опт</span>
+											)}
+										</span>
 										<span className={styles.orderItemMeta}>
 											{count} шт &times; {formatMoney(unit)}
 										</span>
@@ -542,14 +547,19 @@ function TabOrders() {
 		clearCart()
 		const items = order.items || []
 		items.forEach(item => {
-			const { unit } = getOrderItemDisplay(item)
+			const product = item.product
 			addToCart(
 				{
 					id: item.product_id || item.id,
-					name: item.name,
-					price: unit,
-					slug: item.product?.slug || '',
-					image: item.product?.thumb_url || '',
+					name: product?.name || item.name,
+					price: product?.price ?? item.price,
+					old_price: product?.old_price ?? null,
+					wholesale_min_qty: product?.wholesale_min_qty ?? null,
+					wholesale_price: product?.wholesale_price ?? null,
+					slug: product?.slug || '',
+					image: product?.thumb_url || '',
+					stock: typeof product?.stock === 'number' ? product.stock : null,
+					in_stock: product?.in_stock,
 				},
 				item.count,
 			)

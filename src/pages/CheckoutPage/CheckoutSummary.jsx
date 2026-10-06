@@ -26,7 +26,10 @@ export default function CheckoutSummary({
 			<div className={styles.sideCard}>
 				<h3 className={styles.sideTitle}>Корзина</h3>
 				<ul className={styles.sideList}>
-					{items.map(line => (
+					{items.map(line => {
+						const unit = line.chargeUnit ?? line.price ?? 0
+						const total = line.chargeTotal ?? unit * line.qty
+						return (
 						<li key={line.id} className={styles.sideItem}>
 							{line.image && (
 								<img src={line.image} alt='' className={styles.sideImg} />
@@ -44,6 +47,15 @@ export default function CheckoutSummary({
 										×
 									</button>
 								</div>
+								{line.wholesaleActive && (
+									<span className={styles.wholesaleBadge}>Опт</span>
+								)}
+								{line.unitsUntilWholesale > 0 && (
+									<p className={styles.wholesaleHint}>
+										Ещё {line.unitsUntilWholesale} шт. до опта —{' '}
+										{line.wholesaleOffer.price.toLocaleString('ru-RU')} ₽/шт
+									</p>
+								)}
 								<div className={styles.sideItemBottom}>
 									<div className={styles.sideQty}>
 										<button
@@ -75,17 +87,17 @@ export default function CheckoutSummary({
 									</div>
 									<div className={styles.sidePriceCol}>
 										<span className={styles.sidePrice}>
-											{((line.price || 0) * line.qty).toLocaleString('ru-RU')} ₽
+											{total.toLocaleString('ru-RU')} ₽
 										</span>
 										<span className={styles.sidePer}>
-											{line.qty} шт ×{' '}
-											{Number(line.price || 0).toLocaleString('ru-RU')} ₽
+											{line.qty} шт × {Number(unit).toLocaleString('ru-RU')} ₽
 										</span>
 									</div>
 								</div>
 							</div>
 						</li>
-					))}
+						)
+					})}
 				</ul>
 
 				<div className={styles.totals}>
