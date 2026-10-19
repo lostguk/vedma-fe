@@ -104,6 +104,8 @@ export default function CheckoutPage() {
 	const { user, isAuthenticated, signOut } = useAuth()
 	const [placedItems, setPlacedItems] = useState(null)
 	const displayItems = placedItems ?? items
+	const skipsDelivery =
+		displayItems.length > 0 && displayItems.every(item => item.skips_delivery)
 	const displayTotal = displayItems.reduce(
 		(sum, line) => sum + lineCharge(line).chargeTotal,
 		0,
@@ -171,7 +173,10 @@ export default function CheckoutPage() {
 	}, [cartReady, createdOrderId, items.length, submitting, navigate])
 
 	useEffect(() => {
-		if (createdOrderId) return
+		if (createdOrderId || skipsDelivery) {
+			setDeliveryPrice(null)
+			return
+		}
 		if (
 			form.address &&
 			addressConfirmed &&
@@ -189,6 +194,7 @@ export default function CheckoutPage() {
 		displayItems,
 		recalcShipping,
 		createdOrderId,
+		skipsDelivery,
 	])
 
 	useEffect(() => {
@@ -202,7 +208,7 @@ export default function CheckoutPage() {
 			phone: user.phone || prev.phone,
 			address: user.address || prev.address,
 		}))
-		if (user.address) {
+		if (!skipsDelivery && user.address) {
 			suggestAddress(user.address, 1)
 				.then(res => {
 					const suggestions = res.data?.data?.suggestions || []
@@ -228,7 +234,7 @@ export default function CheckoutPage() {
 			setAddressConfirmed(false)
 			setAddressData(null)
 		}
-	}, [user])
+	}, [user, skipsDelivery])
 
 	const calcResult = promo.calcResult
 	const pricedItems = useMemo(() => {
@@ -258,7 +264,8 @@ export default function CheckoutPage() {
 		: 0
 	const total = Math.max(
 		0,
-		(calcResult?.total_with_discount ?? subtotal) + (deliveryPrice || 0),
+		(calcResult?.total_with_discount ?? subtotal) +
+			(skipsDelivery ? 0 : deliveryPrice || 0),
 	)
 
 	const addressErrorText = getAddressValidationError({
@@ -306,14 +313,16 @@ export default function CheckoutPage() {
 		const phoneDigits = form.phone.replace(/\D/g, '')
 		if (phoneDigits.length !== 11) e.phone = 'Введите полный номер телефона'
 
-		let addressErr = getAddressValidationError({
-			address: form.address,
-			addressConfirmed,
-			addressData,
-		})
-		if (!addressErr && deliveryLoading) {
+		let addressErr = skipsDelivery
+			? ''
+			: getAddressValidationError({
+					address: form.address,
+					addressConfirmed,
+					addressData,
+				})
+		if (!addressErr && !skipsDelivery && deliveryLoading) {
 			addressErr = 'Считаем стоимость доставки...'
-		} else if (!addressErr && deliveryPrice == null) {
+		} else if (!addressErr && !skipsDelivery && deliveryPrice == null) {
 			addressErr = 'Не удалось рассчитать стоимость доставки. Проверьте адрес.'
 		}
 		setAddressError(addressErr)
@@ -388,7 +397,6 @@ export default function CheckoutPage() {
 				items: items.map(i => ({ id: Number(i.id), count: i.qty })),
 				promo_code: promo.promoApplied?.code || null,
 				register: !isAuthenticated,
-				delivery_type: 'PostOffice',
 				first_name: isAuthenticated ? user.first_name : form.firstName.trim(),
 				last_name: isAuthenticated ? user.last_name : form.lastName.trim(),
 				middle_name: isAuthenticated
@@ -396,7 +404,10 @@ export default function CheckoutPage() {
 					: form.middleName.trim(),
 				email: isAuthenticated ? user.email : form.email.trim().toLowerCase(),
 				phone: isAuthenticated && user.phone ? user.phone : form.phone.trim(),
-				address: form.address.trim(),
+			}
+			if (!skipsDelivery) {
+				orderData.delivery_type = 'PostOffice'
+				orderData.address = form.address.trim()
 			}
 			if (!isAuthenticated) {
 				orderData.password = form.password
@@ -504,13 +515,20 @@ export default function CheckoutPage() {
 								}}
 							/>
 
-							<CheckoutDeliverySection
-								form={form}
-								errors={errors}
-								addressError={visibleAddressError}
-								onAddressChange={handleAddressChange}
-								onAddressSelect={handleAddressSelect}
-							/>
+							{skipsDelivery ? (
+								<p className={styles.deliverySkipNote}>
+									Этот заказ без доставки: адрес не нужен, оплата только за
+									товар.
+								</p>
+							) : (
+								<CheckoutDeliverySection
+									form={form}
+									errors={errors}
+									addressError={visibleAddressError}
+									onAddressChange={handleAddressChange}
+									onAddressSelect={handleAddressSelect}
+								/>
+							)}
 						</fieldset>
 
 						<button
@@ -535,6 +553,7 @@ export default function CheckoutPage() {
 					discountAmount={Math.abs(discountAmount)}
 					deliveryPrice={deliveryPrice}
 					deliveryLoading={deliveryLoading}
+					withoutDelivery={skipsDelivery}
 					total={total}
 					promoApplied={promo.promoApplied}
 					promoInput={promo.promoInput}

@@ -31,6 +31,7 @@ import {
 	PageShell,
 	PasswordInput,
 } from '../../components/ui'
+import LinkedText from '../../components/LinkedText'
 import { useAuth } from '../../context/AuthContext'
 import { useCart } from '../../context/CartContext'
 import {
@@ -38,6 +39,7 @@ import {
 	getAddressValidationError,
 	isDeliverableAddress,
 } from '../../utils/address'
+import OrderConversation from './OrderConversation'
 import styles from './ProfilePage.module.css'
 
 const TABS = [
@@ -346,6 +348,7 @@ function getOrderTotals(order) {
 function OrderCard({ order, onPay, onRepeat }) {
 	const [open, setOpen] = useState(false)
 	const [paying, setPaying] = useState(false)
+	const [unread, setUnread] = useState(order.conversation?.unread_count || 0)
 	const st = STATUS_MAP[order.status_code] || {
 		label: order.status || 'Неизвестен',
 		cls: 'statusPending',
@@ -374,6 +377,7 @@ function OrderCard({ order, onPay, onRepeat }) {
 					<span className={`${styles.orderStatus} ${styles[st.cls]}`}>
 						{order.status || st.label}
 					</span>
+					{unread > 0 && <span className={styles.orderUnread}>Новое</span>}
 					<span className={styles.orderTotal}>{formatMoney(total)}</span>
 					<IconChevronDown
 						size={16}
@@ -479,6 +483,12 @@ function OrderCard({ order, onPay, onRepeat }) {
 							<span>{formatMoney(total)}</span>
 						</div>
 					</div>
+					{order.conversation?.topic_id && (
+						<OrderConversation
+							topicId={order.conversation.topic_id}
+							onRead={() => setUnread(0)}
+						/>
+					)}
 					<div className={styles.orderActions}>
 						{canPay && (
 							<Button
@@ -556,6 +566,7 @@ function TabOrders() {
 					old_price: product?.old_price ?? null,
 					wholesale_min_qty: product?.wholesale_min_qty ?? null,
 					wholesale_price: product?.wholesale_price ?? null,
+					skips_delivery: Boolean(product?.skips_delivery),
 					slug: product?.slug || '',
 					image: product?.thumb_url || '',
 					stock: typeof product?.stock === 'number' ? product.stock : null,
@@ -785,7 +796,9 @@ function TabChat() {
 						>
 							<div className={styles.chatBubble}>
 								{msg.content && (
-									<p className={styles.chatBubbleText}>{msg.content}</p>
+									<p className={styles.chatBubbleText}>
+										<LinkedText text={msg.content} />
+									</p>
 								)}
 								{msg.attachments?.length > 0 && (
 									<div className={styles.chatBubbleFiles}>

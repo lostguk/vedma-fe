@@ -60,6 +60,7 @@ function sameLines(left, right) {
 			(item.old_price ?? null) === (other.old_price ?? null) &&
 			(item.wholesale_min_qty ?? null) === (other.wholesale_min_qty ?? null) &&
 			(item.wholesale_price ?? null) === (other.wholesale_price ?? null) &&
+			Boolean(item.skips_delivery) === Boolean(other.skips_delivery) &&
 			(item.stock ?? null) === (other.stock ?? null) &&
 			item.name === other.name &&
 			item.image === other.image &&
@@ -84,6 +85,7 @@ function mapServerItems(data) {
 					item.wholesale_min_qty == null ? null : Number(item.wholesale_min_qty),
 				wholesale_price:
 					item.wholesale_price == null ? null : Number(item.wholesale_price),
+				skips_delivery: Boolean(item.skips_delivery),
 				image: item.image || '',
 				slug: item.slug || String(item.id),
 				stock: typeof item.stock === 'number' ? item.stock : null,
@@ -120,6 +122,10 @@ function getImage(product) {
 		product.image ||
 		''
 	)
+}
+
+function readSkipsDelivery(product) {
+	return Boolean(product?.skips_delivery)
 }
 
 function readWholesale(product) {
@@ -305,6 +311,7 @@ export function CartProvider({ children }) {
 					price: product.price || 0,
 					old_price: product.old_price ?? product.oldPrice ?? null,
 					...readWholesale(product),
+					skips_delivery: readSkipsDelivery(product),
 					image: typeof product === 'object' ? getImage(product) : '',
 					slug: product.slug || productId,
 					stock,
@@ -323,6 +330,7 @@ export function CartProvider({ children }) {
 				price: product.price ?? next[idx].price,
 				old_price: product.old_price ?? product.oldPrice ?? next[idx].old_price,
 				...readWholesale(product),
+				skips_delivery: readSkipsDelivery(product),
 			}
 			return next
 		})

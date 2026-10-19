@@ -26,6 +26,16 @@
 	letter-spacing: -0.02em;
 }
 
+.deliverySkipNote {
+	margin: 0 0 var(--space-xl);
+	padding: 14px 16px;
+	border-radius: var(--radius-md);
+	background: rgba(var(--color-primary-rgb), 0.06);
+	color: var(--color-text);
+	font-size: var(--text-sm);
+	line-height: 1.5;
+}
+
 .form {
 	display: flex;
 	flex-direction: column;

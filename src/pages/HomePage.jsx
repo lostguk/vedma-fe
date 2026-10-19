@@ -3,6 +3,7 @@ import { getHomeContent } from '../api/home'
 import About from '../components/About/About'
 import Features from '../components/Features/Features'
 import Hero from '../components/Hero/Hero'
+import HomeNotice from '../components/HomeNotice/HomeNotice'
 import { BotanicalDivider } from '../components/Icons'
 import ProductSection from '../components/ProductSection/ProductSection'
 import PromoBanner from '../components/PromoBanner/PromoBanner'
@@ -11,6 +12,7 @@ import useScrollReveal from '../hooks/useScrollReveal'
 export default function HomePage() {
 	const mainRef = useScrollReveal()
 	const [slides, setSlides] = useState([])
+	const [notice, setNotice] = useState(null)
 	const [promo, setPromo] = useState(null)
 	const [categories, setCategories] = useState([])
 	const [loading, setLoading] = useState(true)
@@ -20,11 +22,13 @@ export default function HomePage() {
 			.then(res => {
 				const data = res.data?.data ?? res.data
 				setSlides(data.slides || [])
+				setNotice(data.notice || null)
 				setPromo(data.promo || null)
 				setCategories(data.categories || [])
 			})
 			.catch(() => {
 				setSlides([])
+				setNotice(null)
 				setPromo(null)
 				setCategories([])
 			})
@@ -34,6 +38,8 @@ export default function HomePage() {
 	return (
 		<div ref={mainRef}>
 			<Hero slides={slides} />
+
+			{notice && <HomeNotice notice={notice} />}
 
 			{promo && <PromoBanner promo={promo} />}
 

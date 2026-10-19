@@ -7,6 +7,7 @@ export default function CheckoutSummary({
 	discountAmount,
 	deliveryPrice,
 	deliveryLoading,
+	withoutDelivery = false,
 	total,
 	promoApplied,
 	promoInput,
@@ -110,13 +111,15 @@ export default function CheckoutSummary({
 						<span
 							className={deliveryPrice != null ? undefined : styles.totalMuted}
 						>
-							{deliveryLoading
-								? 'Считаем...'
-								: deliveryPrice != null
-									? deliveryPrice === 0
-										? 'Бесплатно'
-										: `${Number(deliveryPrice).toLocaleString('ru-RU')} ₽`
-									: 'Укажите полный адрес'}
+							{withoutDelivery
+								? 'Не требуется'
+								: deliveryLoading
+									? 'Считаем...'
+									: deliveryPrice != null
+										? deliveryPrice === 0
+											? 'Бесплатно'
+											: `${Number(deliveryPrice).toLocaleString('ru-RU')} ₽`
+										: 'Укажите полный адрес'}
 						</span>
 					</div>
 					{discountAmount > 0 && (

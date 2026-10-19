@@ -133,6 +133,10 @@ export default function ProductPage() {
 		<PageShell>
 			<Breadcrumbs items={breadcrumbs} />
 
+			{product.disclaimer ? (
+				<p className={styles.disclaimer}>{product.disclaimer}</p>
+			) : null}
+
 			<div className={styles.main}>
 				<ProductGallery
 					images={images}
@@ -178,6 +182,9 @@ export default function ProductPage() {
 							от {pricing.wholesaleOffer.minQty} шт. —{' '}
 							{formatPrice(pricing.wholesaleOffer.price)} ₽ за штуку
 						</p>
+					)}
+					{product.skips_delivery && (
+						<p className={styles.wholesaleNote}>Без доставки</p>
 					)}
 
 					{product.description ? (
